@@ -188,3 +188,4 @@ data/*
 !data/.gitkeep
 
 *.csv
+output*/
