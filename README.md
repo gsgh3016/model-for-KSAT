@@ -54,15 +54,3 @@ $ git config commit.template .gitcommit_template
 
 - `.gitcommit_template` 파일은 프로젝트 루트에 있는 커밋 템플릿 파일입니다.
 - 위 명령어를 실행하면 커밋 시 템플릿이 자동으로 불러와집니다.
-
-### 패키지 추가 시 처리 방법
-
-새로운 Python 패키지를 설치하거나 업데이트한 후, 프로젝트의 의존성 파일을 최신 상태로 유지하기 위해 아래 명령어를 실행하세요:
-
-```shell
-$ pip list --not-required --format=freeze > requirements.txt
-```
-
-- `pip list --not-required --format=freeze` 명령어는 현재 환경에 설치된 패키지 중 의존성 패키지가 아닌 직접 설치한 패키지들을 `requirements.txt` 파일에 기록합니다.
-- 이 명령어를 통해 불필요한 패키지 정보가 포함되지 않도록 관리합니다.
-- `requirements.txt` 파일은 프로젝트 실행 환경을 복제하거나 배포 시에 사용됩니다.
