@@ -7,3 +7,9 @@
 ```shell
 pip install -r requirements.txt
 ```
+
+## Contribution
+
+```sh
+git config commit.template .gitcommit_template
+```
