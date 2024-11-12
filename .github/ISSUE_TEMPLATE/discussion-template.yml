@@ -49,13 +49,3 @@ body:
       label: "🔗 관련 이슈"
       description: "이 논의와 관련된 이전 이슈가 있다면 이슈 번호를 간단히 언급해주세요."
       placeholder: "예: 관련 이슈 - #13, #17"
-
-  - type: dropdown
-    id: priority-level
-    attributes:
-      label: "⭐ 우선순위"
-      description: "이 논의의 우선순위를 설정해주세요."
-      options:
-        - Low
-        - Medium
-        - High

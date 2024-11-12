@@ -56,13 +56,3 @@ body:
       label: "🔗 관련 이슈"
       description: "이 실험과 관련된 이전 이슈가 있다면 이슈 번호를 간단히 언급해주세요."
       placeholder: "예: 관련 실험 - #45, #50"
-
-  - type: dropdown
-    id: result-significance
-    attributes:
-      label: "⭐ 결과 중요도"
-      description: "이번 실험 결과가 프로젝트에 얼마나 중요한지 설정해주세요."
-      options:
-        - Low
-        - Medium
-        - High
