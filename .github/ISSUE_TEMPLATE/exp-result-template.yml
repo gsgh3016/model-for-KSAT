@@ -1,5 +1,5 @@
 name: Experiment Results
-title: "[EXP]"
+title: "[EXP] "
 description: Share and discuss experiment results related to the project.
 labels: ["Type: Experiment", "Priority: Medium", "Status: Pending"]
 body:

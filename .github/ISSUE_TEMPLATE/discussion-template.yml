@@ -1,5 +1,5 @@
 name: Discussion
-title: [DISC]
+title: "[DISC] "
 description: Share and discuss ideas or questions related to the project.
 labels: ["Type: Discussion", "Priority: Medium", "Status: Pending"]
 body:

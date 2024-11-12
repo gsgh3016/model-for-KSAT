@@ -1,5 +1,5 @@
 name: New Feature Request
-title: "[FEAT]"
+title: "[FEAT] "
 description: Suggest a new feature or enhancement for the project.
 labels: ["Type: Enhancement", "Priority: Medium", "Status: Pending"]
 body:
