@@ -1,4 +1,5 @@
 name: Bug Report
+title: "[BUG]"
 description: Report a bug or issue in the project.
 labels: ["Type: Bug", "Priority: Medium", "Status: Pending"]
 body:
