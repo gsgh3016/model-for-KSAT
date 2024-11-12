@@ -1,0 +1,20 @@
+# Core Packages
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch==2.5.1+cu121  # PyTorch with CUDA 12.1 support
+transformers
+scikit-learn
+evaluate
+peft
+trl
+numpy
+pandas
+
+# Development Packages
+tqdm
+ipykernel
+matplotlib
+
+# Linting
+black
+flake8
+isort
