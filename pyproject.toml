@@ -1,3 +1,8 @@
+[project]
+name = "Generation-for-NLP-Project"
+version = "1.0.0"
+requires-python = "^3.10"
+
 [tool.black]
 line-length = 120  # 한 줄의 최대 길이
 target-version = ["py310"]  # 지원하는 Python 버전
