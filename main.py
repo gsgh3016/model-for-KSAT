@@ -280,7 +280,7 @@ tokenizer = AutoTokenizer.from_pretrained(
 )
 # Load the test dataset
 # TODO Test Data 경로 입력
-test_df = pd.read_csv("test.csv")
+test_df = pd.read_csv("data/test.csv")
 
 # Flatten the JSON dataset
 records = []
@@ -361,5 +361,5 @@ with torch.inference_mode():
 
         predict_value = pred_choices_map[np.argmax(probs, axis=-1)]
         infer_results.append({"id": _id, "answer": predict_value})
-pd.DataFrame(infer_results).to_csv("output.csv", index=False)
+pd.DataFrame(infer_results).to_csv("data/output.csv", index=False)
 pd.DataFrame(infer_results)
