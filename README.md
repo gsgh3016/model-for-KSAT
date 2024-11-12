@@ -4,6 +4,12 @@
 
 ## Getting Started
 
+### Requirements
+
+- Python: 3.10
+- CUDA: >= 12.1
+- PyTorch: 2.5.1+cu121
+
 ### Git Clone
 
 ```shell
