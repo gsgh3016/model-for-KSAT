@@ -1,6 +1,6 @@
 name: Experiment Results
 description: Share and discuss experiment results related to the project.
-labels: ["experiment"]
+labels: ["Type: Experiment"]
 body:
   - type: checkboxes
     id: no-duplicate-experiment
@@ -8,7 +8,7 @@ body:
       label: "⚠️ Please check that similar experiment results haven't been shared already."
       description: "This helps us avoid redundancy and keeps experiment records organized."
       options:
-        - label: "이전에 공유된 [실험 결과](https://github.com/boostcampaitech7/level2-nlp-generationfornlp-nlp-06-lv3/issues?q=label%3Aexperiment+) 중 중복되는 것이 없습니다."
+        - label: "이전에 공유된 [실험 결과](https://github.com/boostcampaitech7/level2-nlp-generationfornlp-nlp-06-lv3/issues?q=+is%3Aissue+label%3A%22Type%3A+Experiment%22+) 중 중복되는 것이 없습니다."
           required: true
 
   - type: input
