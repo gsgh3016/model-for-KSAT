@@ -12,5 +12,7 @@ exclude =
     output,
     # No need to include the data path
     data,
+    # Do not include the virtual environment
+    .venv,
 max-complexity = 10
 statistics = true
