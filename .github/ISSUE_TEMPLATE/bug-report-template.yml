@@ -1,6 +1,6 @@
 name: Bug Report
 description: Report a bug or issue in the project.
-labels: ["Type: Bug"]
+labels: ["Type: Bug", "Priority: Medium", "Status: Pending"]
 body:
   - type: checkboxes
     id: no-duplicate-bug

@@ -1,6 +1,6 @@
 name: Experiment Results
 description: Share and discuss experiment results related to the project.
-labels: ["Type: Experiment"]
+labels: ["Type: Experiment", "Priority: Medium", "Status: Pending"]
 body:
   - type: checkboxes
     id: no-duplicate-experiment
