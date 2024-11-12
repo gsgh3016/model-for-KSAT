@@ -1,6 +1,7 @@
 name: Discussion
+title: "[DISC] "
 description: Share and discuss ideas or questions related to the project.
-labels: ["Type: Discussion"]
+labels: ["Type: Discussion", "Priority: Medium", "Status: Pending"]
 body:
   - type: checkboxes
     id: no-duplicate-discussion
