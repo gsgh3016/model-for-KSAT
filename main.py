@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import torch
 from datasets import Dataset
-from peft import AutoPeftModelForCausalLM, LoraConfig
+from peft import LoraConfig
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from trl import DataCollatorForCompletionOnlyLM, SFTConfig, SFTTrainer
@@ -247,18 +247,20 @@ trainer = SFTTrainer(
 )
 trainer.train()
 
-checkpoint_path = "outputs_gemma/checkpoint-4485"
+# from peft import AutoPeftModelForCausalLM
 
-model = AutoPeftModelForCausalLM.from_pretrained(
-    checkpoint_path,
-    trust_remote_code=True,
-    # torch_dtype=torch.bfloat16,
-    device_map="auto",
-)
-tokenizer = AutoTokenizer.from_pretrained(
-    checkpoint_path,
-    trust_remote_code=True,
-)
+# checkpoint_path = "outputs_gemma/checkpoint-4485"
+
+# model = AutoPeftModelForCausalLM.from_pretrained(
+#     checkpoint_path,
+#     trust_remote_code=True,
+#     # torch_dtype=torch.bfloat16,
+#     device_map="auto",
+# )
+# tokenizer = AutoTokenizer.from_pretrained(
+#     checkpoint_path,
+#     trust_remote_code=True,
+# )
 
 # Load the test dataset
 # TODO Test Data 경로 입력
