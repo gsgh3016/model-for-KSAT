@@ -8,6 +8,7 @@ peft
 trl
 numpy
 pandas
+bitsandbytes
 
 # Development Packages
 tqdm
