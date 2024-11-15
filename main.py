@@ -1,6 +1,7 @@
 import random
 from ast import literal_eval
 
+import dotenv
 import evaluate
 import numpy as np
 import pandas as pd
@@ -23,6 +24,7 @@ def set_seed(random_seed):
     random.seed(random_seed)
 
 
+dotenv.load_dotenv()
 set_seed(42)
 
 dataset = pd.read_csv("data/train.csv")

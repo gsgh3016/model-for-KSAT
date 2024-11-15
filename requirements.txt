@@ -14,6 +14,7 @@ bitsandbytes
 tqdm
 ipykernel
 matplotlib
+python-dotenv
 
 # Linting
 black
