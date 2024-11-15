@@ -27,28 +27,8 @@ def set_seed(random_seed):
 dotenv.load_dotenv()
 set_seed(42)
 
-dataset = pd.read_csv("data/train.csv")
-
-# Flatten the JSON dataset
-records = []
-for _, row in dataset.iterrows():
-    problems = literal_eval(row["problems"])
-    record = {
-        "id": row["id"],
-        "paragraph": row["paragraph"],
-        "question": problems["question"],
-        "choices": problems["choices"],
-        "answer": problems.get("answer", None),
-        "question_plus": problems.get("question_plus", None),
-    }
-    # Include 'question_plus' if it exists
-    if "question_plus" in problems:
-        record["question_plus"] = problems["question_plus"]
-    records.append(record)
-
-# Convert to DataFrame
-df = pd.DataFrame(records)
-df["question_plus"] = df["question_plus"].fillna("")
+df = pd.read_csv("data/train.csv")
+df["choices"] = df["choices"].apply(literal_eval)
 
 model = AutoModelForCausalLM.from_pretrained(
     "beomi/gemma-ko-2b",
@@ -267,8 +247,7 @@ trainer = SFTTrainer(
 )
 trainer.train()
 
-# TODO 학습된 Checkpoint 경로 입력
-checkpoint_path = "outputs_gemma/checkpoint-4491"
+checkpoint_path = "outputs_gemma/checkpoint-4485"
 
 model = AutoPeftModelForCausalLM.from_pretrained(
     checkpoint_path,
