@@ -259,29 +259,12 @@ tokenizer = AutoTokenizer.from_pretrained(
     checkpoint_path,
     trust_remote_code=True,
 )
+
 # Load the test dataset
 # TODO Test Data 경로 입력
 test_df = pd.read_csv("data/test.csv")
+test_df["choices"] = test_df["choices"].apply(literal_eval)
 
-# Flatten the JSON dataset
-records = []
-for _, row in test_df.iterrows():
-    problems = literal_eval(row["problems"])
-    record = {
-        "id": row["id"],
-        "paragraph": row["paragraph"],
-        "question": problems["question"],
-        "choices": problems["choices"],
-        "answer": problems.get("answer", None),
-        "question_plus": problems.get("question_plus", None),
-    }
-    # Include 'question_plus' if it exists
-    if "question_plus" in problems:
-        record["question_plus"] = problems["question_plus"]
-    records.append(record)
-
-# Convert to DataFrame
-test_df = pd.DataFrame(records)
 test_dataset = []
 for i, row in test_df.iterrows():
     choices_string = "\n".join([f"{idx + 1} - {choice}" for idx, choice in enumerate(row["choices"])])
@@ -310,7 +293,6 @@ for i, row in test_df.iterrows():
                 {"role": "system", "content": "지문을 읽고 질문의 답을 구하세요."},
                 {"role": "user", "content": user_message},
             ],
-            "label": row["answer"],
             "len_choices": len_choices,
         }
     )
