@@ -161,7 +161,7 @@ tokenized_dataset = tokenized_dataset.train_test_split(test_size=0.1, seed=42)
 
 train_dataset = tokenized_dataset["train"]
 eval_dataset = tokenized_dataset["test"]
-# 데이터 확인
+
 response_template = "<start_of_turn>model"
 data_collator = DataCollatorForCompletionOnlyLM(
     response_template=response_template,
@@ -212,7 +212,6 @@ def compute_metrics(evaluation_result):
 # pad token 설정
 tokenizer.pad_token = tokenizer.eos_token
 tokenizer.pad_token_id = tokenizer.eos_token_id
-tokenizer.special_tokens_map
 tokenizer.padding_side = "right"
 
 sft_config = SFTConfig(
@@ -326,5 +325,5 @@ with torch.inference_mode():
 
         predict_value = pred_choices_map[np.argmax(probs, axis=-1)]
         infer_results.append({"id": _id, "answer": predict_value})
+
 pd.DataFrame(infer_results).to_csv("data/output.csv", index=False)
-pd.DataFrame(infer_results)
