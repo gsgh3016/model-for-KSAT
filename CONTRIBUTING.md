@@ -71,3 +71,42 @@
    - `test`: 테스트 코드 추가 또는 수정
 
 더 자세한 커밋 작성 방법은 [커밋 템플릿](https://github.com/boostcampaitech7/level2-nlp-generationfornlp-nlp-06-lv3/blob/main/.gitcommit_template)을 참고해주세요.
+
+### 브랜치 이름 규칙
+
+브랜치 이름은 다음 두 가지 유형 중 하나를 따릅니다:
+
+---
+
+#### 1. `feature` 브랜치
+
+- 새로운 기능 개발에 사용합니다.
+- **형식**: `feature/{issue-number}-short-description`
+  - `{issue-number}`: 해당 작업의 이슈 번호
+  - `short-description`: 기능을 간단히 설명하는 이름
+- **예시**:
+  - `feature/123-user-login`
+  - `feature/45-add-item-to-cart`
+
+---
+
+#### 2. `hotfix` 브랜치
+
+- 긴급한 수정 작업에 사용합니다.
+- **형식**: `hotfix-short-description`
+  - `short-description`: 수정할 문제를 간단히 설명
+- **예시**:
+  - `hotfix-fix-login-error`
+  - `hotfix-correct-typo`
+
+---
+
+#### 📝 네이밍 관련 설명
+
+- 구분자 사용
+  - `feature` 뒤에는 `/`를 사용해 폴더 구조처럼 구분합니다.
+  - 기능 이름은 `-`로 단어를 연결합니다.
+- 브랜치 이름은 **작업 내용을 명확히 표현**하도록 간결하게 작성합니다.
+- 이슈 번호와 연동하여 작업 내역을 추적합니다.
+
+대부분의 경우에는 feature를 사용하시면 됩니다.
