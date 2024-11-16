@@ -1,7 +1,7 @@
 - [Contributing](#contributing)
 
   - [Before development](#before-development)
-  - [How to make an Issue](#how-to-make-an-issue)
+  - [How to create an Issue](#how-to-create-an-issue)
   - [Development guildlines](#development-guidelines)
 
     - [기본 철학](#기본-철학)
