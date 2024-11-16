@@ -8,11 +8,13 @@ peft
 trl
 numpy
 pandas
+bitsandbytes
 
 # Development Packages
 tqdm
 ipykernel
 matplotlib
+python-dotenv
 
 # Linting
 black

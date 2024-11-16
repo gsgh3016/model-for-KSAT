@@ -40,6 +40,16 @@ $ source .venv/bin/activate
 (.venv) $ pip install -r requirements.txt
 ```
 
+### Setup Envronment Variables
+
+`.env`를 생성 후 환경 변수를 수정합니다.
+
+```shell
+(.venv) $ cp .env.example .env
+```
+
+- `HF_TOKEN`: `HuggingFace`로 부터 모델을 내려받기 위해 필요한 토큰(`Read/Write`)입니다.
+
 ### Run main.py
 
 ```shell

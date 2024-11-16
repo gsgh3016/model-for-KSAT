@@ -1,12 +1,13 @@
 import random
 from ast import literal_eval
 
+import dotenv
 import evaluate
 import numpy as np
 import pandas as pd
 import torch
 from datasets import Dataset
-from peft import AutoPeftModelForCausalLM, LoraConfig
+from peft import LoraConfig
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from trl import DataCollatorForCompletionOnlyLM, SFTConfig, SFTTrainer
@@ -23,30 +24,11 @@ def set_seed(random_seed):
     random.seed(random_seed)
 
 
+dotenv.load_dotenv()
 set_seed(42)
 
-dataset = pd.read_csv("data/train.csv")
-
-# Flatten the JSON dataset
-records = []
-for _, row in dataset.iterrows():
-    problems = literal_eval(row["problems"])
-    record = {
-        "id": row["id"],
-        "paragraph": row["paragraph"],
-        "question": problems["question"],
-        "choices": problems["choices"],
-        "answer": problems.get("answer", None),
-        "question_plus": problems.get("question_plus", None),
-    }
-    # Include 'question_plus' if it exists
-    if "question_plus" in problems:
-        record["question_plus"] = problems["question_plus"]
-    records.append(record)
-
-# Convert to DataFrame
-df = pd.DataFrame(records)
-df["question_plus"] = df["question_plus"].fillna("")
+df = pd.read_csv("data/train.csv")
+df["choices"] = df["choices"].apply(literal_eval)
 
 model = AutoModelForCausalLM.from_pretrained(
     "beomi/gemma-ko-2b",
@@ -179,7 +161,7 @@ tokenized_dataset = tokenized_dataset.train_test_split(test_size=0.1, seed=42)
 
 train_dataset = tokenized_dataset["train"]
 eval_dataset = tokenized_dataset["test"]
-# 데이터 확인
+
 response_template = "<start_of_turn>model"
 data_collator = DataCollatorForCompletionOnlyLM(
     response_template=response_template,
@@ -230,7 +212,6 @@ def compute_metrics(evaluation_result):
 # pad token 설정
 tokenizer.pad_token = tokenizer.eos_token
 tokenizer.pad_token_id = tokenizer.eos_token_id
-tokenizer.special_tokens_map
 tokenizer.padding_side = "right"
 
 sft_config = SFTConfig(
@@ -265,42 +246,26 @@ trainer = SFTTrainer(
 )
 trainer.train()
 
-# TODO 학습된 Checkpoint 경로 입력
-checkpoint_path = "outputs_gemma/checkpoint-4491"
+# from peft import AutoPeftModelForCausalLM
 
-model = AutoPeftModelForCausalLM.from_pretrained(
-    checkpoint_path,
-    trust_remote_code=True,
-    # torch_dtype=torch.bfloat16,
-    device_map="auto",
-)
-tokenizer = AutoTokenizer.from_pretrained(
-    checkpoint_path,
-    trust_remote_code=True,
-)
+# checkpoint_path = "outputs_gemma/checkpoint-4485"
+
+# model = AutoPeftModelForCausalLM.from_pretrained(
+#     checkpoint_path,
+#     trust_remote_code=True,
+#     # torch_dtype=torch.bfloat16,
+#     device_map="auto",
+# )
+# tokenizer = AutoTokenizer.from_pretrained(
+#     checkpoint_path,
+#     trust_remote_code=True,
+# )
+
 # Load the test dataset
 # TODO Test Data 경로 입력
 test_df = pd.read_csv("data/test.csv")
+test_df["choices"] = test_df["choices"].apply(literal_eval)
 
-# Flatten the JSON dataset
-records = []
-for _, row in test_df.iterrows():
-    problems = literal_eval(row["problems"])
-    record = {
-        "id": row["id"],
-        "paragraph": row["paragraph"],
-        "question": problems["question"],
-        "choices": problems["choices"],
-        "answer": problems.get("answer", None),
-        "question_plus": problems.get("question_plus", None),
-    }
-    # Include 'question_plus' if it exists
-    if "question_plus" in problems:
-        record["question_plus"] = problems["question_plus"]
-    records.append(record)
-
-# Convert to DataFrame
-test_df = pd.DataFrame(records)
 test_dataset = []
 for i, row in test_df.iterrows():
     choices_string = "\n".join([f"{idx + 1} - {choice}" for idx, choice in enumerate(row["choices"])])
@@ -329,7 +294,6 @@ for i, row in test_df.iterrows():
                 {"role": "system", "content": "지문을 읽고 질문의 답을 구하세요."},
                 {"role": "user", "content": user_message},
             ],
-            "label": row["answer"],
             "len_choices": len_choices,
         }
     )
@@ -361,5 +325,5 @@ with torch.inference_mode():
 
         predict_value = pred_choices_map[np.argmax(probs, axis=-1)]
         infer_results.append({"id": _id, "answer": predict_value})
+
 pd.DataFrame(infer_results).to_csv("data/output.csv", index=False)
-pd.DataFrame(infer_results)
