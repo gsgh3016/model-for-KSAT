@@ -1,4 +1,4 @@
-- [Contribution](#contributing)
+- [Contributing](#contributing)
 
   - [Before development](#before-development)
   - [How to make an Issue](#how-to-make-an-issue)
@@ -6,7 +6,7 @@
 
     - [기본 철학](#기본-철학)
     - [커밋 메시지 작성 가이드](#커밋-메시지-작성-가이드)
-    - [브랜치 네이밍 규칙](#브랜치-이름-규칙)
+    - [브랜치 네이밍 규칙](#브랜치-네이밍-규칙)
     - [코드 스타일 및 코드 리뷰 가이드](#코드-스타일-및-코드-리뷰-가이드)
 
 # Contributing
