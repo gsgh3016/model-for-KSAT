@@ -41,13 +41,29 @@
   -  **Aborted**: 작업이 중단/실패 됨. 해당 원인을 이슈 안에 설명 해주세요.
   -  **Completed**: 작업이 완료 됐다면 Completed 로 **변경 한 뒤** 이슈를 **닫아주세요.**
 
-### New Feature Request
+### Issue Categories
+#### Bug Report
+버그를 보고할 때 생성하는 이슈입니다. 
 
-### Bug Report
+- 작성 전, 현재 보고하고 싶은 버그가 [지금까지 보고된 버그](https://github.com/boostcampaitech7/level2-nlp-generationfornlp-nlp-06-lv3/issues?q=+is%3Aissue+label%3A%22Type%3A+Bug%22+)와 중복되지 않는 지 확인하고 해당 체크박스를 체크해주세요.
+- 그 외 항목들은 템플릿의 안내를 따라서 작성 하시면 됩니다.
 
-### Discussion
+#### Discussion
+프로젝트 관련 아이디어나 제안사항에 대해 토의가 필요할 때 생성하는 이슈입니다. 디스코드로 가볍게 이야기를 나누는 것 보다는 더 디테일하고 체계적으로 팀원들과 토의를 할 사항에 대해 다루어주시면 됩니다.
+- 작성 전, 이전에 진행된 [논의들](https://github.com/boostcampaitech7/level2-nlp-generationfornlp-nlp-06-lv3/issues?q=is%3Aissue+label%3A%22Type%3A+Discussion%22+)과 중복되지 않는 주제인지 확인하고 해당 체크박스를 체크해주세요.
+- 여러 주제를 동시에 다루는 것은 지양해주세요.
+- 그 외 항목들은 템플릿의 안내를 따라서 작성 하시면 됩니다.
 
-### Experiment Results
+#### Experiment Results
+실험에 관한 내용을 정리하고 공유할 때 생성하는 이슈입니다.
+ - 작성 전, 이전에 진행된 [실험들](https://github.com/boostcampaitech7/level2-nlp-generationfornlp-nlp-06-lv3/issues?q=+is%3Aissue+label%3A%22Type%3A+Experiment%22+)과 중복되지 않는 지 확인하고 해당 체크박스를 체크해주세요.
+ - 그 외 항목들은 템플릿의 안내를 따라서 작성 하시면 됩니다.
+
+#### New Feature Request
+기능 도입에 관련된 사항을 공유할 때 생성하는 이슈입니다. 단순한 아이디어 보다는 구체적으로 프로젝트에 적용하면 좋을 라이브러리 혹은 신기능에 대해 다루어 주시면 됩니다.
+ - 작성 전, 이전에 제안된 [기능 요청들](https://github.com/boostcampaitech7/level2-nlp-generationfornlp-nlp-06-lv3/issues?q=+is%3Aissue+label%3A%22Type%3A+Experiment%22+)과 중복되지 않는 지 확인하고 해당 체크박스를 체크해주세요.
+ - 그 외 항목들은 템플릿의 안내를 따라서 작성 하시면 됩니다.
+
 
 ## Development guidelines
 
