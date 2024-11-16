@@ -2,6 +2,11 @@
 
   - [Before development](#before-development)
   - [How to create an Issue](#how-to-create-an-issue)
+
+    - [Notes](#notes)
+    - [Issue Labels](#issue-labels)
+    - [Issue Categories](#issue-categories)
+
   - [Development guildlines](#development-guidelines)
 
     - [기본 철학](#기본-철학)
@@ -19,14 +24,14 @@
 
 2. [개발 지침](#development-guidelines)을 읽고 프로젝트의 진행 방식을 숙지해주세요.
 
-## How to create an Issue
+## How to create an issue
 ### Notes
 - Issues - New issue 순으로 들어가면 각 카테고리에 맞는 템플릿을 선택할 수 있습니다. 
 - Assignees에 작업자를 선택 해주시고, 아래를 참고하여 적절한 레이블을 달아주신 뒤 항목 별 설명과 작성 예시들을 참고하여 작성해주시면 됩니다.
 - 각 항목은 간단하게만 적어주셔도 됩니다. 디테일하게 적으려고 큰 수고를 할 필요는 없습니다. 
 - 작성자 판단 하에 작성이 불필요한 항목은 비우고 이슈를 생성하셔도 무방합니다.
 
-### Labels
+### Issue Labels
 
 이슈 생성 할 때 달아주셔야 할 레이블이 3개 있습니다: **Type, Priority, Status**
 - **Type**
