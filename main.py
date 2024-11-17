@@ -29,6 +29,7 @@ set_seed(42)
 
 df = pd.read_csv("data/train.csv")
 df["choices"] = df["choices"].apply(literal_eval)
+df["question_plus"] = df["question_plus"].fillna("")
 
 model = AutoModelForCausalLM.from_pretrained(
     "beomi/gemma-ko-2b",
@@ -265,6 +266,7 @@ trainer.train()
 # TODO Test Data 경로 입력
 test_df = pd.read_csv("data/test.csv")
 test_df["choices"] = test_df["choices"].apply(literal_eval)
+test_df["question_plus"] = test_df["question_plus"].fillna("")
 
 test_dataset = []
 for i, row in test_df.iterrows():
