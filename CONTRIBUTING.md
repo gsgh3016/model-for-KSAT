@@ -191,26 +191,60 @@
 
 3. 명확한 네이밍
 
-   - 변수명과 함수명은 해당 역할과 목적을 명확히 나타내야 합니다.
-   - 좋은 예: `calculateTotalPrice`, `isUserLoggedIn`
-   - 나쁜 예: `doSomething`, `data`
-
-4. 코드 자체로 의도를 설명
-
-   - 주석 대신 코드를 명확하게 작성하세요. 복잡한 로직은 함수로 분리하여 의도를 드러냅니다.
-   - 예시:
+   - 변수명: 명사로 데이터의 성격을 나타내고 `snake_case` 사용
 
      ```python
-     # 나쁜 코드: 주석으로 설명 필요
-     total_price = sum(item.price for item in cart if item.on_sale)
-
-     # 좋은 코드: 함수로 의도를 명확히
-     def calculate_total_price(cart):
-         return sum(item.price for item in cart if item.on_sale)
+     team_name = "Modum Sushi"
+     total_member = 6
      ```
 
-5. 공식 문서 및 레퍼런스 사용
-   - GPT나 비공식적인 자료보다는 **공식 문서** 또는 **신뢰할 수 있는 자료**를 기반으로 코드 작성 및 리뷰를 진행하세요.
+   - 함수명: 동사로 동작을 표현하고 `snake_case` 사용
+
+     ```python
+     def preprocess_data(data: List[float]) -> List[float]:
+        """
+        데이터 전처리 함수. 데이터 정규화나 클리닝을 포함.
+        """
+     ```
+
+     > 함수 작성 시 가능하면 type hint와 docstring을 명시해주세요.
+
+   - 클래스명: 명사로 객체의 역할을 표현하고 `UpperCamelCase` 사용
+
+     ```python
+     class ModelBuilder:
+        def __init__(self, input_dim: int, output_dim: int):
+           self.input_dim = input_dim
+           self.output_dim = output_dim
+     ```
+
+4. Pythonic Code에 대해 알고 싶다면..
+
+   - 터미널에서 python을 실행하고 `import this`를 입력해보세요.
+
+     ```sh
+     $ python
+     Type "help", "copyright", "credits" or "license" for more information.
+     >>> import this
+     The Zen of Python, by Tim Peters
+
+     Beautiful is better than ugly.
+     Explicit is better than implicit.
+     Simple is better than complex.
+     Complex is better than complicated.
+     Flat is better than nested.
+
+     ...
+     ```
+
+     > Python에서 추구하는 코드 스타일이 뭔지 알 수 있습니다.
+
+   - Pythonic Code 예시 :
+
+     ```python
+     total_price = sum(item.price for item in cart if item.on_sale)
+     # 깔끔하고 직관적인 변수명, 리스트 컴프리헨션 스타일의 표현식
+     ```
 
 #### 코드 리뷰 가이드
 
@@ -240,3 +274,7 @@
    - 작성된 코드가 테스트되었는지 확인합니다.
    - 테스트가 없는 경우, 기능 동작을 확인할 수 있는 최소한의 테스트를 추가하도록 권장합니다.
  -->
+
+#### 당부의 말씀
+
+GPT나 비공식적인 자료보다는 **공식 문서** 또는 **신뢰할 수 있는 자료**를 기반으로 코드 작성 및 리뷰를 진행해주세요.
