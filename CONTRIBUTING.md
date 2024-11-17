@@ -7,7 +7,7 @@
     - [Issue Labels](#issue-labels)
     - [Issue Categories](#issue-categories)
 
-  - [Development guildlines](#development-guidelines)
+  - [Development guidelines](#development-guidelines)
 
     - [기본 철학](#기본-철학)
     - [커밋 메시지 작성 가이드](#커밋-메시지-작성-가이드)
