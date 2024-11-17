@@ -56,7 +56,7 @@
 #### Discussion
 프로젝트 관련 아이디어나 제안사항에 대해 토의가 필요할 때 생성하는 이슈입니다. 디스코드로 가볍게 이야기를 나누는 것 보다는 더 디테일하고 체계적으로 팀원들과 토의를 할 사항에 대해 다루어주시면 됩니다.
 - 작성 전, 이전에 진행된 [논의들](https://github.com/boostcampaitech7/level2-nlp-generationfornlp-nlp-06-lv3/issues?q=is%3Aissue+label%3A%22Type%3A+Discussion%22+)과 중복되지 않는 주제인지 확인하고 해당 체크박스를 체크해주세요.
-- 여러 주제를 동시에 다루는 것은 지양해주세요.
+- 하나의 Discussion 안에서 여러 주제를 동시에 다루는 것은 지양해주세요.
 - 그 외 항목들은 템플릿의 안내를 따라서 작성 하시면 됩니다.
 
 #### Experiment Results
