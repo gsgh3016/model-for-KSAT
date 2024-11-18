@@ -44,33 +44,34 @@ if __name__ == "__main__":
 
         if uploaded_file:
             df = pd.read_csv(uploaded_file)
-            # 데이터 요약
-            with tab1:
-                display_data_summary(df)
+        else:
+            # 첨부 파일이 없으면 기본적으로 train.csv에 대한 분석을 출력합니다.
+            df = pd.read_csv("data/train.csv")
+        # 데이터 요약
+        with tab1:
+            display_data_summary(df)
 
-            # 개별 데이터 접근
-            with tab2:
-                st.subheader("전체 데이터 확인")
-                st.dataframe(df)
+        # 개별 데이터 접근
+        with tab2:
+            st.subheader("전체 데이터 확인")
+            st.dataframe(df)
 
-                st.subheader("개별 데이터 확인")
-                access_method = st.radio("데이터 접근 방식 선택", ("인덱스로 접근", "컬럼으로 필터링"))
-                if access_method == "인덱스로 접근":
-                    # TODO: 인덱스로 파일 엑세스
-                    pass
-                elif access_method == "컬럼으로 필터링":
-                    # TODO: Column으로 파일 인덱스
-                    pass
-
-                # TODO: 수능 문제 형태로 출력
+            st.subheader("개별 데이터 확인")
+            access_method = st.radio("데이터 접근 방식 선택", ("인덱스로 접근", "컬럼으로 필터링"))
+            if access_method == "인덱스로 접근":
+                # TODO: 인덱스로 파일 엑세스
+                pass
+            elif access_method == "컬럼으로 필터링":
+                # TODO: Column으로 파일 인덱스
                 pass
 
-            # 분포 확인
-            with tab3:
-                st.subheader("데이터 분포")
-                if df is not None:
-                    pass  # TODO: Add distribution plotting logic
-                else:
-                    st.write("Please upload a CSV file to view the analytics.")
-        else:
-            st.write("Please upload a CSV file to view the analytics.")
+            # TODO: 수능 문제 형태로 출력
+            pass
+
+        # 분포 확인
+        with tab3:
+            st.subheader("데이터 분포")
+            if df is not None:
+                pass  # TODO: Add distribution plotting logic
+            else:
+                st.write("Please upload a CSV file to view the analytics.")
