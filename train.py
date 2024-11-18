@@ -4,10 +4,9 @@ import shutil
 import dotenv
 import pandas as pd
 from datasets import Dataset
-from peft import LoraConfig
-from trl import DataCollatorForCompletionOnlyLM, SFTConfig, SFTTrainer
+from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
-from configs import Config
+from configs import Config, create_peft_config, create_sft_config
 from data_loaders import load_data, prepare_datasets, tokenize_dataset
 from metrics import compute_metrics, preprocess_logits_for_metrics
 from model_loader import add_special_tokens, load_model, load_tokenizer, prepare_tokenizer, set_chat_template
@@ -38,15 +37,6 @@ model = load_model(model_name_or_path, device=device)
 
 # 토크나이저의 스페셜 토큰 수를 모델에 반영
 model.resize_token_embeddings(len(tokenizer))
-
-peft_config = LoraConfig(
-    r=config.peft.r,
-    lora_alpha=config.peft.lora_alpha,
-    lora_dropout=config.peft.lora_dropout,
-    target_modules=config.peft.target_modules,
-    bias=config.peft.bias,
-    task_type=config.peft.task_type,
-)
 
 processed_dataset = []
 for i, row in df.iterrows():
@@ -90,25 +80,8 @@ data_collator = DataCollatorForCompletionOnlyLM(
 #     config=config.raw_config,  # 설정값을 wandb에 로깅
 # )
 
-
-sft_config = SFTConfig(
-    do_train=config.sft.do_train,
-    do_eval=config.sft.do_eval,
-    lr_scheduler_type=config.sft.lr_scheduler_type,
-    max_seq_length=config.sft.max_seq_length,
-    output_dir="outputs/checkpoint",
-    per_device_train_batch_size=config.sft.per_device_eval_batch_size,
-    per_device_eval_batch_size=config.sft.per_device_eval_batch_size,
-    num_train_epochs=config.sft.num_train_epochs,
-    learning_rate=config.sft.learning_rate,
-    weight_decay=config.sft.weight_decay,
-    logging_steps=config.sft.logging_steps,
-    save_strategy=config.sft.save_strategy,
-    eval_strategy=config.sft.eval_strategy,
-    save_total_limit=config.sft.save_total_limit,
-    save_only_model=config.sft.save_only_model,
-    report_to=config.sft.report_to,
-)
+peft_config = create_peft_config(config.peft)
+sft_config = create_sft_config(config.sft)
 
 trainer = SFTTrainer(
     model=model,
