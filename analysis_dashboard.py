@@ -48,7 +48,7 @@ if __name__ == "__main__":
         # 분포 확인
         with tab3:
             st.subheader("데이터 분포")
-            if df is not None:
-                pass  # TODO: Add distribution plotting logic
-            else:
-                st.write("Please upload a CSV file to view the analytics.")
+            # TODO: Add distribution plotting logic
+
+    elif selected == "Compare":
+        st.title("🆚 Compare Dataset")
