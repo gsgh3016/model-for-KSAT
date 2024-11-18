@@ -1,5 +1,3 @@
-from ast import literal_eval
-
 import dotenv
 import numpy as np
 import pandas as pd
@@ -8,6 +6,7 @@ from peft import AutoPeftModelForCausalLM
 from tqdm import tqdm
 from transformers import AutoTokenizer
 
+from data_loaders import load_data
 from prompts import make_prompt
 from utils import set_seed
 
@@ -28,11 +27,7 @@ if __name__ == "__main__":
         trust_remote_code=True,
     )
 
-    # Load the test dataset
-    # TODO Test Data 경로 입력
-    test_df = pd.read_csv("data/test.csv")
-    test_df["choices"] = test_df["choices"].apply(literal_eval)
-    test_df["question_plus"] = test_df["question_plus"].fillna("")
+    test_df = load_data("data/test.csv")
 
     test_dataset = []
     for i, row in test_df.iterrows():
