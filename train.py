@@ -8,10 +8,10 @@ import pandas as pd
 import torch
 from datasets import Dataset
 from peft import LoraConfig
-from transformers import AutoModelForCausalLM, AutoTokenizer
 from trl import DataCollatorForCompletionOnlyLM, SFTConfig, SFTTrainer
 
-from data_loaders import load_data
+from data_loaders import load_data, prepare_datasets, tokenize_dataset
+from model_loader import add_special_tokens, load_model, load_tokenizer, prepare_tokenizer, set_chat_template
 from prompts import make_prompt
 from utils import set_seed
 
@@ -20,22 +20,21 @@ set_seed(42)
 
 df = load_data("data/train.csv")
 
-model = AutoModelForCausalLM.from_pretrained(
-    "beomi/gemma-ko-2b",
-    torch_dtype=torch.float16,
-    trust_remote_code=True,
-)
-tokenizer = AutoTokenizer.from_pretrained(
-    "beomi/gemma-ko-2b",
-    trust_remote_code=True,
-)
-tokenizer.chat_template = (
-    "{% if messages[0]['role'] == 'system' %}{% set system_message = messages[0]['content'] %}"
-    "{% endif %}{% if system_message is defined %}{{ system_message }}{% endif %}{% for message in messages %}"
-    "{% set content = message['content'] %}{% if message['role'] == 'user' %}"
-    "{{ '<start_of_turn>user\n' + content + '<end_of_turn>\n<start_of_turn>model\n' }}"
-    "{% elif message['role'] == 'assistant' %}{{ content + '<end_of_turn>\n' }}{% endif %}{% endfor %}"
-)
+# 모델 이름 또는 경로 지정
+model_name_or_path = "beomi/gemma-ko-2b"
+
+# 토크나이저 로드 및 설정
+tokenizer = load_tokenizer(model_name_or_path)
+tokenizer = set_chat_template(tokenizer)
+tokenizer = add_special_tokens(tokenizer)
+tokenizer = prepare_tokenizer(tokenizer)
+
+# 모델 로드
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model = load_model(model_name_or_path, device=device)
+
+# 토크나이저의 스페셜 토큰 수를 모델에 반영
+model.resize_token_embeddings(len(tokenizer))
 
 peft_config = LoraConfig(
     r=6,
@@ -63,48 +62,11 @@ for i, row in df.iterrows():
     )
 processed_dataset = Dataset.from_pandas(pd.DataFrame(processed_dataset))
 
+# 토큰화
+tokenized_dataset = tokenize_dataset(processed_dataset, tokenizer)
 
-def formatting_prompts_func(example):
-    output_texts = []
-    for i in range(len(example["messages"])):
-        output_texts.append(
-            tokenizer.apply_chat_template(
-                example["messages"][i],
-                tokenize=False,
-            )
-        )
-    return output_texts
-
-
-def tokenize(element):
-    outputs = tokenizer(
-        formatting_prompts_func(element),
-        truncation=False,
-        padding=False,
-        return_overflowing_tokens=False,
-        return_length=False,
-    )
-    return {
-        "input_ids": outputs["input_ids"],
-        "attention_mask": outputs["attention_mask"],
-    }
-
-
-# 데이터 토큰화
-tokenized_dataset = processed_dataset.map(
-    tokenize,
-    remove_columns=list(processed_dataset.features),
-    batched=True,
-    num_proc=4,
-    load_from_cache_file=True,
-    desc="Tokenizing",
-)
-# 데이터 분리
-tokenized_dataset = tokenized_dataset.filter(lambda x: len(x["input_ids"]) <= 1024)
-tokenized_dataset = tokenized_dataset.train_test_split(test_size=0.1, seed=42)
-
-train_dataset = tokenized_dataset["train"]
-eval_dataset = tokenized_dataset["test"]
+# 데이터셋 분리
+train_dataset, eval_dataset = prepare_datasets(tokenized_dataset, max_length=1024, test_size=0.1, seed=42)
 
 response_template = "<start_of_turn>model"
 data_collator = DataCollatorForCompletionOnlyLM(
@@ -152,11 +114,6 @@ def compute_metrics(evaluation_result):
     acc = acc_metric.compute(predictions=predictions, references=labels)
     return acc
 
-
-# pad token 설정
-tokenizer.pad_token = tokenizer.eos_token
-tokenizer.pad_token_id = tokenizer.eos_token_id
-tokenizer.padding_side = "right"
 
 sft_config = SFTConfig(
     do_train=True,
