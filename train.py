@@ -5,7 +5,7 @@ import dotenv
 from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
 from configs import Config, create_peft_config, create_sft_config
-from data_loaders import DataLoader
+from data_loaders import TrainDataLoader
 from evaluation import compute_metrics, preprocess_logits_for_metrics
 from models import load_model_and_tokenizer
 from utils import set_seed
@@ -22,7 +22,7 @@ def train(config: Config):
 
     model, tokenizer = load_model_and_tokenizer(config.model.name_or_path, config.training.device)
 
-    data_loader = DataLoader("data/train.csv", tokenizer, config)
+    data_loader = TrainDataLoader("data/train.csv", tokenizer, config)
 
     response_template = "<start_of_turn>model"
     data_collator = DataCollatorForCompletionOnlyLM(

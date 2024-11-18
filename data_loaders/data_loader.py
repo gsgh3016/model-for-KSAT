@@ -1,82 +1,41 @@
+from abc import ABC, abstractmethod
 from ast import literal_eval
 
 import pandas as pd
 from datasets import Dataset
 from transformers import PreTrainedTokenizerFast
 
-from configs import Config
 from prompts import make_prompt
 
 
-class DataLoader:
-    def __init__(self, data_path: str, tokenizer: PreTrainedTokenizerFast, config: Config):
+class BaseDataLoader(ABC):
+    def __init__(self, data_path: str, tokenizer: PreTrainedTokenizerFast):
         self.tokenizer = tokenizer
 
         df = pd.read_csv(data_path)
         df["choices"] = df["choices"].apply(literal_eval)
         df["question_plus"] = df["question_plus"].fillna("")
 
-        dataset = self.preprocess_dataset(df)
-        tokenized_dataset = self.tokenize_dataset(dataset)
-
-        # 데이터셋 분리
-        tokenized_dataset = tokenized_dataset.filter(lambda x: len(x["input_ids"]) <= config.sft.max_seq_length)
-        tokenized_dataset = tokenized_dataset.train_test_split(test_size=0.1, seed=config.training.seed)
-
-        self.train_dataset = tokenized_dataset["train"]
-        self.eval_dataset = tokenized_dataset["test"]
+        self.dataset = self.preprocess_dataset(df)
 
     def preprocess_dataset(self, df: pd.DataFrame) -> Dataset:
         processed_dataset = []
         for i, row in df.iterrows():
-            user_message = make_prompt(row, template_type="base")
+            user_prompt = make_prompt(row, template_type="base")
 
-            processed_dataset.append(
-                {
-                    "id": row["id"],
-                    "messages": [
-                        {"role": "system", "content": "지문을 읽고 질문의 답을 구하세요."},
-                        {"role": "user", "content": user_message},
-                        {"role": "assistant", "content": f"{row['answer']}"},
-                    ],
-                    "label": row["answer"],
-                }
-            )
+            processed_dataset.append(self.build_single_data(row, user_prompt))
         return Dataset.from_list(processed_dataset)
 
-    def tokenize_dataset(self, dataset: Dataset) -> Dataset:
-        # 데이터 토큰화
-        tokenized_dataset = dataset.map(
-            self.tokenize,
-            # remove_columns=list(processed_dataset.features), # 원본
-            remove_columns=dataset.column_names,
-            batched=True,
-            num_proc=4,
-            load_from_cache_file=True,
-            desc="Tokenizing",
-        )
-        return tokenized_dataset
+    @abstractmethod
+    def build_single_data(self, data: pd.Series, user_prompt: str):
+        """
+        각 행의 데이터를 처리하는 추상 메서드. 서브클래스에서 구현 필요.
 
-    def tokenize(self, element):
-        outputs = self.tokenizer(
-            self.formatting_prompts_func(element),
-            truncation=False,
-            padding=False,
-            return_overflowing_tokens=False,
-            return_length=False,
-        )
-        return {
-            "input_ids": outputs["input_ids"],
-            "attention_mask": outputs["attention_mask"],
-        }
+        Args:
+            data (pd.Series): 데이터프레임의 행 데이터.
+            user_prompt (str): 사용자 프롬프트.
 
-    def formatting_prompts_func(self, example):
-        output_texts = []
-        for i in range(len(example["messages"])):
-            output_texts.append(
-                self.tokenizer.apply_chat_template(
-                    example["messages"][i],
-                    tokenize=False,
-                )
-            )
-        return output_texts
+        Returns:
+            dict: 처리된 데이터.
+        """
+        pass

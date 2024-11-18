@@ -2,16 +2,17 @@ import dotenv
 import numpy as np
 import pandas as pd
 import torch
+from datasets import Dataset
 from peft import AutoPeftModelForCausalLM
 from tqdm import tqdm
-from transformers import AutoTokenizer, PreTrainedModel, PreTrainedTokenizer
+from transformers import AutoTokenizer, PreTrainedModel, PreTrainedTokenizerFast
+from transformers.modeling_outputs import CausalLMOutput
 
-from data_loaders import load_data
-from prompts import make_prompt
+from data_loaders import InferenceDataLoader
 from utils import set_seed
 
 
-def inference(model: PreTrainedModel, tokenizer: PreTrainedTokenizer, dataset: list) -> pd.DataFrame:
+def inference(model: PreTrainedModel, tokenizer: PreTrainedTokenizerFast, dataset: Dataset) -> pd.DataFrame:
     infer_results = []
     pred_choices_map = {0: "1", 1: "2", 2: "3", 3: "4", 4: "5"}
 
@@ -22,7 +23,7 @@ def inference(model: PreTrainedModel, tokenizer: PreTrainedTokenizer, dataset: l
             messages = data["messages"]
             len_choices = data["len_choices"]
 
-            outputs = model(
+            outputs: CausalLMOutput = model(
                 tokenizer.apply_chat_template(
                     messages,
                     tokenize=True,
@@ -50,36 +51,11 @@ if __name__ == "__main__":
     set_seed(42)
 
     model_path = "outputs/ko-gemma"
+    model = AutoPeftModelForCausalLM.from_pretrained(model_path, device_map="auto")
+    tokenizer = AutoTokenizer.from_pretrained(model_path)
 
-    model = AutoPeftModelForCausalLM.from_pretrained(
-        model_path,
-        trust_remote_code=True,
-        # torch_dtype=torch.bfloat16,
-        device_map="auto",
-    )
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_path,
-        trust_remote_code=True,
-    )
+    data_loader = InferenceDataLoader("data/test.csv", tokenizer)
 
-    test_df = load_data("data/test.csv")
-
-    test_dataset = []
-    for i, row in test_df.iterrows():
-        user_message = make_prompt(row, template_type="base")
-        len_choices = len(row["choices"])
-
-        test_dataset.append(
-            {
-                "id": row["id"],
-                "messages": [
-                    {"role": "system", "content": "지문을 읽고 질문의 답을 구하세요."},
-                    {"role": "user", "content": user_message},
-                ],
-                "len_choices": len_choices,
-            }
-        )
-
-    infer_results = inference(model, tokenizer, test_dataset)
+    infer_results = inference(model, tokenizer, data_loader.dataset)
 
     infer_results.to_csv("data/output.csv", index=False)
