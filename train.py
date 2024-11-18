@@ -1,3 +1,4 @@
+import argparse
 import os
 import shutil
 
@@ -59,7 +60,18 @@ def train(config: Config):
 
 if __name__ == "__main__":
     dotenv.load_dotenv()
-    config = Config()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-c", "--config_file", type=str, default="config.yaml")
+    args = parser.parse_args()
+
+    try:
+        config = Config(args.config_file)
+    except FileNotFoundError:
+        print(f"Config file not found: {args.config_file}")
+        print("Run with default config: config.yaml\n")
+        config = Config()
+
     set_seed(config.common.seed)
 
     train(config)
