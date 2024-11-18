@@ -56,4 +56,4 @@ def load_template(file_name: str, template_type: str) -> str:
         raise FileNotFoundError(f"Template file '{file_name}' not found.")
 
     with open(file_path, "r", encoding="utf-8") as file:
-        return file.read()
+        return file.read().strip()
