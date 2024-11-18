@@ -12,6 +12,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from trl import DataCollatorForCompletionOnlyLM, SFTConfig, SFTTrainer
 
 from data_loaders import load_data
+from prompts import make_prompt
 from utils import set_seed
 
 dotenv.load_dotenv()
@@ -45,67 +46,21 @@ peft_config = LoraConfig(
     task_type="CAUSAL_LM",
 )
 
-dataset = Dataset.from_pandas(df)
-PROMPT_NO_QUESTION_PLUS = """지문:
-{paragraph}
-
-질문:
-{question}
-
-선택지:
-{choices}
-
-1, 2, 3, 4, 5 중에 하나를 정답으로 고르세요.
-정답:"""
-
-PROMPT_QUESTION_PLUS = """지문:
-{paragraph}
-
-질문:
-{question}
-
-<보기>:
-{question_plus}
-
-선택지:
-{choices}
-
-1, 2, 3, 4, 5 중에 하나를 정답으로 고르세요.
-정답:"""
-
 processed_dataset = []
-for i in range(len(dataset)):
-    choices_string = "\n".join([f"{idx + 1} - {choice}" for idx, choice in enumerate(dataset[i]["choices"])])
+for i, row in df.iterrows():
+    user_message = make_prompt(row, template_type="base")
 
-    # <보기>가 있을 때
-    if dataset[i]["question_plus"]:
-        user_message = PROMPT_QUESTION_PLUS.format(
-            paragraph=dataset[i]["paragraph"],
-            question=dataset[i]["question"],
-            question_plus=dataset[i]["question_plus"],
-            choices=choices_string,
-        )
-    # <보기>가 없을 때
-    else:
-        user_message = PROMPT_NO_QUESTION_PLUS.format(
-            paragraph=dataset[i]["paragraph"],
-            question=dataset[i]["question"],
-            choices=choices_string,
-        )
-
-    # chat message 형식으로 변환
     processed_dataset.append(
         {
-            "id": dataset[i]["id"],
+            "id": row["id"],
             "messages": [
                 {"role": "system", "content": "지문을 읽고 질문의 답을 구하세요."},
                 {"role": "user", "content": user_message},
-                {"role": "assistant", "content": f"{dataset[i]['answer']}"},
+                {"role": "assistant", "content": f"{row['answer']}"},
             ],
-            "label": dataset[i]["answer"],
+            "label": row["answer"],
         }
     )
-
 processed_dataset = Dataset.from_pandas(pd.DataFrame(processed_dataset))
 
 
