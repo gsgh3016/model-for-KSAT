@@ -8,7 +8,7 @@ from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
 from configs import Config, create_peft_config, create_sft_config
 from data_loaders import load_data, prepare_datasets, tokenize_dataset
-from metrics import compute_metrics, preprocess_logits_for_metrics
+from evaluation import compute_metrics, preprocess_logits_for_metrics
 from models import load_model_and_tokenizer
 from prompts import make_prompt
 from utils import set_seed
