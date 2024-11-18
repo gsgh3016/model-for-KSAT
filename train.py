@@ -19,12 +19,12 @@ dotenv.load_dotenv()
 # 설정 로드
 config = Config()
 
-set_seed(config.training["seed"])
+set_seed(config.training.seed)
 
 df = load_data("data/train.csv")
 
 # 모델 이름 또는 경로 지정
-model_name_or_path = config.model["name_or_path"]
+model_name_or_path = config.model.name_or_path
 
 # 토크나이저 로드 및 설정
 tokenizer = load_tokenizer(model_name_or_path)
@@ -33,19 +33,19 @@ tokenizer = add_special_tokens(tokenizer)
 tokenizer = prepare_tokenizer(tokenizer)
 
 # 모델 로드
-device = config.training["device"]
+device = config.training.device
 model = load_model(model_name_or_path, device=device)
 
 # 토크나이저의 스페셜 토큰 수를 모델에 반영
 model.resize_token_embeddings(len(tokenizer))
 
 peft_config = LoraConfig(
-    r=config.peft["r"],
-    lora_alpha=config.peft["lora_alpha"],
-    lora_dropout=config.peft["lora_dropout"],
-    target_modules=config.peft["target_modules"],
-    bias=config.peft["bias"],
-    task_type=config.peft["task_type"],
+    r=config.peft.r,
+    lora_alpha=config.peft.lora_alpha,
+    lora_dropout=config.peft.lora_dropout,
+    target_modules=config.peft.target_modules,
+    bias=config.peft.bias,
+    task_type=config.peft.task_type,
 )
 
 processed_dataset = []
@@ -71,9 +71,9 @@ tokenized_dataset = tokenize_dataset(processed_dataset, tokenizer)
 # 데이터셋 분리
 train_dataset, eval_dataset = prepare_datasets(
     tokenized_dataset,
-    max_length=config.sft["max_seq_length"],
+    max_length=config.sft.max_seq_length,
     test_size=0.1,
-    seed=config.training["seed"],
+    seed=config.training.seed,
 )
 
 response_template = "<start_of_turn>model"
@@ -84,29 +84,30 @@ data_collator = DataCollatorForCompletionOnlyLM(
 
 # # wandb 초기화
 # wandb.init(
-#     project=config.wandb["project"],
-#     entity=config.wandb["entity"],
-#     name=config.wandb["name"],
-#     config=config.config,  # 설정값을 wandb에 로깅
+#     project=config.wandb.project,
+#     entity=config.wandb.entity,
+#     name=config.wandb.name,
+#     config=config.raw_config,  # 설정값을 wandb에 로깅
 # )
 
+
 sft_config = SFTConfig(
-    do_train=config.sft["do_train"],
-    do_eval=config.sft["do_eval"],
-    lr_scheduler_type=config.sft["lr_scheduler_type"],
-    max_seq_length=config.sft["max_seq_length"],
-    output_dir=config.sft["output_dir"],
-    per_device_train_batch_size=config.sft["per_device_train_batch_size"],
-    per_device_eval_batch_size=config.sft["per_device_eval_batch_size"],
-    num_train_epochs=config.sft["num_train_epochs"],
-    learning_rate=config.sft["learning_rate"],
-    weight_decay=config.sft["weight_decay"],
-    logging_steps=config.sft["logging_steps"],
-    save_strategy=config.sft["save_strategy"],
-    eval_strategy=config.sft["eval_strategy"],
-    save_total_limit=config.sft["save_total_limit"],
-    save_only_model=config.sft["save_only_model"],
-    report_to=config.sft["report_to"],
+    do_train=config.sft.do_train,
+    do_eval=config.sft.do_eval,
+    lr_scheduler_type=config.sft.lr_scheduler_type,
+    max_seq_length=config.sft.max_seq_length,
+    output_dir="outputs/checkpoint",
+    per_device_train_batch_size=config.sft.per_device_eval_batch_size,
+    per_device_eval_batch_size=config.sft.per_device_eval_batch_size,
+    num_train_epochs=config.sft.num_train_epochs,
+    learning_rate=config.sft.learning_rate,
+    weight_decay=config.sft.weight_decay,
+    logging_steps=config.sft.logging_steps,
+    save_strategy=config.sft.save_strategy,
+    eval_strategy=config.sft.eval_strategy,
+    save_total_limit=config.sft.save_total_limit,
+    save_only_model=config.sft.save_only_model,
+    report_to=config.sft.report_to,
 )
 
 trainer = SFTTrainer(
@@ -129,5 +130,5 @@ if os.path.exists(sft_config.output_dir):
 
 # 최종 모델 저장
 final_model_dir = "outputs/ko-gemma"
-print(f"Saving final model to {final_model_dir}...")
+print(f"Saving final model to {config.sft.save_dir}...")
 trainer.save_model(final_model_dir)

@@ -18,7 +18,7 @@ sft:
   do_eval: true
   lr_scheduler_type: "cosine"
   max_seq_length: 1024
-  output_dir: "outputs/checkpoint"
+  save_dir: "outputs/ko-gemma"
   per_device_train_batch_size: 1
   per_device_eval_batch_size: 1
   num_train_epochs: 3
