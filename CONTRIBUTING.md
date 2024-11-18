@@ -29,7 +29,7 @@
 ### Notes
 
 - Issues - New issue 순으로 들어가면 각 카테고리에 맞는 템플릿을 선택할 수 있습니다.
-- Assignees에 작업자를 선택 해주시고, 아래를 참고하여 적절한 레이블을 달아주신 뒤 항목 별 설명과 작성 예시들을 참고하여 작성해주시면 됩니다.
+- Assignees에 작업자를 선택 해주시고, 아래를 참고하여 알맞은 레이블을 달아주신 뒤 항목 별 설명과 작성 예시들을 참고하여 작성해주시면 됩니다.
 - 각 항목은 간단하게만 적어주셔도 됩니다. 디테일하게 적으려고 큰 수고를 할 필요는 없습니다.
 - 작성자 판단 하에 작성이 불필요한 항목은 비우고 이슈를 생성하셔도 무방합니다.
 
@@ -53,32 +53,19 @@
 
 #### Bug Report
 
-버그를 보고할 때 생성하는 이슈입니다.
-
-- 작성 전, 현재 보고하고 싶은 버그가 [지금까지 보고된 버그](https://github.com/boostcampaitech7/level2-nlp-generationfornlp-nlp-06-lv3/issues?q=+is%3Aissue+label%3A%22Type%3A+Bug%22+)와 중복되지 않는 지 확인하고 해당 체크박스를 체크해주세요.
-- 그 외 항목들은 템플릿의 안내를 따라서 작성 하시면 됩니다.
+버그 관련 사안을 공유 할 때 생성하는 이슈입니다.
 
 #### Discussion
 
 프로젝트 관련 아이디어나 제안사항에 대해 토의가 필요할 때 생성하는 이슈입니다. 디스코드로 가볍게 이야기를 나누는 것 보다는 더 디테일하고 체계적으로 팀원들과 토의를 할 사항에 대해 다루어주시면 됩니다.
 
-- 작성 전, 이전에 진행된 [논의들](https://github.com/boostcampaitech7/level2-nlp-generationfornlp-nlp-06-lv3/issues?q=is%3Aissue+label%3A%22Type%3A+Discussion%22+)과 중복되지 않는 주제인지 확인하고 해당 체크박스를 체크해주세요.
-- 하나의 Discussion 안에서 여러 주제를 동시에 다루는 것은 지양해주세요.
-- 그 외 항목들은 템플릿의 안내를 따라서 작성 하시면 됩니다.
-
 #### Experiment Results
 
 실험에 관한 내용을 정리하고 공유할 때 생성하는 이슈입니다.
 
-- 작성 전, 이전에 진행된 [실험들](https://github.com/boostcampaitech7/level2-nlp-generationfornlp-nlp-06-lv3/issues?q=+is%3Aissue+label%3A%22Type%3A+Experiment%22+)과 중복되지 않는 지 확인하고 해당 체크박스를 체크해주세요.
-- 그 외 항목들은 템플릿의 안내를 따라서 작성 하시면 됩니다.
-
 #### New Feature Request
 
 기능 도입에 관련된 사항을 공유할 때 생성하는 이슈입니다. 단순한 아이디어 보다는 구체적으로 프로젝트에 적용하면 좋을 라이브러리 혹은 신기능에 대해 다루어 주시면 됩니다.
-
-- 작성 전, 이전에 제안된 [기능 요청들](https://github.com/boostcampaitech7/level2-nlp-generationfornlp-nlp-06-lv3/issues?q=+is%3Aissue+label%3A%22Type%3A+Experiment%22+)과 중복되지 않는 지 확인하고 해당 체크박스를 체크해주세요.
-- 그 외 항목들은 템플릿의 안내를 따라서 작성 하시면 됩니다.
 
 ## Development guidelines
 
