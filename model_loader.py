@@ -1,8 +1,8 @@
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, PreTrainedModel, PreTrainedTokenizer
 
 
-def load_model(model_name_or_path, device="cuda"):
+def load_model(model_name_or_path, device="cuda") -> PreTrainedModel:
     """
     모델을 로드하는 함수입니다.
 
@@ -38,10 +38,14 @@ def load_tokenizer(model_name_or_path):
         model_name_or_path,
         trust_remote_code=True,
     )
+    tokenizer = set_chat_template(tokenizer)
+    tokenizer = add_special_tokens(tokenizer)
+    tokenizer = prepare_tokenizer(tokenizer)
+
     return tokenizer
 
 
-def set_chat_template(tokenizer):
+def set_chat_template(tokenizer: PreTrainedTokenizer):
     """
     토크나이저에 채팅 템플릿을 설정하는 함수입니다.
 
@@ -61,7 +65,7 @@ def set_chat_template(tokenizer):
     return tokenizer
 
 
-def add_special_tokens(tokenizer):
+def add_special_tokens(tokenizer: PreTrainedTokenizer):
     """
     토크나이저에 스페셜 토큰을 추가하는 함수입니다.
 
@@ -82,7 +86,7 @@ def add_special_tokens(tokenizer):
     return tokenizer
 
 
-def prepare_tokenizer(tokenizer):
+def prepare_tokenizer(tokenizer: PreTrainedTokenizer):
     """
     토크나이저를 설정하는 함수입니다.
 
