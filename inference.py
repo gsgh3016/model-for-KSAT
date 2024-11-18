@@ -8,6 +8,7 @@ from tqdm import tqdm
 from transformers import AutoTokenizer, PreTrainedModel, PreTrainedTokenizerFast
 from transformers.modeling_outputs import CausalLMOutput
 
+from configs import Config
 from data_loaders import InferenceDataLoader
 from utils import set_seed
 
@@ -48,14 +49,14 @@ def inference(model: PreTrainedModel, tokenizer: PreTrainedTokenizerFast, datase
 
 if __name__ == "__main__":
     dotenv.load_dotenv()
-    set_seed(42)
+    config = Config()
+    set_seed(config.common.seed)
 
-    model_path = "outputs/ko-gemma"
-    model = AutoPeftModelForCausalLM.from_pretrained(model_path, device_map="auto")
-    tokenizer = AutoTokenizer.from_pretrained(model_path)
+    model = AutoPeftModelForCausalLM.from_pretrained(config.inference.model_path, device_map="auto")
+    tokenizer = AutoTokenizer.from_pretrained(config.inference.model_path)
 
-    data_loader = InferenceDataLoader("data/test.csv", tokenizer)
+    data_loader = InferenceDataLoader(config.inference.data_path, tokenizer)
 
     infer_results = inference(model, tokenizer, data_loader.dataset)
 
-    infer_results.to_csv("data/output.csv", index=False)
+    infer_results.to_csv(config.inference.output_path, index=False)

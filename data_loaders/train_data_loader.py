@@ -14,7 +14,7 @@ class TrainDataLoader(BaseDataLoader):
 
         # 데이터셋 분리
         tokenized_dataset = tokenized_dataset.filter(lambda x: len(x["input_ids"]) <= config.sft.max_seq_length)
-        tokenized_dataset = tokenized_dataset.train_test_split(test_size=0.1, seed=config.training.seed)
+        tokenized_dataset = tokenized_dataset.train_test_split(test_size=0.1, seed=config.common.seed)
 
         self.train_dataset = tokenized_dataset["train"]
         self.eval_dataset = tokenized_dataset["test"]

@@ -15,10 +15,12 @@ class Config:
             self.raw_config = yaml.safe_load(f)
 
         self.model = ModelConfig(**self.raw_config["model"])
-        self.training = TrainingConfig(**self.raw_config["training"])
+        self.common = CommonConfig(**self.raw_config["common"])
         self.peft = PeftConfig(**self.raw_config["peft"])
         self.sft = SftConfig(**self.raw_config["sft"])
         self.wandb = WandbConfig(**self.raw_config["wandb"])
+        self.train = TrainConfig(**self.raw_config["train"])
+        self.inference = InferenceConfig(**self.raw_config["inference"])
 
 
 @dataclass
@@ -27,7 +29,7 @@ class ModelConfig:
 
 
 @dataclass
-class TrainingConfig:
+class CommonConfig:
     seed: int
     device: str
 
@@ -48,7 +50,6 @@ class SftConfig:
     do_eval: bool
     lr_scheduler_type: str
     max_seq_length: int
-    save_dir: str
     per_device_train_batch_size: int
     per_device_eval_batch_size: int
     num_train_epochs: int
@@ -67,3 +68,16 @@ class WandbConfig:
     project: str
     entity: str
     name: str
+
+
+@dataclass
+class TrainConfig:
+    data_path: str
+    save_path: str
+
+
+@dataclass
+class InferenceConfig:
+    model_path: str
+    data_path: str
+    output_path: str

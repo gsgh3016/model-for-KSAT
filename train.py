@@ -20,9 +20,9 @@ def train(config: Config):
     #     config=config.raw_config,  # 설정값을 wandb에 로깅
     # )
 
-    model, tokenizer = load_model_and_tokenizer(config.model.name_or_path, config.training.device)
+    model, tokenizer = load_model_and_tokenizer(config.model.name_or_path, config.common.device)
 
-    data_loader = TrainDataLoader("data/train.csv", tokenizer, config)
+    data_loader = TrainDataLoader(config.train.data_path, tokenizer, config)
 
     response_template = "<start_of_turn>model"
     data_collator = DataCollatorForCompletionOnlyLM(
@@ -53,13 +53,13 @@ def train(config: Config):
 
     # 최종 모델 저장
     final_model_dir = "outputs/ko-gemma"
-    print(f"Saving final model to {config.sft.save_dir}...")
+    print(f"Saving final model to {config.train.save_path}...")
     trainer.save_model(final_model_dir)
 
 
 if __name__ == "__main__":
     dotenv.load_dotenv()
     config = Config()
-    set_seed(config.training.seed)
+    set_seed(config.common.seed)
 
     train(config)
