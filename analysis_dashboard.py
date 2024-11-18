@@ -20,6 +20,25 @@ def display_data_summary(df: pd.DataFrame):
     st.write(df.head())
 
 
+# 인덱스 접근 함수
+def access_data_by_index(df: pd.DataFrame):
+    st.markdown("### Access by Index")
+    index_input = st.number_input(
+        "Enter the index of the row to retrieve:",
+        min_value=0,
+        max_value=len(df) - 1,
+        step=1,
+        key="unique_key_1",
+    )
+    if st.button("Retrieve by Index"):
+        if 0 <= index_input < len(df):
+            row_data = df.iloc[int(index_input)]
+            st.write(f"Row at index {int(index_input)}:")
+            st.write(row_data)
+        else:
+            st.error("Invalid index. Please try again.")
+
+
 if __name__ == "__main__":
 
     # 페이지 기본 설정
@@ -57,11 +76,10 @@ if __name__ == "__main__":
             st.dataframe(df)
 
             st.subheader("개별 데이터 확인")
-            access_method = st.radio("데이터 접근 방식 선택", ("인덱스로 접근", "컬럼으로 필터링"))
-            if access_method == "인덱스로 접근":
-                # TODO: 인덱스로 파일 엑세스
-                pass
-            elif access_method == "컬럼으로 필터링":
+            access_method = st.radio("데이터 접근 방식 선택", ("Access by Index", "Filter by Column"))
+            if access_method == "Access by Index":
+                access_data_by_index(df)
+            elif access_method == "Filter by Column":
                 # TODO: Column으로 파일 인덱스
                 pass
 
