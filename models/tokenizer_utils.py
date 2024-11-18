@@ -1,48 +1,4 @@
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, PreTrainedModel, PreTrainedTokenizer
-
-
-def load_model(model_name_or_path, device="cuda") -> PreTrainedModel:
-    """
-    모델을 로드하는 함수입니다.
-
-    Args:
-        model_name_or_path (str): 사전 학습된 모델의 경로 또는 이름.
-        device (str): 모델을 로드할 디바이스 ('cuda' 또는 'cpu').
-
-    Returns:
-        model: 로드된 모델.
-    """
-    # 모델 로드
-    model = AutoModelForCausalLM.from_pretrained(
-        model_name_or_path,
-        torch_dtype=torch.float16,
-        trust_remote_code=True,
-    )
-
-    model.to(device)
-    return model
-
-
-def load_tokenizer(model_name_or_path):
-    """
-    토크나이저를 로드하는 함수입니다.
-
-    Args:
-        model_name_or_path (str): 사전 학습된 모델의 경로 또는 이름.
-
-    Returns:
-        tokenizer: 로드된 토크나이저.
-    """
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_name_or_path,
-        trust_remote_code=True,
-    )
-    tokenizer = set_chat_template(tokenizer)
-    tokenizer = add_special_tokens(tokenizer)
-    tokenizer = prepare_tokenizer(tokenizer)
-
-    return tokenizer
+from transformers import PreTrainedTokenizer
 
 
 def set_chat_template(tokenizer: PreTrainedTokenizer):

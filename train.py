@@ -9,7 +9,7 @@ from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 from configs import Config, create_peft_config, create_sft_config
 from data_loaders import load_data, prepare_datasets, tokenize_dataset
 from metrics import compute_metrics, preprocess_logits_for_metrics
-from model_loader import load_model, load_tokenizer
+from models import load_model_and_tokenizer
 from prompts import make_prompt
 from utils import set_seed
 
@@ -22,14 +22,9 @@ set_seed(config.training.seed)
 
 df = load_data("data/train.csv")
 
-# 토크나이저 로드 및 설정
-tokenizer = load_tokenizer(config.model.name_or_path)
+# 모델, 토크나이저 로드 및 설정
+model, tokenizer = load_model_and_tokenizer(config.model.name_or_path, config.training.device)
 
-# 모델 로드
-model = load_model(config.model.name_or_path, device=config.training.device)
-
-# 토크나이저의 스페셜 토큰 수를 모델에 반영
-model.resize_token_embeddings(len(tokenizer))
 
 processed_dataset = []
 for i, row in df.iterrows():
