@@ -1,5 +1,3 @@
-from ast import literal_eval
-
 import dotenv
 import evaluate
 import numpy as np
@@ -10,14 +8,13 @@ from peft import LoraConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from trl import DataCollatorForCompletionOnlyLM, SFTConfig, SFTTrainer
 
+from data_loaders import load_data
 from utils import set_seed
 
 dotenv.load_dotenv()
 set_seed(42)
 
-df = pd.read_csv("data/train.csv")
-df["choices"] = df["choices"].apply(literal_eval)
-df["question_plus"] = df["question_plus"].fillna("")
+df = load_data("data/train.csv")
 
 model = AutoModelForCausalLM.from_pretrained(
     "beomi/gemma-ko-2b",
