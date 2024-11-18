@@ -15,16 +15,16 @@ if __name__ == "__main__":
     dotenv.load_dotenv()
     set_seed(42)
 
-    checkpoint_path = "outputs_gemma/checkpoint-4485"
+    model_path = "outputs/ko-gemma"
 
     model = AutoPeftModelForCausalLM.from_pretrained(
-        checkpoint_path,
+        model_path,
         trust_remote_code=True,
         # torch_dtype=torch.bfloat16,
         device_map="auto",
     )
     tokenizer = AutoTokenizer.from_pretrained(
-        checkpoint_path,
+        model_path,
         trust_remote_code=True,
     )
 
@@ -36,9 +36,8 @@ if __name__ == "__main__":
 
     test_dataset = []
     for i, row in test_df.iterrows():
-        len_choices = len(row["choices"])
-
         user_message = make_prompt(row, template_type="base")
+        len_choices = len(row["choices"])
 
         test_dataset.append(
             {

@@ -1,3 +1,6 @@
+import os
+import shutil
+
 import dotenv
 import evaluate
 import numpy as np
@@ -205,7 +208,7 @@ sft_config = SFTConfig(
     do_eval=True,
     lr_scheduler_type="cosine",
     max_seq_length=1024,
-    output_dir="outputs_gemma",
+    output_dir="outputs/checkpoint",
     per_device_train_batch_size=1,
     per_device_eval_batch_size=1,
     num_train_epochs=3,
@@ -214,7 +217,7 @@ sft_config = SFTConfig(
     logging_steps=1,
     save_strategy="epoch",
     eval_strategy="epoch",
-    save_total_limit=2,
+    save_total_limit=1,
     save_only_model=True,
     report_to="none",
 )
@@ -231,3 +234,13 @@ trainer = SFTTrainer(
     args=sft_config,
 )
 trainer.train()
+
+# 학습 종료 후 체크포인트 삭제
+if os.path.exists(sft_config.output_dir):
+    print(f"Deleting checkpoints in {sft_config.output_dir}...")
+    shutil.rmtree(sft_config.output_dir)  # 체크포인트 디렉토리 삭제
+
+# 최종 모델 저장
+final_model_dir = "outputs/ko-gemma"
+print(f"Saving final model to {final_model_dir}...")
+trainer.save_model(final_model_dir)
