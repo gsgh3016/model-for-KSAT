@@ -2,10 +2,9 @@ import dotenv
 import numpy as np
 import pandas as pd
 import torch
-from datasets import Dataset
 from peft import AutoPeftModelForCausalLM
 from tqdm import tqdm
-from transformers import AutoTokenizer, PreTrainedModel, PreTrainedTokenizerFast
+from transformers import AutoTokenizer
 from transformers.modeling_outputs import CausalLMOutput
 
 from configs import Config
@@ -13,13 +12,18 @@ from data_loaders import InferenceDataLoader
 from utils import set_seed
 
 
-def inference(model: PreTrainedModel, tokenizer: PreTrainedTokenizerFast, dataset: Dataset) -> pd.DataFrame:
+def inference(config: Config):
+    model = AutoPeftModelForCausalLM.from_pretrained(config.inference.model_path, device_map="auto")
+    tokenizer = AutoTokenizer.from_pretrained(config.inference.model_path)
+
+    data_loader = InferenceDataLoader(config.inference.data_path, tokenizer)
+
     infer_results = []
     pred_choices_map = {0: "1", 1: "2", 2: "3", 3: "4", 4: "5"}
 
     model.eval()
     with torch.inference_mode():
-        for data in tqdm(dataset):
+        for data in tqdm(data_loader.dataset):
             _id = data["id"]
             messages = data["messages"]
             len_choices = data["len_choices"]
@@ -44,7 +48,7 @@ def inference(model: PreTrainedModel, tokenizer: PreTrainedTokenizerFast, datase
             predict_value = pred_choices_map[np.argmax(probs, axis=-1)]
             infer_results.append({"id": _id, "answer": predict_value})
 
-    return pd.DataFrame(infer_results)
+    pd.DataFrame(infer_results).to_csv(config.inference.output_path, index=False)
 
 
 if __name__ == "__main__":
@@ -52,11 +56,4 @@ if __name__ == "__main__":
     config = Config()
     set_seed(config.common.seed)
 
-    model = AutoPeftModelForCausalLM.from_pretrained(config.inference.model_path, device_map="auto")
-    tokenizer = AutoTokenizer.from_pretrained(config.inference.model_path)
-
-    data_loader = InferenceDataLoader(config.inference.data_path, tokenizer)
-
-    infer_results = inference(model, tokenizer, data_loader.dataset)
-
-    infer_results.to_csv(config.inference.output_path, index=False)
+    inference(config)
