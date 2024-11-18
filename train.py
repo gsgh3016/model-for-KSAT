@@ -3,12 +3,12 @@ import os
 import shutil
 
 import dotenv
-from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
+from trl import SFTTrainer
 
 from configs import Config, create_peft_config, create_sft_config
 from data_loaders import TrainDataLoader
 from evaluation import compute_metrics, preprocess_logits_for_metrics
-from models import load_model_and_tokenizer
+from models import get_data_collator, load_model_and_tokenizer
 from utils import set_seed
 
 
@@ -25,12 +25,6 @@ def train(config: Config):
 
     data_loader = TrainDataLoader(config.train.data_path, tokenizer, config)
 
-    response_template = "<start_of_turn>model"
-    data_collator = DataCollatorForCompletionOnlyLM(
-        response_template=response_template,
-        tokenizer=tokenizer,
-    )
-
     peft_config = create_peft_config(config.peft)
     sft_config = create_sft_config(config.sft)
 
@@ -38,7 +32,7 @@ def train(config: Config):
         model=model,
         train_dataset=data_loader.train_dataset,
         eval_dataset=data_loader.eval_dataset,
-        data_collator=data_collator,
+        data_collator=get_data_collator(tokenizer),
         tokenizer=tokenizer,
         compute_metrics=lambda eval_res: compute_metrics(eval_res, tokenizer),
         preprocess_logits_for_metrics=lambda logits, labels: preprocess_logits_for_metrics(logits, labels, tokenizer),
