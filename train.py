@@ -2,15 +2,12 @@ import os
 import shutil
 
 import dotenv
-import pandas as pd
-from datasets import Dataset
 from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
 from configs import Config, create_peft_config, create_sft_config
-from data_loaders import load_data, prepare_datasets, tokenize_dataset
+from data_loaders import DataLoader
 from evaluation import compute_metrics, preprocess_logits_for_metrics
 from models import load_model_and_tokenizer
-from prompts import make_prompt
 from utils import set_seed
 
 dotenv.load_dotenv()
@@ -20,39 +17,11 @@ config = Config()
 
 set_seed(config.training.seed)
 
-df = load_data("data/train.csv")
-
 # 모델, 토크나이저 로드 및 설정
 model, tokenizer = load_model_and_tokenizer(config.model.name_or_path, config.training.device)
 
+data_loader = DataLoader("data/train.csv", tokenizer, config)
 
-processed_dataset = []
-for i, row in df.iterrows():
-    user_message = make_prompt(row, template_type="base")
-
-    processed_dataset.append(
-        {
-            "id": row["id"],
-            "messages": [
-                {"role": "system", "content": "지문을 읽고 질문의 답을 구하세요."},
-                {"role": "user", "content": user_message},
-                {"role": "assistant", "content": f"{row['answer']}"},
-            ],
-            "label": row["answer"],
-        }
-    )
-processed_dataset = Dataset.from_pandas(pd.DataFrame(processed_dataset))
-
-# 토큰화
-tokenized_dataset = tokenize_dataset(processed_dataset, tokenizer)
-
-# 데이터셋 분리
-train_dataset, eval_dataset = prepare_datasets(
-    tokenized_dataset,
-    max_length=config.sft.max_seq_length,
-    test_size=0.1,
-    seed=config.training.seed,
-)
 
 response_template = "<start_of_turn>model"
 data_collator = DataCollatorForCompletionOnlyLM(
@@ -73,8 +42,8 @@ sft_config = create_sft_config(config.sft)
 
 trainer = SFTTrainer(
     model=model,
-    train_dataset=train_dataset,
-    eval_dataset=eval_dataset,
+    train_dataset=data_loader.train_dataset,
+    eval_dataset=data_loader.eval_dataset,
     data_collator=data_collator,
     tokenizer=tokenizer,
     compute_metrics=lambda eval_res: compute_metrics(eval_res, tokenizer),
