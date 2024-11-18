@@ -8,35 +8,8 @@ from peft import AutoPeftModelForCausalLM
 from tqdm import tqdm
 from transformers import AutoTokenizer
 
+from prompts import make_prompt
 from utils import set_seed
-
-PROMPT_NO_QUESTION_PLUS = """지문:
-{paragraph}
-
-질문:
-{question}
-
-선택지:
-{choices}
-
-1, 2, 3, 4, 5 중에 하나를 정답으로 고르세요.
-정답:"""
-
-PROMPT_QUESTION_PLUS = """지문:
-{paragraph}
-
-질문:
-{question}
-
-<보기>:
-{question_plus}
-
-선택지:
-{choices}
-
-1, 2, 3, 4, 5 중에 하나를 정답으로 고르세요.
-정답:"""
-
 
 if __name__ == "__main__":
     dotenv.load_dotenv()
@@ -63,24 +36,9 @@ if __name__ == "__main__":
 
     test_dataset = []
     for i, row in test_df.iterrows():
-        choices_string = "\n".join([f"{idx + 1} - {choice}" for idx, choice in enumerate(row["choices"])])
         len_choices = len(row["choices"])
 
-        # <보기>가 있을 때
-        if row["question_plus"]:
-            user_message = PROMPT_QUESTION_PLUS.format(
-                paragraph=row["paragraph"],
-                question=row["question"],
-                question_plus=row["question_plus"],
-                choices=choices_string,
-            )
-        # <보기>가 없을 때
-        else:
-            user_message = PROMPT_NO_QUESTION_PLUS.format(
-                paragraph=row["paragraph"],
-                question=row["question"],
-                choices=choices_string,
-            )
+        user_message = make_prompt(row, template_type="base")
 
         test_dataset.append(
             {
