@@ -22,7 +22,7 @@ def display_data_summary(df: pd.DataFrame):
 
 # 인덱스 접근 함수
 def access_data_by_index(df: pd.DataFrame):
-    st.markdown("### Access by Index")
+    st.markdown("### Access Data by Index")
     index_input = st.number_input(
         "Enter the index of the row to retrieve:",
         min_value=0,
@@ -37,6 +37,22 @@ def access_data_by_index(df: pd.DataFrame):
             st.write(row_data)
         else:
             st.error("Invalid index. Please try again.")
+
+
+# 칼럼 필터링 함수
+def filter_data_by_column(df: pd.DataFrame):
+    st.subheader("Filter Data by Column")
+    column = st.selectbox("Select a column to filter by:", df.columns)
+    search_value = st.text_input(f"Enter the value to search in '{column}':")
+
+    if st.button("Search"):
+        filtered_df = df[df[column].astype(str).str.contains(search_value, na=False, case=False, regex=False)]
+        result_count = len(filtered_df)
+        st.write(f"Number of rows containing '{search_value}' in column '{column}': {result_count}")
+        if result_count > 0:
+            st.dataframe(filtered_df)
+        else:
+            st.write("No matching data found.")
 
 
 if __name__ == "__main__":
@@ -80,8 +96,7 @@ if __name__ == "__main__":
             if access_method == "Access by Index":
                 access_data_by_index(df)
             elif access_method == "Filter by Column":
-                # TODO: Column으로 파일 인덱스
-                pass
+                filter_data_by_column(df)
 
             # TODO: 수능 문제 형태로 출력
             pass
