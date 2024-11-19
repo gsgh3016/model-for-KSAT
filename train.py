@@ -47,9 +47,8 @@ def train(config: Config):
         shutil.rmtree(sft_config.output_dir)  # 체크포인트 디렉토리 삭제
 
     # 최종 모델 저장
-    final_model_dir = "outputs/ko-gemma"
     print(f"Saving final model to {config.train.save_path}...")
-    trainer.save_model(final_model_dir)
+    trainer.save_model(config.train.save_path)
 
 
 if __name__ == "__main__":
