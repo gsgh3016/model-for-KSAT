@@ -43,27 +43,10 @@ def set_chat_template(tokenizer: PreTrainedTokenizerFast):
             "{% endif %}"
             "{% endfor %}"
         )
-    return tokenizer
+        tokenizer.add_special_tokens(
+            special_tokens_dict={"additional_special_tokens": ["<start_of_turn>", "<end_of_turn>"]}
+        )
 
-
-def add_special_tokens(tokenizer: PreTrainedTokenizerFast):
-    """
-    토크나이저에 스페셜 토큰을 추가하는 함수입니다.
-
-    Args:
-        tokenizer: 업데이트할 토크나이저.
-
-    Returns:
-        tokenizer: 업데이트된 토크나이저.
-    """
-    # special_tokens_dict = {
-    #     "pad_token": tokenizer.eos_token,
-    #     "additional_special_tokens": [
-    #         "<start_of_turn>",
-    #         "<end_of_turn>",
-    #     ],
-    # }
-    # tokenizer.add_special_tokens(special_tokens_dict)
     return tokenizer
 
 

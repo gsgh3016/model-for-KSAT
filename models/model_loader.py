@@ -1,7 +1,7 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, PreTrainedModel
 
-from models.tokenizer_utils import add_special_tokens, prepare_tokenizer, set_chat_template
+from models.tokenizer_utils import prepare_tokenizer, set_chat_template
 
 
 def load_model_and_tokenizer(model_name_or_path, device="cuda"):
@@ -61,7 +61,6 @@ def load_tokenizer(model_name_or_path):
         trust_remote_code=True,
     )
     tokenizer = set_chat_template(tokenizer)
-    tokenizer = add_special_tokens(tokenizer)
     tokenizer = prepare_tokenizer(tokenizer)
 
     return tokenizer

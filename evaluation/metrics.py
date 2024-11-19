@@ -39,5 +39,5 @@ def preprocess_labels(labels, tokenizer: PreTrainedTokenizerFast):
 
     labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
     labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
-    labels = [x.split("<end_of_turn>")[0].strip() for x in labels]
+    labels = [x.strip() for x in labels]
     return [int_output_map[x] for x in labels]
