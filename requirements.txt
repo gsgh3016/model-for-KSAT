@@ -10,6 +10,10 @@ numpy
 pandas
 bitsandbytes
 
+# Visualization Packages
+streamlit
+streamlit-option-menu
+
 # Development Packages
 tqdm
 ipykernel
