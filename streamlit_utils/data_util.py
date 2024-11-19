@@ -72,6 +72,7 @@ def display_question_format(df: pd.DataFrame):
         paragraph = row["paragraph"]
         question = row["question"]
         choices = row["choices"]
+        answer = row["answer"]
 
         st.markdown("#### 📜 지문")
         st.write(paragraph)
@@ -84,7 +85,16 @@ def display_question_format(df: pd.DataFrame):
         choices_list = eval(choices) if isinstance(choices, str) else choices
         st.markdown("#### 📝 선택지")
         for idx, choice in enumerate(choices_list, start=1):
-            st.write(f"{idx}. {choice.strip()}")
+            if answer and idx == int(answer):  # 정답 강조
+                st.markdown(
+                    f"<span style='color: green; font-weight: bold;'>{idx}. {choice.strip()}</span>",
+                    unsafe_allow_html=True,
+                )
+            else:
+                st.markdown(
+                    f"<span>{idx}. {choice.strip()}</span>",
+                    unsafe_allow_html=True,
+                )
         if "answer" in df.columns:
             st.markdown("#### ✅ 정답")
             st.write(row["answer"])
