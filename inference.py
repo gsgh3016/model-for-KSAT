@@ -10,7 +10,7 @@ from transformers import AutoTokenizer
 from transformers.modeling_outputs import CausalLMOutput
 
 from configs import Config
-from data_loaders import InferenceDataLoader
+from data_loaders import build_data_loader
 from utils import set_seed
 
 
@@ -18,7 +18,7 @@ def inference(config: Config):
     model = AutoPeftModelForCausalLM.from_pretrained(config.inference.model_path, device_map="auto")
     tokenizer = AutoTokenizer.from_pretrained(config.inference.model_path)
 
-    data_loader = InferenceDataLoader(config.inference.data_path, tokenizer)
+    data_loader = build_data_loader("inference", config.inference.data_path, tokenizer, config)
 
     infer_results = []
     pred_choices_map = {0: "1", 1: "2", 2: "3", 3: "4", 4: "5"}
