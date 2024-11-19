@@ -72,7 +72,10 @@ def display_question_format(df: pd.DataFrame):
         paragraph = row["paragraph"]
         question = row["question"]
         choices = row["choices"]
-        answer = row["answer"]
+        if "answer" in df.columns:
+            answer = row["answer"]
+        else:
+            answer = None
 
         st.markdown("#### 📜 지문")
         st.write(paragraph)
