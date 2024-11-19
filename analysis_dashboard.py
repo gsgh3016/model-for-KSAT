@@ -51,4 +51,4 @@ if __name__ == "__main__":
             # TODO: Add distribution plotting logic
 
     elif selected == "Compare":
-        st.title("🆚 Compare Dataset")
+        st.title("🆚 Compare Datasets")
