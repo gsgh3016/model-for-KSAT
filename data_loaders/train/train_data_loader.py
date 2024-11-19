@@ -4,6 +4,7 @@ from transformers import PreTrainedTokenizerFast
 
 from configs import Config
 from data_loaders.base_data_loader import BaseDataLoader
+from models import SpecialTokens
 
 
 class TrainDataLoader(BaseDataLoader):
@@ -24,12 +25,22 @@ class TrainDataLoader(BaseDataLoader):
     def build_single_data(self, data: pd.Series, user_prompt: str):
         len_choices = len(data["choices"])
 
+        response = (
+            SpecialTokens.start_of_response
+            # + SpecialTokens.start_of_reasoning  # Chain Of Thought Prompt 추가 시
+            # + data["reasoning"]
+            # + SpecialTokens.end_of_reasoning
+            + SpecialTokens.start_of_answer
+            + str(data["answer"])
+            + SpecialTokens.end_of_answer
+            + SpecialTokens.end_of_response
+        )
         return {
             "id": data["id"],
             "messages": [
                 {"role": "system", "content": "지문을 읽고 질문의 답을 구하세요."},
                 {"role": "user", "content": user_prompt},
-                {"role": "assistant", "content": f"{data['answer']}"},
+                {"role": "assistant", "content": response},
             ],
             # "label": data["answer"], # train, eval 둘다 안쓰임..
             "len_choices": len_choices,

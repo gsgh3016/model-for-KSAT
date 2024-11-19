@@ -1,5 +1,9 @@
+import re
+
 from transformers import PreTrainedTokenizerFast
 from trl import DataCollatorForCompletionOnlyLM
+
+from models.special_tokens import SpecialTokens
 
 
 def get_data_collator(tokenizer: PreTrainedTokenizerFast, response_template: str):
@@ -15,9 +19,29 @@ def get_data_collator(tokenizer: PreTrainedTokenizerFast, response_template: str
         DataCollatorForLanguageModeling: 언어 모델링용 데이터 콜레이터.
     """
     return DataCollatorForCompletionOnlyLM(
-        response_template=response_template,
+        response_template=SpecialTokens.start_of_response,
         tokenizer=tokenizer,
     )
+
+
+def extract_answer_from_response(response: str) -> str:
+    """
+    모델 응답에서 스페셜 토큰을 기반으로 정답을 추출하는 함수.
+
+    Args:
+        response (str): 모델이 생성한 텍스트.
+        special_tokens (SpecialTokens): 스페셜 토큰 객체.
+
+    Returns:
+        str: 추출된 정답. 답변이 없으면 None 반환.
+    """
+    answer_pattern = re.compile(
+        f"{re.escape(SpecialTokens.start_of_answer)}(.*?){re.escape(SpecialTokens.end_of_answer)}"
+    )
+    match = answer_pattern.search(response)
+    if match:
+        return match.group(1).strip()
+    return None
 
 
 def set_chat_template(tokenizer: PreTrainedTokenizerFast):
@@ -43,10 +67,13 @@ def set_chat_template(tokenizer: PreTrainedTokenizerFast):
             "{% endif %}"
             "{% endfor %}"
         )
-        tokenizer.add_special_tokens(
-            special_tokens_dict={"additional_special_tokens": ["<start_of_turn>", "<end_of_turn>"]}
-        )
+        special_tokens_dict = {
+            "additional_special_tokens": SpecialTokens.to_list() + ["<start_of_turn>", "<end_of_turn>"]
+        }
+    else:
+        special_tokens_dict = {"additional_special_tokens": SpecialTokens.to_list()}
 
+    tokenizer.add_special_tokens(special_tokens_dict)
     return tokenizer
 
 
