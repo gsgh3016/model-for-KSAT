@@ -26,6 +26,7 @@ class Config:
 @dataclass
 class ModelConfig:
     name_or_path: str
+    response_template: str
 
 
 @dataclass

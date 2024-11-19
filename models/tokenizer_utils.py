@@ -2,7 +2,7 @@ from transformers import PreTrainedTokenizerFast
 from trl import DataCollatorForCompletionOnlyLM
 
 
-def get_data_collator(tokenizer: PreTrainedTokenizerFast):
+def get_data_collator(tokenizer: PreTrainedTokenizerFast, response_template: str):
     """
     데이터를 모델에 입력하기 위해 처리하는 데이터 콜레이터를 반환합니다.
 
@@ -15,7 +15,7 @@ def get_data_collator(tokenizer: PreTrainedTokenizerFast):
         DataCollatorForLanguageModeling: 언어 모델링용 데이터 콜레이터.
     """
     return DataCollatorForCompletionOnlyLM(
-        response_template="<start_of_turn>model",
+        response_template=response_template,
         tokenizer=tokenizer,
     )
 

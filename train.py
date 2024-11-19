@@ -32,7 +32,7 @@ def train(config: Config):
         model=model,
         train_dataset=data_loader.train_dataset,
         eval_dataset=data_loader.eval_dataset,
-        data_collator=get_data_collator(tokenizer),
+        data_collator=get_data_collator(tokenizer, config.model.response_template),
         tokenizer=tokenizer,
         compute_metrics=lambda eval_res: compute_metrics(eval_res, tokenizer),
         preprocess_logits_for_metrics=lambda logits, labels: preprocess_logits_for_metrics(logits, labels, tokenizer),
