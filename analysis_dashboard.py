@@ -26,7 +26,7 @@ if __name__ == "__main__":
             df = pd.read_csv(uploaded_file)
         else:
             # 첨부 파일이 없으면 기본적으로 train.csv에 대한 분석을 출력합니다.
-            df = pd.read_csv("data/train.csv")
+            df = pd.read_csv("data/train_v1.0.2.csv")
         # 데이터 요약
         with tab1:
             display_data_summary(df)
