@@ -27,6 +27,7 @@ class Config:
 class ModelConfig:
     name_or_path: str
     response_template: str
+    without_system_role: str
 
 
 @dataclass

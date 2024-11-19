@@ -1,6 +1,7 @@
 model:
   name_or_path: "beomi/gemma-ko-2b"
   response_template: "<start_of_turn>model"
+  without_system_role: false
 
 common:
   seed: 42

@@ -6,7 +6,7 @@ import dotenv
 from trl import SFTTrainer
 
 from configs import Config, create_peft_config, create_sft_config
-from data_loaders import TrainDataLoader
+from data_loaders import build_data_loader
 from evaluation import compute_metrics, preprocess_logits_for_metrics
 from models import get_data_collator, load_model_and_tokenizer
 from utils import set_seed
@@ -23,7 +23,7 @@ def train(config: Config):
 
     model, tokenizer = load_model_and_tokenizer(config.model.name_or_path, config.common.device)
 
-    data_loader = TrainDataLoader(config.train.data_path, tokenizer, config)
+    data_loader = build_data_loader("train", config.train.data_path, tokenizer, config)
 
     peft_config = create_peft_config(config.peft)
     sft_config = create_sft_config(config.sft)
