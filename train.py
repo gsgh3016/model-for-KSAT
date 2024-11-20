@@ -28,6 +28,14 @@ def train(config: Config):
     peft_config = create_peft_config(config.peft)
     sft_config = create_sft_config(config.sft)
 
+    logit_idx = [
+        tokenizer.vocab["1"],
+        tokenizer.vocab["2"],
+        tokenizer.vocab["3"],
+        tokenizer.vocab["4"],
+        tokenizer.vocab["5"],
+    ]
+
     trainer = SFTTrainer(
         model=model,
         train_dataset=data_loader.train_dataset,
@@ -35,7 +43,7 @@ def train(config: Config):
         data_collator=get_data_collator(tokenizer, config.model.response_template),
         tokenizer=tokenizer,
         compute_metrics=lambda eval_res: compute_metrics(eval_res, tokenizer),
-        preprocess_logits_for_metrics=lambda logits, labels: preprocess_logits_for_metrics(logits, labels, tokenizer),
+        preprocess_logits_for_metrics=lambda logits, labels: preprocess_logits_for_metrics(logits, labels, logit_idx),
         peft_config=peft_config,
         args=sft_config,
     )
