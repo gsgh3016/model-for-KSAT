@@ -12,11 +12,15 @@ class BaseDataLoader(ABC):
     def __init__(self, data_path: str, tokenizer: PreTrainedTokenizerFast):
         self.tokenizer = tokenizer
 
+        df = self.read_csv(data_path)
+
+        self.dataset = self.preprocess_dataset(df)
+
+    def read_csv(self, data_path: str) -> pd.DataFrame:
         df = pd.read_csv(data_path)
         df["choices"] = df["choices"].apply(literal_eval)
         df["question_plus"] = df["question_plus"].fillna("")
-
-        self.dataset = self.preprocess_dataset(df)
+        return df
 
     def preprocess_dataset(self, df: pd.DataFrame) -> Dataset:
         processed_dataset = []

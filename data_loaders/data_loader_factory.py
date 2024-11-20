@@ -7,14 +7,14 @@ from data_loaders.train.train_data_loader import TrainDataLoader
 from data_loaders.train.train_data_loader_without_system import TrainDataLoaderWithoutSystem
 
 
-def build_data_loader(type: str, data_path: str, tokenizer: PreTrainedTokenizerFast, config: Config):
+def build_data_loader(type: str, tokenizer: PreTrainedTokenizerFast, config: Config):
     if type == "train":
         if config.model.without_system_role:
-            return TrainDataLoaderWithoutSystem(data_path, tokenizer, config)
+            return TrainDataLoaderWithoutSystem(config, tokenizer)
         else:
-            return TrainDataLoader(data_path, tokenizer, config)
+            return TrainDataLoader(config, tokenizer)
     else:  # inference
         if config.model.without_system_role:
-            return InferenceDataLoaderWithoutSystem(data_path, tokenizer)
+            return InferenceDataLoaderWithoutSystem(config.inference.data_path, tokenizer)
         else:
-            return InferenceDataLoader(data_path, tokenizer)
+            return InferenceDataLoader(config.inference.data_path, tokenizer)

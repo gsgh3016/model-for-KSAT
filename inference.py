@@ -18,7 +18,7 @@ def inference(config: Config):
     model = AutoPeftModelForCausalLM.from_pretrained(config.inference.model_path, device_map="auto")
     tokenizer = AutoTokenizer.from_pretrained(config.inference.model_path)
 
-    data_loader = build_data_loader("inference", config.inference.data_path, tokenizer, config)
+    data_loader = build_data_loader("inference", tokenizer, config)
 
     infer_results = []
     pred_choices_map = {0: "1", 1: "2", 2: "3", 3: "4", 4: "5"}

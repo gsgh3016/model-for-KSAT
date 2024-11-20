@@ -23,7 +23,7 @@ def train(config: Config):
 
     model, tokenizer = load_model_and_tokenizer(config.model.name_or_path, config.common.device)
 
-    data_loader = build_data_loader("train", config.train.data_path, tokenizer, config)
+    data_loader = build_data_loader("train", tokenizer, config)
 
     peft_config = create_peft_config(config.peft)
     sft_config = create_sft_config(config.sft)
