@@ -10,6 +10,8 @@ class TrainDataLoaderWithoutSystem(TrainDataLoader):
         super().__init__(config, tokenizer)
 
     def build_single_data(self, data: pd.Series, user_prompt: str):
+        len_choices = len(data["choices"])
+
         return {
             "id": data["id"],
             "messages": [
@@ -17,4 +19,5 @@ class TrainDataLoaderWithoutSystem(TrainDataLoader):
                 {"role": "assistant", "content": f"{data['answer']}"},
             ],
             "label": data["answer"],
+            "len_choices": len_choices,
         }

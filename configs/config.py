@@ -76,6 +76,7 @@ class WandbConfig:
 class TrainConfig:
     data_path: str
     valid_data_path: str
+    valid_output_path: str
 
 
 @dataclass

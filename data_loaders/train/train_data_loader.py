@@ -13,15 +13,17 @@ class TrainDataLoader(BaseDataLoader):
         train_dataset = train_dataset.filter(lambda x: len(x["input_ids"]) <= config.sft.max_seq_length)
 
         eval_df = self.read_csv(config.train.valid_data_path)
-        eval_dataset = self.preprocess_dataset(eval_df)
+        self.origin_eval_dataset = self.preprocess_dataset(eval_df)
 
-        eval_dataset = self.tokenize_dataset(eval_dataset)
+        eval_dataset = self.tokenize_dataset(self.origin_eval_dataset)
         eval_dataset = eval_dataset.filter(lambda x: len(x["input_ids"]) <= config.sft.max_seq_length)
 
         self.train_dataset = train_dataset
         self.eval_dataset = eval_dataset
 
     def build_single_data(self, data: pd.Series, user_prompt: str):
+        len_choices = len(data["choices"])
+
         return {
             "id": data["id"],
             "messages": [
@@ -30,6 +32,7 @@ class TrainDataLoader(BaseDataLoader):
                 {"role": "assistant", "content": f"{data['answer']}"},
             ],
             "label": data["answer"],
+            "len_choices": len_choices,
         }
 
     def tokenize_dataset(self, dataset: Dataset) -> Dataset:
