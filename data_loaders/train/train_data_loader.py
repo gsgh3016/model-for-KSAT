@@ -7,19 +7,23 @@ from data_loaders.base_data_loader import BaseDataLoader
 
 
 class TrainDataLoader(BaseDataLoader):
-    def __init__(self, data_path: str, tokenizer: PreTrainedTokenizerFast, config: Config):
-        super().__init__(data_path, tokenizer)
+    def __init__(self, config: Config, tokenizer: PreTrainedTokenizerFast):
+        super().__init__(config.train.data_path, tokenizer)
+        train_dataset = self.tokenize_dataset(self.dataset)
+        train_dataset = train_dataset.filter(lambda x: len(x["input_ids"]) <= config.sft.max_seq_length)
 
-        tokenized_dataset = self.tokenize_dataset(self.dataset)
+        eval_df = self.read_csv(config.train.valid_data_path)
+        self.origin_eval_dataset = self.preprocess_dataset(eval_df)
 
-        # 데이터셋 분리
-        tokenized_dataset = tokenized_dataset.filter(lambda x: len(x["input_ids"]) <= config.sft.max_seq_length)
-        tokenized_dataset = tokenized_dataset.train_test_split(test_size=0.1, seed=config.common.seed)
+        eval_dataset = self.tokenize_dataset(self.origin_eval_dataset)
+        eval_dataset = eval_dataset.filter(lambda x: len(x["input_ids"]) <= config.sft.max_seq_length)
 
-        self.train_dataset = tokenized_dataset["train"]
-        self.eval_dataset = tokenized_dataset["test"]
+        self.train_dataset = train_dataset
+        self.eval_dataset = eval_dataset
 
     def build_single_data(self, data: pd.Series, user_prompt: str):
+        len_choices = len(data["choices"])
+
         return {
             "id": data["id"],
             "messages": [
@@ -28,6 +32,7 @@ class TrainDataLoader(BaseDataLoader):
                 {"role": "assistant", "content": f"{data['answer']}"},
             ],
             "label": data["answer"],
+            "len_choices": len_choices,
         }
 
     def tokenize_dataset(self, dataset: Dataset) -> Dataset:

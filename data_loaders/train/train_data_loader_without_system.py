@@ -6,10 +6,12 @@ from data_loaders.train.train_data_loader import TrainDataLoader
 
 
 class TrainDataLoaderWithoutSystem(TrainDataLoader):
-    def __init__(self, data_path: str, tokenizer: PreTrainedTokenizerFast, config: Config):
-        super().__init__(data_path, tokenizer, config)
+    def __init__(self, config: Config, tokenizer: PreTrainedTokenizerFast):
+        super().__init__(config, tokenizer)
 
     def build_single_data(self, data: pd.Series, user_prompt: str):
+        len_choices = len(data["choices"])
+
         return {
             "id": data["id"],
             "messages": [
@@ -17,4 +19,5 @@ class TrainDataLoaderWithoutSystem(TrainDataLoader):
                 {"role": "assistant", "content": f"{data['answer']}"},
             ],
             "label": data["answer"],
+            "len_choices": len_choices,
         }
