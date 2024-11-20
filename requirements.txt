@@ -9,6 +9,7 @@ trl
 numpy
 pandas
 bitsandbytes
+wikipedia-api
 
 # Visualization Packages
 streamlit
