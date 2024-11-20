@@ -1,4 +1,4 @@
-name: New Feature Request
+name: Feature Request
 title: "[FEAT] "
 description: Suggest a new feature or enhancement for the project.
 labels: ["Type: Enhancement", "Priority: Medium", "Status: Pending"]
@@ -17,8 +17,8 @@ body:
     validations:
       required: true
     attributes:
-      label: "💡 기능 제목"
-      description: "추가하고 싶은 기능의 간단한 제목을 입력해주세요."
+      label: "💡 기능 요약"
+      description: "추가하고 싶은 기능을 간단히 요약해주세요."
       placeholder: "예: 사용자 로그인 기능"
 
   - type: textarea
