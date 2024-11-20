@@ -2,8 +2,7 @@ import pandas as pd
 from transformers import PreTrainedTokenizerFast
 
 from configs import Config
-
-from .train_data_loader import TrainDataLoader
+from data_loaders.train.train_data_loader import TrainDataLoader
 
 
 class TrainDataLoaderWithoutSystem(TrainDataLoader):

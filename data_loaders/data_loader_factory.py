@@ -1,11 +1,10 @@
 from transformers import PreTrainedTokenizerFast
 
 from configs import Config
-
-from .inference_data_loader import InferenceDataLoader
-from .inference_data_loader_without_system import InferenceDataLoaderWithoutSystem
-from .train_data_loader import TrainDataLoader
-from .train_data_loader_without_system import TrainDataLoaderWithoutSystem
+from data_loaders.inference.inference_data_loader import InferenceDataLoader
+from data_loaders.inference.inference_data_loader_without_system import InferenceDataLoaderWithoutSystem
+from data_loaders.train.train_data_loader import TrainDataLoader
+from data_loaders.train.train_data_loader_without_system import TrainDataLoaderWithoutSystem
 
 
 def build_data_loader(type: str, data_path: str, tokenizer: PreTrainedTokenizerFast, config: Config):

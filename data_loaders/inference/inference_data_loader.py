@@ -1,10 +1,10 @@
 import pandas as pd
 from transformers import PreTrainedTokenizerFast
 
-from .inference_data_loader import InferenceDataLoader
+from data_loaders.base_data_loader import BaseDataLoader
 
 
-class InferenceDataLoaderWithoutSystem(InferenceDataLoader):
+class InferenceDataLoader(BaseDataLoader):
     def __init__(self, data_path: str, tokenizer: PreTrainedTokenizerFast):
         super().__init__(data_path, tokenizer)
 
@@ -14,7 +14,8 @@ class InferenceDataLoaderWithoutSystem(InferenceDataLoader):
         return {
             "id": data["id"],
             "messages": [
-                {"role": "user", "content": "지문을 읽고 질문의 답을 구하세요.\n" + user_prompt},
+                {"role": "system", "content": "지문을 읽고 질문의 답을 구하세요."},
+                {"role": "user", "content": user_prompt},
             ],
             "len_choices": len_choices,
         }

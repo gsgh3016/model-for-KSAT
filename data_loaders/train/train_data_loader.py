@@ -3,8 +3,7 @@ from datasets import Dataset
 from transformers import PreTrainedTokenizerFast
 
 from configs import Config
-
-from .base_data_loader import BaseDataLoader
+from data_loaders.base_data_loader import BaseDataLoader
 
 
 class TrainDataLoader(BaseDataLoader):
