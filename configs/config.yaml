@@ -1,0 +1,47 @@
+model:
+  name_or_path: "beomi/gemma-ko-2b"
+  response_template: "<start_of_turn>model\n"
+  without_system_role: false
+
+common:
+  seed: 42
+  device: "cuda"
+
+peft:
+  r: 6
+  lora_alpha: 8
+  lora_dropout: 0.05
+  target_modules: ["q_proj", "k_proj"]
+  bias: "none"
+  task_type: "CAUSAL_LM"
+
+sft:
+  do_train: true
+  do_eval: true
+  lr_scheduler_type: "cosine"
+  max_seq_length: 1024
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
+  num_train_epochs: 3
+  learning_rate: 2.0e-5 # 지수 자릿수 앞부분을 실수 형태로 .을 사용해 작성
+  weight_decay: 0.01
+  logging_steps: 1
+  save_strategy: "epoch"
+  eval_strategy: "epoch"
+  save_total_limit: 1
+  save_only_model: true
+  report_to: "none"
+  # report_to: "wandb" # wandb로 변경하여 로그를 기록합니다.
+
+wandb:
+  project: "your_wandb_project_name"
+  entity: "your_wandb_entity_name"
+  name: "experiment_name"
+
+train:
+  data_path: "data/train.csv"
+
+inference:
+  model_path: "outputs/gemma-ko-2b"
+  data_path: "data/test.csv"
+  output_path: "data/output.csv"

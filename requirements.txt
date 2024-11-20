@@ -11,6 +11,11 @@ pandas
 bitsandbytes
 langchain
 langchain-openai
+wikipedia-api
+
+# Visualization Packages
+streamlit
+streamlit-option-menu
 
 # Development Packages
 tqdm

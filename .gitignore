@@ -4,18 +4,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Created by https://www.toptal.com/developers/gitignore/api/python
-# Edit at https://www.toptal.com/developers/gitignore?templates=python
-
-### Python ###
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
 # C extensions
 *.so
 
@@ -63,6 +51,9 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+playground/
+playground*.py
+playground*.ipynb
 
 # Translations
 *.mo
@@ -192,3 +183,5 @@ output*/
 
 baseline*.ipynb
 .DS_Store
+configs/*.yaml
+!configs/config.yaml
