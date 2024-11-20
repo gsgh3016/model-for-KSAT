@@ -9,6 +9,8 @@ trl
 numpy
 pandas
 bitsandbytes
+langchain
+langchain-openai
 wikipedia-api
 
 # Visualization Packages
