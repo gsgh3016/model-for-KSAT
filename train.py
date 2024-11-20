@@ -47,8 +47,9 @@ def train(config: Config):
         shutil.rmtree(sft_config.output_dir)  # 체크포인트 디렉토리 삭제
 
     # 최종 모델 저장
-    print(f"Saving final model to {config.train.save_path}...")
-    trainer.save_model(config.train.save_path)
+    save_path = f"outputs/{config.model.name_or_path.split('/')[1]}"
+    print(f"Saving final model to {save_path}...")
+    trainer.save_model(save_path)
 
 
 if __name__ == "__main__":

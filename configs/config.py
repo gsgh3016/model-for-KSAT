@@ -75,7 +75,6 @@ class WandbConfig:
 @dataclass
 class TrainConfig:
     data_path: str
-    save_path: str
 
 
 @dataclass

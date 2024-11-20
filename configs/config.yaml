@@ -40,9 +40,8 @@ wandb:
 
 train:
   data_path: "data/train.csv"
-  save_path: "outputs/ko-gemma"
 
 inference:
-  model_path: "outputs/ko-gemma"
+  model_path: "outputs/gemma-ko-2b"
   data_path: "data/test.csv"
   output_path: "data/output.csv"
