@@ -4,7 +4,7 @@ from transformers import PreTrainedTokenizerFast
 
 from configs import Config
 
-from .data_loader import BaseDataLoader
+from .base_data_loader import BaseDataLoader
 
 
 class TrainDataLoader(BaseDataLoader):

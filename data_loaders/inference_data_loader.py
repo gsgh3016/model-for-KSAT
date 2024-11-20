@@ -1,7 +1,7 @@
 import pandas as pd
 from transformers import PreTrainedTokenizerFast
 
-from .data_loader import BaseDataLoader
+from .base_data_loader import BaseDataLoader
 
 
 class InferenceDataLoader(BaseDataLoader):
