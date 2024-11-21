@@ -1,5 +1,8 @@
+import os
+
 import pandas as pd
 import streamlit as st
+from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
 
 from streamlit_utils import access_data_by_index, display_data_summary, display_question_format, filter_data_by_column
@@ -15,6 +18,7 @@ if __name__ == "__main__":
         selected = option_menu(
             "Main Menu", ["Home", "Compare"], icons=["house", "arrows-expand"], menu_icon="menu", default_index=0
         )
+    load_dotenv()
 
     # HOME 탭
     if selected == "Home":
@@ -26,7 +30,7 @@ if __name__ == "__main__":
             df = pd.read_csv(uploaded_file)
         else:
             # 첨부 파일이 없으면 기본적으로 train.csv에 대한 분석을 출력합니다.
-            df = pd.read_csv("data/train_v1.0.2.csv")
+            df = pd.read_csv(os.getenv("streamlit_default_train_path"))
         # 데이터 요약
         with tab1:
             display_data_summary(df)
