@@ -185,3 +185,5 @@ baseline*.ipynb
 .DS_Store
 configs/*.yaml
 !configs/config.yaml
+
+wandb/
