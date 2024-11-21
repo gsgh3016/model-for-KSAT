@@ -27,6 +27,7 @@ def create_sft_config(sft_config: SftConfig) -> SFTConfig:
         num_train_epochs=sft_config.num_train_epochs,
         learning_rate=sft_config.learning_rate,
         weight_decay=sft_config.weight_decay,
+        logging_strategy=sft_config.logging_strategy,
         logging_steps=sft_config.logging_steps,
         save_strategy=sft_config.save_strategy,
         eval_strategy=sft_config.eval_strategy,

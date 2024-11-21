@@ -6,6 +6,7 @@ import dotenv
 from sklearn.metrics import accuracy_score
 from trl import SFTTrainer
 
+import wandb
 from configs import Config, create_peft_config, create_sft_config
 from data_loaders import build_data_loader
 from evaluation import compute_metrics, preprocess_logits_for_metrics
@@ -14,13 +15,18 @@ from utils import set_seed
 
 
 def train(config: Config):
-    # # wandb 초기화
-    # wandb.init(
-    #     project=config.wandb.project,
-    #     entity=config.wandb.entity,
-    #     name=config.wandb.name,
-    #     config=config.raw_config,  # 설정값을 wandb에 로깅
-    # )
+    # wandb 초기화
+    wandb.init(
+        project=config.wandb.project,
+        name=(
+            f"{config.model.name_or_path.split('/')[1]}/"
+            f"epoch-{config.sft.num_train_epochs}/"
+            f"LoRA_r-{config.peft.r}/"
+            f"max_seq_length-{config.sft.max_seq_length}/"
+            f"data-{config.train.data_path.split('_')[1].split('.csv')[0]}"
+        ),
+        config=config.raw_config,
+    )
 
     model, tokenizer = load_model_and_tokenizer(config.model.name_or_path, config.common.device)
 
