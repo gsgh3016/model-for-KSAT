@@ -3,10 +3,10 @@ import os
 import shutil
 
 import dotenv
+import wandb
 from sklearn.metrics import accuracy_score
 from trl import SFTTrainer
 
-import wandb
 from configs import Config, create_peft_config, create_sft_config
 from data_loaders import build_data_loader
 from evaluation import compute_metrics, preprocess_logits_for_metrics
