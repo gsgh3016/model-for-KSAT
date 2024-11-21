@@ -57,6 +57,7 @@ class SftConfig:
     num_train_epochs: int
     learning_rate: float
     weight_decay: float
+    logging_strategy: str
     logging_steps: int
     save_strategy: str
     eval_strategy: str
@@ -68,8 +69,6 @@ class SftConfig:
 @dataclass
 class WandbConfig:
     project: str
-    entity: str
-    name: str
 
 
 @dataclass

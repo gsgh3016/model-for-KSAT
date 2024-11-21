@@ -23,27 +23,25 @@ sft:
   per_device_train_batch_size: 1
   per_device_eval_batch_size: 1
   num_train_epochs: 3
-  learning_rate: 2.0e-5 # 지수 자릿수 앞부분을 실수 형태로 .을 사용해 작성
+  learning_rate: 2.0e-5 # 지수 자릿수 앞부분을 실수 형태로 작성 ('2'-> x, '2.0'-> o)
   weight_decay: 0.01
-  logging_steps: 1
+  logging_strategy: "steps" # epoch or steps, epoch의 경우 logging_steps 무시
+  logging_steps: 100
   save_strategy: "epoch"
   eval_strategy: "epoch"
   save_total_limit: 1
   save_only_model: true
-  report_to: "none"
-  # report_to: "wandb" # wandb로 변경하여 로그를 기록합니다.
+  report_to: "wandb" # none or wandb, wandb로 변경하여 로그를 기록합니다.
 
 wandb:
-  project: "your_wandb_project_name"
-  entity: "your_wandb_entity_name"
-  name: "experiment_name"
+  project: "MMLU"
 
 train:
-  data_path: "data/train.csv"
-  valid_data_path: "data/valid.csv"
+  data_path: "data/train_v2.0.1.csv" # wandb 로깅 사용시 파일명 변겅 금지(데이터 버전 정보 사용)
+  valid_data_path: "data/valid_v2.0.1.csv"
   valid_output_path: "data/valid_output.csv"
 
 inference:
-  model_path: "outputs/gemma-ko-2b"
-  data_path: "data/test.csv"
+  model_path: "outputs/gemma-ko-2b" # 학습된 모델로 변경 필요
+  data_path: "data/test_v1.0.2.csv"
   output_path: "data/output.csv"

@@ -16,6 +16,7 @@ wikipedia-api
 # Visualization Packages
 streamlit
 streamlit-option-menu
+wandb
 
 # Development Packages
 tqdm
