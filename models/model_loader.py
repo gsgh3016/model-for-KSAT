@@ -1,10 +1,11 @@
-import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, PreTrainedModel
 
+from configs import Config, create_bnb_config
 from models.tokenizer_utils import prepare_tokenizer, set_chat_template
+from utils import str_to_dtype
 
 
-def load_model_and_tokenizer(model_name_or_path, device="cuda"):
+def load_model_and_tokenizer(model_name_or_path, config: Config):
     """
     모델과 토크나이저를 로드하는 함수입니다.
 
@@ -16,7 +17,7 @@ def load_model_and_tokenizer(model_name_or_path, device="cuda"):
         model: 로드된 모델.
         tokenizer: 로드된 토크나이저.
     """
-    model = load_model(model_name_or_path, device)
+    model = load_model(model_name_or_path, config)
     tokenizer = load_tokenizer(model_name_or_path)
 
     # 토크나이저의 스페셜 토큰 수를 모델에 반영
@@ -24,7 +25,7 @@ def load_model_and_tokenizer(model_name_or_path, device="cuda"):
     return model, tokenizer
 
 
-def load_model(model_name_or_path, device="cuda") -> PreTrainedModel:
+def load_model(model_name_or_path, config: Config) -> PreTrainedModel:
     """
     모델을 로드하는 함수입니다.
 
@@ -35,14 +36,18 @@ def load_model(model_name_or_path, device="cuda") -> PreTrainedModel:
     Returns:
         model: 로드된 모델.
     """
+    # 양자화 설정 없을 시 None으로 설정(양자화가 없더라도 BitsAndBytesConfig가 들어가면 속도 저하됨)
+    quantization_config = create_bnb_config(config.bnb) if config.bnb.load_in_4bit or config.bnb.load_in_8bit else None
+
     # 모델 로드
     model = AutoModelForCausalLM.from_pretrained(
         model_name_or_path,
-        torch_dtype=torch.float16,
+        quantization_config=quantization_config,
+        torch_dtype=str_to_dtype(config.model.torch_dtype),
         trust_remote_code=True,
     )
 
-    model.to(device)
+    model.to(config.common.device)
     return model
 
 

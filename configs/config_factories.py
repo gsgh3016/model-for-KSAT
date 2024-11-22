@@ -1,7 +1,19 @@
 from peft import LoraConfig
+from transformers import BitsAndBytesConfig
 from trl import SFTConfig
 
-from configs import PeftConfig, SftConfig
+from configs import BnbConfig, PeftConfig, SftConfig
+from utils import str_to_dtype
+
+
+def create_bnb_config(bnb_config: BnbConfig) -> BitsAndBytesConfig:
+    return BitsAndBytesConfig(
+        load_in_8bit=bnb_config.load_in_8bit,
+        load_in_4bit=bnb_config.load_in_4bit,
+        bnb_4bit_compute_dtype=str_to_dtype(bnb_config.bnb_4bit_compute_dtype),
+        bnb_4bit_use_double_quant=bnb_config.bnb_4bit_use_double_quant,
+        bnb_4bit_quant_type=bnb_config.bnb_4bit_quant_type,
+    )
 
 
 def create_peft_config(peft_config: PeftConfig) -> LoraConfig:

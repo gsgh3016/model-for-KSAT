@@ -16,6 +16,7 @@ class Config:
 
         self.model = ModelConfig(**self.raw_config["model"])
         self.common = CommonConfig(**self.raw_config["common"])
+        self.bnb = BnbConfig(**self.raw_config["bnb"])
         self.peft = PeftConfig(**self.raw_config["peft"])
         self.sft = SftConfig(**self.raw_config["sft"])
         self.wandb = WandbConfig(**self.raw_config["wandb"])
@@ -28,12 +29,22 @@ class ModelConfig:
     name_or_path: str
     response_template: str
     without_system_role: str
+    torch_dtype: str
 
 
 @dataclass
 class CommonConfig:
     seed: int
     device: str
+
+
+@dataclass
+class BnbConfig:
+    load_in_8bit: bool
+    load_in_4bit: bool
+    bnb_4bit_compute_dtype: str
+    bnb_4bit_use_double_quant: bool
+    bnb_4bit_quant_type: str
 
 
 @dataclass

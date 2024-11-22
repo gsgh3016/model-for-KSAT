@@ -2,10 +2,18 @@ model:
   name_or_path: "beomi/gemma-ko-2b"
   response_template: "<start_of_turn>model\n"
   without_system_role: false
+  torch_dtype: "float16" # float32, float16, bfloat16 / 모델의 기본 데이터 타입
 
 common:
   seed: 42
   device: "cuda"
+
+bnb:
+  load_in_8bit: false
+  load_in_4bit: false
+  bnb_4bit_compute_dtype: "float16" # float16, float32, bfloat16 / 4 bit 양자화 데이터의 계산 데이터 타입
+  bnb_4bit_use_double_quant: false # true 시 더블 양자화(메모리 사용량 감소, 시간 더 걸림)
+  bnb_4bit_quant_type: "nf4" # nf4, fp4
 
 peft:
   r: 6
