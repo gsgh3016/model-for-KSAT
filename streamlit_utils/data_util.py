@@ -87,6 +87,14 @@ def display_question_format(df: pd.DataFrame):
             st.markdown(body="#### 🔍 <보기>")
             st.write(row["question_plus"])
 
+        default_columns = [
+            "id",
+            "paragraph",
+            "question",
+            "question_plus",
+            "choices",
+            "answer",
+        ]  # 제공된 데이터셋의 기본 열 이름 정보
         choices_list = eval(choices) if isinstance(choices, str) else choices
         st.markdown("#### 📝 선택지")
         for idx, choice in enumerate(choices_list, start=1):
@@ -103,6 +111,12 @@ def display_question_format(df: pd.DataFrame):
         if "answer" in df.columns:
             st.markdown("#### ✅ 정답")
             st.write(row["answer"])
+
+        # 기본 열이 아닌 생성된 열일 경우 추가로 렌더링 하는 기능
+        for column in df.columns:
+            if column not in default_columns:
+                st.markdown(f"#### {column}")
+                st.write(row[column])
 
 
 def display_data_tab(df: pd.DataFrame):
