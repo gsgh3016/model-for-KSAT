@@ -5,7 +5,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
 
-from streamlit_utils import access_data_by_index, display_data_summary, display_question_format, filter_data_by_column
+from streamlit_utils import display_data_summary, display_data_tab
 
 if __name__ == "__main__":
 
@@ -37,17 +37,7 @@ if __name__ == "__main__":
 
         # 개별 데이터 접근
         with tab2:
-            st.subheader("전체 데이터 확인")
-            st.dataframe(df)
-
-            st.subheader("개별 데이터 확인")
-            access_method = st.radio("데이터 접근 방식 선택", ("Access by Index", "Filter by Column"))
-            if access_method == "Access by Index":
-                access_data_by_index(df)
-            elif access_method == "Filter by Column":
-                filter_data_by_column(df)
-
-            display_question_format(df)
+            display_data_tab(df)
 
         # 분포 확인
         with tab3:

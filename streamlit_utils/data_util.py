@@ -1,6 +1,8 @@
 import pandas as pd
 import streamlit as st
 
+from .key_manager import key_manager
+
 
 # 데이터 요약 출력 함수
 def display_data_summary(df: pd.DataFrame):
@@ -27,7 +29,7 @@ def access_data_by_index(df: pd.DataFrame):
         min_value=0,
         max_value=len(df) - 1,
         step=1,
-        key="unique_key_1",
+        key=key_manager.generate_key(),
     )
     if st.button("Retrieve by Index"):
         if 0 <= index_input < len(df):
@@ -41,8 +43,8 @@ def access_data_by_index(df: pd.DataFrame):
 # 칼럼 필터링 함수
 def filter_data_by_column(df: pd.DataFrame):
     st.markdown("#### Filter Data by Column")
-    column = st.selectbox("Select a column to filter by:", df.columns)
-    search_value = st.text_input(f"Enter the value to search in '{column}':")
+    column = st.selectbox("Select a column to filter by:", df.columns, key=key_manager.generate_key())
+    search_value = st.text_input(f"Enter the value to search in '{column}':", key=key_manager.generate_key())
 
     if st.button("Search"):
         filtered_df = df[df[column].astype(str).str.contains(search_value, na=False, case=False, regex=False)]
@@ -66,7 +68,7 @@ def display_question_format(df: pd.DataFrame):
             min_value=0,
             max_value=len(df) - 1,
             step=1,
-            key="unique_key_2",
+            key=key_manager.generate_key(),
         )
         row = df.iloc[question_idx]
         paragraph = row["paragraph"]
@@ -101,3 +103,19 @@ def display_question_format(df: pd.DataFrame):
         if "answer" in df.columns:
             st.markdown("#### ✅ 정답")
             st.write(row["answer"])
+
+
+def display_data_tab(df: pd.DataFrame):
+    st.subheader("전체 데이터 확인")
+    st.dataframe(df, key=key_manager.generate_key())
+
+    st.subheader("개별 데이터 확인")
+    access_method = st.radio(
+        "데이터 접근 방식 선택", ("Access by Index", "Filter by Column"), key=key_manager.generate_key()
+    )
+    if access_method == "Access by Index":
+        access_data_by_index(df)
+    elif access_method == "Filter by Column":
+        filter_data_by_column(df)
+
+    display_question_format(df)
