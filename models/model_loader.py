@@ -19,9 +19,6 @@ def load_model_and_tokenizer(model_name_or_path, config: Config):
     """
     model = load_model(model_name_or_path, config)
     tokenizer = load_tokenizer(model_name_or_path)
-
-    # 토크나이저의 스페셜 토큰 수를 모델에 반영
-    model.resize_token_embeddings(len(tokenizer))
     return model, tokenizer
 
 
