@@ -4,13 +4,12 @@ import shutil
 
 import dotenv
 import wandb
-from sklearn.metrics import accuracy_score
 from trl import SFTTrainer
 
 from configs import Config, create_peft_config, create_sft_config
 from data_loaders import build_data_loader
 from evaluation import compute_metrics, preprocess_logits_for_metrics
-from models import get_data_collator, load_model_and_tokenizer, predict
+from models import get_data_collator, load_model_and_tokenizer
 from utils import set_seed
 
 
@@ -66,14 +65,6 @@ def train(config: Config):
     save_path = f"outputs/{config.model.name_or_path.split('/')[1]}"
     print(f"Saving final model to {save_path}...")
     trainer.save_model(save_path)
-
-    prediction = predict(model, tokenizer, data_loader.origin_eval_dataset)
-
-    accuracy = accuracy_score(prediction["label"].astype(str), prediction["answer"].astype(str))
-    print("\nFinal Validation results:")
-    print(f"Accuracy: {accuracy:4f}")
-
-    prediction.to_csv(config.train.valid_output_path, index=False)
 
 
 if __name__ == "__main__":
