@@ -24,7 +24,7 @@ if __name__ == "__main__":
     if selected == "Home":
         st.title("📊 Data Analysis")
         uploaded_file = st.sidebar.file_uploader("Upload a CSV file for analysis", type="csv")
-        tab1, tab2, tab3 = st.tabs(["📊 데이터 개요", "🔍 데이터 탐색", "📈 데이터 분포"])
+        tab1, tab2, tab3, tab4 = st.tabs(["📊 데이터 개요", "🔍 데이터 탐색", "📈 데이터 분포", "🔬 실험 데이터"])
 
         if uploaded_file:
             df = pd.read_csv(uploaded_file)
@@ -53,6 +53,10 @@ if __name__ == "__main__":
         with tab3:
             st.subheader("데이터 분포")
             # TODO: Add distribution plotting logic
+
+        # 실험 데이터 확인
+        with tab4:
+            pass
 
     elif selected == "Compare":
         st.title("🆚 Compare Datasets")
