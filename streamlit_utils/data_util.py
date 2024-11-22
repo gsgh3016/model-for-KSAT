@@ -31,7 +31,7 @@ def access_data_by_index(df: pd.DataFrame):
         step=1,
         key=key_manager.generate_key(),
     )
-    if st.button("Retrieve by Index"):
+    if st.button("Retrieve by Index", key=key_manager.generate_key()):
         if 0 <= index_input < len(df):
             row_data = df.iloc[int(index_input)]
             st.write(f"Row at index {int(index_input)}:")

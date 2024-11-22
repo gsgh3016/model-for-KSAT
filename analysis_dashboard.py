@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
         # 실험 데이터 확인
         with tab4:
-            pass
+            display_data_tab(exp_df)
 
     elif selected == "Compare":
         st.title("🆚 Compare Datasets")
