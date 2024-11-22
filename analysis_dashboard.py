@@ -5,7 +5,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
 
-from streamlit_utils import display_data_summary, display_data_tab
+from streamlit_utils import display_data_summary, display_data_tab, key_manager
 
 if __name__ == "__main__":
 
@@ -23,14 +23,24 @@ if __name__ == "__main__":
     # HOME 탭
     if selected == "Home":
         st.title("📊 Data Analysis")
-        uploaded_file = st.sidebar.file_uploader("Upload a CSV file for analysis", type="csv")
+        uploaded_file = st.sidebar.file_uploader(
+            "Upload a CSV file for analysis", type="csv", key=key_manager.generate_key()
+        )
+        experiment_file = st.sidebar.file_uploader(
+            "Upload a experiment result CSV file for analysis", type="csv", key=key_manager.generate_key()
+        )
         tab1, tab2, tab3, tab4 = st.tabs(["📊 데이터 개요", "🔍 데이터 탐색", "📈 데이터 분포", "🔬 실험 데이터"])
 
         if uploaded_file:
             df = pd.read_csv(uploaded_file)
         else:
-            # 첨부 파일이 없으면 기본적으로 train.csv에 대한 분석을 출력합니다.
+            # 첨부 파일이 없으면 기본적으로 train_v2.0.1.csv에 대한 분석을 출력합니다.
             df = pd.read_csv(os.getenv("STREAMLIT_DATA_PATH"))
+        if experiment_file:
+            exp_df = pd.read_csv(experiment_file)
+        else:
+            exp_df = pd.read_csv(os.getenv("STREAMLIT_EXPERIMENT_DATA_PATH"))
+
         # 데이터 요약
         with tab1:
             display_data_summary(df)
