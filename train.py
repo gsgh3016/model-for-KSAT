@@ -28,7 +28,7 @@ def train(config: Config):
         config=config.raw_config,
     )
 
-    model, tokenizer = load_model_and_tokenizer(config.model.name_or_path, config.common.device)
+    model, tokenizer = load_model_and_tokenizer(config.model.name_or_path, config)
 
     data_loader = build_data_loader("train", tokenizer, config)
 

@@ -1,18 +1,15 @@
 import argparse
 
 import dotenv
-from peft import AutoPeftModelForCausalLM
-from transformers import AutoTokenizer
 
 from configs import Config
 from data_loaders import build_data_loader
-from models import predict
+from models import load_model_and_tokenizer, predict
 from utils import set_seed
 
 
 def inference(config: Config):
-    model = AutoPeftModelForCausalLM.from_pretrained(config.inference.model_path, device_map="auto")
-    tokenizer = AutoTokenizer.from_pretrained(config.inference.model_path)
+    model, tokenizer = load_model_and_tokenizer(config.inference.model_path, config)
 
     data_loader = build_data_loader("inference", tokenizer, config)
 
