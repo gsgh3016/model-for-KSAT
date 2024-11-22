@@ -5,7 +5,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
 
-from streamlit_utils import display_data_summary, display_data_tab, key_manager
+from streamlit_utils import display_data_summary, display_data_tab
 
 if __name__ == "__main__":
 
@@ -23,12 +23,8 @@ if __name__ == "__main__":
     # HOME 탭
     if selected == "Home":
         st.title("📊 Data Analysis")
-        uploaded_file = st.sidebar.file_uploader(
-            "Upload a CSV file for analysis", type="csv", key=key_manager.generate_key()
-        )
-        experiment_file = st.sidebar.file_uploader(
-            "Upload a experiment result CSV file for analysis", type="csv", key=key_manager.generate_key()
-        )
+        uploaded_file = st.sidebar.file_uploader("Upload a CSV file for analysis", type="csv")
+        experiment_file = st.sidebar.file_uploader("Upload a experiment result CSV file for analysis", type="csv")
         tab1, tab2, tab3, tab4 = st.tabs(["📊 데이터 개요", "🔍 데이터 탐색", "📈 데이터 분포", "🔬 실험 데이터"])
 
         if uploaded_file:
