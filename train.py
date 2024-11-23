@@ -10,7 +10,7 @@ from configs import Config, create_peft_config, create_sft_config
 from data_loaders import build_data_loader
 from evaluation import compute_metrics, preprocess_logits_for_metrics
 from models import get_data_collator, load_model_and_tokenizer
-from utils import set_seed
+from utils import CustomEarlyStoppingCallback, set_seed
 
 
 def train(config: Config):
@@ -43,6 +43,13 @@ def train(config: Config):
         tokenizer.vocab["5"],
     ]
 
+    early_stopping_callback = CustomEarlyStoppingCallback(
+        monitor=config.earlystop.metric_for_best_model,
+        patience=config.earlystop.early_stopping_patience,
+        threshold=config.earlystop.early_stopping_threshold,
+        greater_is_better=config.earlystop.greater_is_better,
+    )
+
     trainer = SFTTrainer(
         model=model,
         train_dataset=data_loader.train_dataset,
@@ -53,6 +60,7 @@ def train(config: Config):
         preprocess_logits_for_metrics=lambda logits, labels: preprocess_logits_for_metrics(logits, labels, logit_idx),
         peft_config=peft_config,
         args=sft_config,
+        callbacks=[early_stopping_callback],
     )
     trainer.train()
 
