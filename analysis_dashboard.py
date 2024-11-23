@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
         # 개별 데이터 접근
         with tab2:
-            display_data_tab(df)
+            display_data_tab(df, "tab2")
 
         # 분포 확인
         with tab3:
@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
         # 실험 데이터 확인
         with tab4:
-            display_data_tab(exp_df)
+            display_data_tab(exp_df, "tab4")
 
     elif selected == "Compare":
         st.title("🆚 Compare Datasets")

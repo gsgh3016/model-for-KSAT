@@ -1,8 +1,6 @@
 import pandas as pd
 import streamlit as st
 
-from .key_manager import key_manager
-
 
 # 데이터 요약 출력 함수
 def display_data_summary(df: pd.DataFrame):
@@ -22,16 +20,16 @@ def display_data_summary(df: pd.DataFrame):
 
 
 # 인덱스 접근 함수
-def access_data_by_index(df: pd.DataFrame):
+def access_data_by_index(df: pd.DataFrame, tab_name: str):
     st.markdown("#### Access Data by Index")
     index_input = st.number_input(
         "Enter the index of the row to retrieve:",
         min_value=0,
         max_value=len(df) - 1,
         step=1,
-        key=key_manager.generate_key(),
+        key="index_input_" + tab_name,
     )
-    if st.button("Retrieve by Index", key=key_manager.generate_key()):
+    if st.button("Retrieve by Index", key="index_retriever_" + tab_name):
         if 0 <= index_input < len(df):
             row_data = df.iloc[int(index_input)]
             st.write(f"Row at index {int(index_input)}:")
@@ -41,10 +39,10 @@ def access_data_by_index(df: pd.DataFrame):
 
 
 # 칼럼 필터링 함수
-def filter_data_by_column(df: pd.DataFrame):
+def filter_data_by_column(df: pd.DataFrame, tab_name: str):
     st.markdown("#### Filter Data by Column")
-    column = st.selectbox("Select a column to filter by:", df.columns, key=key_manager.generate_key())
-    search_value = st.text_input(f"Enter the value to search in '{column}':", key=key_manager.generate_key())
+    column = st.selectbox("Select a column to filter by:", df.columns, key="column_filter_" + tab_name)
+    search_value = st.text_input(f"Enter the value to search in '{column}':", key="column_search_value_" + tab_name)
 
     if st.button("Search"):
         filtered_df = df[df[column].astype(str).str.contains(search_value, na=False, case=False, regex=False)]
@@ -57,7 +55,7 @@ def filter_data_by_column(df: pd.DataFrame):
 
 
 # 수능 형식으로 데이터 출력해주는 함수
-def display_question_format(df: pd.DataFrame):
+def display_question_format(df: pd.DataFrame, tab_name: str):
     st.subheader("문제 형태로 확인")
     required_columns = {"paragraph", "question", "choices"}
     if not required_columns.issubset(df.columns):
@@ -68,7 +66,7 @@ def display_question_format(df: pd.DataFrame):
             min_value=0,
             max_value=len(df) - 1,
             step=1,
-            key=key_manager.generate_key(),
+            key="question_idx_" + tab_name,
         )
         row = df.iloc[question_idx]
         paragraph = row["paragraph"]
@@ -119,17 +117,18 @@ def display_question_format(df: pd.DataFrame):
                 st.write(row[column])
 
 
-def display_data_tab(df: pd.DataFrame):
+# 데이터 분석 렌더링 모듈화
+def display_data_tab(df: pd.DataFrame, tab_name: str):
     st.subheader("전체 데이터 확인")
-    st.dataframe(df, key=key_manager.generate_key())
+    st.dataframe(df, key="dataframe_" + tab_name)
 
     st.subheader("개별 데이터 확인")
     access_method = st.radio(
-        "데이터 접근 방식 선택", ("Access by Index", "Filter by Column"), key=key_manager.generate_key()
+        "데이터 접근 방식 선택", ("Access by Index", "Filter by Column"), key="access_method_" + tab_name
     )
     if access_method == "Access by Index":
-        access_data_by_index(df)
+        access_data_by_index(df, tab_name)
     elif access_method == "Filter by Column":
-        filter_data_by_column(df)
+        filter_data_by_column(df, tab_name)
 
-    display_question_format(df)
+    display_question_format(df, tab_name)
