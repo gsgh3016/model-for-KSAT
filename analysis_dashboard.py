@@ -5,7 +5,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
 
-from streamlit_utils import access_data_by_index, display_data_summary, display_question_format, filter_data_by_column
+from streamlit_utils import display_data_summary, display_data_tab
 
 if __name__ == "__main__":
 
@@ -24,35 +24,36 @@ if __name__ == "__main__":
     if selected == "Home":
         st.title("📊 Data Analysis")
         uploaded_file = st.sidebar.file_uploader("Upload a CSV file for analysis", type="csv")
-        tab1, tab2, tab3 = st.tabs(["📊 데이터 개요", "🔍 데이터 탐색", "📈 데이터 분포"])
+        experiment_file = st.sidebar.file_uploader("Upload a experiment result CSV file for analysis", type="csv")
+        tab1, tab2, tab3, tab4 = st.tabs(["📊 데이터 개요", "🔍 데이터 탐색", "📈 데이터 분포", "🔬 실험 데이터"])
 
         if uploaded_file:
             df = pd.read_csv(uploaded_file)
         else:
-            # 첨부 파일이 없으면 기본적으로 train.csv에 대한 분석을 출력합니다.
+            # 첨부 파일이 없으면 기본적으로 설정한 학습 데이터에 대한 분석을 출력합니다.
+            # .env에서 STREAMLIT_DATA_PATH, STREAMLIT_EXPERIMENT_DATA_PATH에 각각 학습 데이터, 실험 데이터를 설정하세요.
             df = pd.read_csv(os.getenv("STREAMLIT_DATA_PATH"))
+        if experiment_file:
+            exp_df = pd.read_csv(experiment_file)
+        else:
+            exp_df = pd.read_csv(os.getenv("STREAMLIT_EXPERIMENT_DATA_PATH"))
+
         # 데이터 요약
         with tab1:
             display_data_summary(df)
 
         # 개별 데이터 접근
         with tab2:
-            st.subheader("전체 데이터 확인")
-            st.dataframe(df)
-
-            st.subheader("개별 데이터 확인")
-            access_method = st.radio("데이터 접근 방식 선택", ("Access by Index", "Filter by Column"))
-            if access_method == "Access by Index":
-                access_data_by_index(df)
-            elif access_method == "Filter by Column":
-                filter_data_by_column(df)
-
-            display_question_format(df)
+            display_data_tab(df, "tab2")
 
         # 분포 확인
         with tab3:
             st.subheader("데이터 분포")
             # TODO: Add distribution plotting logic
+
+        # 실험 데이터 확인
+        with tab4:
+            display_data_tab(exp_df, "tab4")
 
     elif selected == "Compare":
         st.title("🆚 Compare Datasets")
