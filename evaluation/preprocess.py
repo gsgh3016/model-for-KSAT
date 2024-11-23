@@ -3,7 +3,7 @@ import torch
 from transformers import PreTrainedTokenizerFast
 
 
-def preprocess_logits_for_metrics(logits, logit_idx: list[int]):
+def preprocess_logits_for_metrics(logits, labels, logit_idx: list[int]):
     """
     모델의 logits를 조정하여 정답 토큰 부분만 출력하도록 설정하는 함수.
 
