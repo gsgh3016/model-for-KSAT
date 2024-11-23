@@ -39,12 +39,13 @@ def load_model(model_name_or_path, config: Config) -> PreTrainedModel:
     # 모델 로드
     model = AutoModelForCausalLM.from_pretrained(
         model_name_or_path,
+        device_map="auto",
         quantization_config=quantization_config,
         torch_dtype=str_to_dtype(config.model.torch_dtype),
         trust_remote_code=True,
     )
 
-    model.to(config.common.device)
+    # model.to(config.common.device)
     return model
 
 
