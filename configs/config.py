@@ -17,6 +17,7 @@ class Config:
         self.model = ModelConfig(**self.raw_config["model"])
         self.common = CommonConfig(**self.raw_config["common"])
         self.bnb = BnbConfig(**self.raw_config["bnb"])
+        self.earlystop = EarlystopConfig(**self.raw_config["earlystop"])
         self.peft = PeftConfig(**self.raw_config["peft"])
         self.sft = SftConfig(**self.raw_config["sft"])
         self.wandb = WandbConfig(**self.raw_config["wandb"])
@@ -48,6 +49,14 @@ class BnbConfig:
 
 
 @dataclass
+class EarlystopConfig:
+    metric_for_best_model: str
+    early_stopping_patience: int
+    early_stopping_threshold: float
+    greater_is_better: bool
+
+
+@dataclass
 class PeftConfig:
     r: int
     lora_alpha: int
@@ -72,6 +81,7 @@ class SftConfig:
     logging_steps: int
     save_strategy: str
     eval_strategy: str
+    load_best_model_at_end: bool
     save_total_limit: int
     save_only_model: bool
     report_to: str

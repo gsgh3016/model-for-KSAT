@@ -15,6 +15,12 @@ bnb:
   bnb_4bit_use_double_quant: false # true 시 더블 양자화(메모리 사용량 감소, 시간 더 걸림)
   bnb_4bit_quant_type: "nf4" # nf4, fp4
 
+earlystop:
+  metric_for_best_model: "eval_loss" # 모니터링할 지표 이름
+  early_stopping_patience: 1 # 개선되지 않는 에폭 수
+  early_stopping_threshold: 0.0 # 개선으로 간주할 최소 변화량
+  greater_is_better: false # 지표가 높을수록 좋은 경우 True
+
 peft:
   r: 6
   lora_alpha: 8
@@ -37,6 +43,7 @@ sft:
   logging_steps: 100
   save_strategy: "epoch"
   eval_strategy: "epoch"
+  load_best_model_at_end: true
   save_total_limit: 1
   save_only_model: true
   report_to: "wandb" # none or wandb, wandb로 변경하여 로그를 기록합니다.

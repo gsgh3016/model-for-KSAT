@@ -43,6 +43,7 @@ def create_sft_config(sft_config: SftConfig) -> SFTConfig:
         logging_steps=sft_config.logging_steps,
         save_strategy=sft_config.save_strategy,
         eval_strategy=sft_config.eval_strategy,
+        load_best_model_at_end=sft_config.load_best_model_at_end,
         save_total_limit=sft_config.save_total_limit,
         save_only_model=sft_config.save_only_model,
         report_to=sft_config.report_to,
