@@ -1,6 +1,7 @@
 import argparse
 
 import dotenv
+from sklearn.metrics import accuracy_score
 
 from configs import Config
 from data_loaders import build_data_loader
@@ -20,6 +21,9 @@ def inference(config: Config, validation: bool = False):
 
     if validation:
         prediction.to_csv(config.train.valid_output_path, index=False)
+        accuracy = accuracy_score(prediction["label"].astype(str), prediction["answer"].astype(str))
+        print("\nFinal Validation results:")
+        print(f"Accuracy: {accuracy:4f}")
     else:
         prediction.to_csv(config.inference.output_path, index=False)
 

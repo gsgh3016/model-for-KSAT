@@ -11,10 +11,14 @@ class InferenceDataLoaderWithoutSystem(InferenceDataLoader):
     def build_single_data(self, data: pd.Series, user_prompt: str):
         len_choices = len(data["choices"])
 
-        return {
+        result = {
             "id": data["id"],
             "messages": [
                 {"role": "user", "content": "지문을 읽고 질문의 답을 구하세요.\n" + user_prompt},
             ],
             "len_choices": len_choices,
         }
+        if "answer" in data:
+            result["label"] = data["answer"]
+
+        return result
