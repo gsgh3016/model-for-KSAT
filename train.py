@@ -57,7 +57,7 @@ def train(config: Config):
         data_collator=get_data_collator(tokenizer, config.model.response_template),
         tokenizer=tokenizer,
         compute_metrics=lambda eval_res: compute_metrics(eval_res, tokenizer),
-        preprocess_logits_for_metrics=lambda logits, labels: preprocess_logits_for_metrics(logits, labels, logit_idx),
+        preprocess_logits_for_metrics=lambda logits: preprocess_logits_for_metrics(logits, logit_idx),
         peft_config=peft_config,
         args=sft_config,
         callbacks=[early_stopping_callback],
