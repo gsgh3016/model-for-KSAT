@@ -44,7 +44,7 @@ def filter_data_by_column(df: pd.DataFrame, tab_name: str):
     column = st.selectbox("Select a column to filter by:", df.columns, key="column_filter_" + tab_name)
     search_value = st.text_input(f"Enter the value to search in '{column}':", key="column_search_value_" + tab_name)
 
-    if st.button("Search"):
+    if st.button("Search", key="search_button_" + tab_name):
         filtered_df = df[df[column].astype(str).str.contains(search_value, na=False, case=False, regex=False)]
         result_count = len(filtered_df)
         st.write(f"Number of rows containing '{search_value}' in column '{column}': {result_count}")
