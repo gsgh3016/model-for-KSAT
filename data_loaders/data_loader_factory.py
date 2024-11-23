@@ -14,7 +14,8 @@ def build_data_loader(type: str, tokenizer: PreTrainedTokenizerFast, config: Con
         else:
             return TrainDataLoader(config, tokenizer)
     else:  # inference
+        data_path = config.train.valid_data_path if type == "validation" else config.inference.data_path
         if config.model.without_system_role:
-            return InferenceDataLoaderWithoutSystem(config.inference.data_path, tokenizer)
+            return InferenceDataLoaderWithoutSystem(data_path, tokenizer)
         else:
-            return InferenceDataLoader(config.inference.data_path, tokenizer)
+            return InferenceDataLoader(data_path, tokenizer)
