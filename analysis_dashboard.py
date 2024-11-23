@@ -30,7 +30,8 @@ if __name__ == "__main__":
         if uploaded_file:
             df = pd.read_csv(uploaded_file)
         else:
-            # 첨부 파일이 없으면 기본적으로 train_v2.0.1.csv에 대한 분석을 출력합니다.
+            # 첨부 파일이 없으면 기본적으로 설정한 학습 데이터에 대한 분석을 출력합니다.
+            # .env에서 STREAMLIT_DATA_PATH, STREAMLIT_EXPERIMENT_DATA_PATH에 각각 학습 데이터, 실험 데이터를 설정하세요.
             df = pd.read_csv(os.getenv("STREAMLIT_DATA_PATH"))
         if experiment_file:
             exp_df = pd.read_csv(experiment_file)
