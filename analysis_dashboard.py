@@ -1,11 +1,12 @@
 import os
 
+import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
 
-from streamlit_utils import display_data_summary, display_data_tab
+from streamlit_utils import display_data_summary, display_data_tab, plot_length_distribution_percentage
 
 if __name__ == "__main__":
 
@@ -48,7 +49,16 @@ if __name__ == "__main__":
 
         # 분포 확인
         with tab3:
-            st.subheader("데이터 분포")
+            st.subheader("column 별 데이터 길이 분포")
+
+            column = st.selectbox("분포를 확인할 열 선택:", df.select_dtypes(include="object").columns)
+            bin_size = st.slider("Bin Size 선택:", min_value=20, max_value=100, value=10, step=10)
+
+            if column:
+                fig, ax = plt.subplots(figsize=(10, 6))
+                plot_length_distribution_percentage(ax=ax, df=df, column=column, bin_size=bin_size, color="skyblue")
+                st.pyplot(fig)
+
             # TODO: Add distribution plotting logic
 
         # 실험 데이터 확인
