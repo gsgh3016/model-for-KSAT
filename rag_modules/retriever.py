@@ -20,7 +20,7 @@ def get_retriever(embedding_model: str = "BAAI/bge-m3", k: int = 5):
     pinecone_index, index_name = get_pinecone_index()
 
     # HuggingFace Embeddings 모델 초기화
-    embeddings = HuggingFaceBgeEmbeddings(model_name="BAAI/bge-m3")
+    embeddings = HuggingFaceBgeEmbeddings(model_name=embedding_model)
 
     # LangChain의 Pinecone VectorStore 생성
     vector_store = PineconeVectorStore(index=pinecone_index, embedding=embeddings, text_key="text")
