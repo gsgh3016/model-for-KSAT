@@ -50,8 +50,8 @@ def run_rag_pipeline():
 
     result_df = pd.DataFrame(results)
 
-    # check_valid_score()
-    check_valid_score(result_df=result_df)
+    # valid accuracy 확인
+    check_valid_score(valid_df=df, result_df=result_df)
 
     result_df.to_csv("data/valid_output.csv", index=False)
 

@@ -1,6 +1,5 @@
 import os
 
-import pandas as pd
 from dotenv import load_dotenv
 from pinecone import Pinecone
 
@@ -23,14 +22,12 @@ def get_pinecone_index():
     return pinecone_index, index_name
 
 
-def check_valid_score(result_df):
-    valid_set = pd.read_csv("data/valid_v2.0.1.csv")
-
+def check_valid_score(valid_df, result_df):
     # answer 열이 일치하는 경우 카운트
-    matches = (result_df["answer"] == valid_set["answer"]).sum()
+    matches = (result_df["answer"] == valid_df["answer"]).sum()
 
     # 정확도 계산 (일치한 수 / 전체 데이터 수)
-    accuracy = matches / len(valid_set)
+    accuracy = matches / len(valid_df)
 
     print(f"valid accuracy: {accuracy * 100:.2f}%")
     return accuracy
