@@ -31,7 +31,7 @@ class TrainDataLoader(BaseDataLoader):
                 {"role": "user", "content": user_prompt},
                 {"role": "assistant", "content": f"{data['answer']}"},
             ],
-            "label": data["answer"],
+            # "label": data["answer"], # train, eval 둘다 안쓰임..
             "len_choices": len_choices,
         }
 
