@@ -1,6 +1,6 @@
 import uuid
 
-from rag_preprocess import generate_embeddings, load_document, split_into_chunks
+from rag_modules import generate_embeddings, load_document, split_into_chunks
 from utils import get_pinecone_index
 
 
