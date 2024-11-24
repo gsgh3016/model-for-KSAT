@@ -9,8 +9,8 @@ import pandas as pd
 title_fontsize = 16
 label_fontsize = 12
 alpha = 0.7
-fig_size_s = (10, 4)
-fig_size_m = (10, 8)
+fig_size_s = (10, 3)
+fig_size_m = (10, 6)
 color = "skyblue"
 edge_color = "black"
 
