@@ -4,6 +4,7 @@ import pandas as pd
 from tqdm import tqdm
 
 from rag_modules import create_chain, get_retriever
+from utils import check_valid_score, set_seed
 
 
 def run_rag_pipeline():
@@ -16,7 +17,7 @@ def run_rag_pipeline():
     chain = create_chain(model_id="google/gemma-2-2b-it", max_new_tokens=256)
 
     # CSV 파일 로드
-    df = pd.read_csv("data/test.csv")
+    df = pd.read_csv("data/valid_v2.0.1.csv")
 
     df["choices"] = df["choices"].apply(literal_eval)
     df["question_plus"] = df["question_plus"].fillna("")
@@ -48,8 +49,13 @@ def run_rag_pipeline():
             results.append({"id": row["id"], "answer": -1})
 
     result_df = pd.DataFrame(results)
-    result_df.to_csv("data/output.csv", index=False)
+
+    # check_valid_score()
+    check_valid_score(result_df=result_df)
+
+    result_df.to_csv("data/valid_output.csv", index=False)
 
 
 if __name__ == "__main__":
+    set_seed(42)
     run_rag_pipeline()
