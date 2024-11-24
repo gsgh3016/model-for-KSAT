@@ -1,5 +1,5 @@
 import torch
-from langchain.embeddings.huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnablePassthrough
@@ -15,13 +15,13 @@ def rag_retrieval():
     pinecone_index, index_name = get_pinecone_index()
 
     # HuggingFace Embeddings 모델 초기화
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    embeddings = HuggingFaceBgeEmbeddings(model_name="BAAI/bge-m3")
 
     # LangChain의 Pinecone VectorStore 생성
     vector_store = PineconeVectorStore(index=pinecone_index, embedding=embeddings, text_key="text")
 
     # 간단한 Query를 사용해 문서 검색
-    query = "초전도체가 뭐야?"
+    query = "농구는 어떤 운동이야?"
     retrieved_docs = vector_store.similarity_search(query, k=5)  # k는 반환할 문서 개수
 
     # 검색된 문서 출력
