@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
             st.subheader("정답 분포 확인")
             # answer 열이 있는 경우 정답 분포를 표출, 없는 경우 warning을 표출합니다.
-            if "answer" in df.columns:
+            if "answer" in selected_df.columns:
                 st.pyplot(make_answer_distribution_fig(selected_df))
             else:
                 st.warning("'answer' 행이 데이터 셋 내에 존재하지 않습니다!")
