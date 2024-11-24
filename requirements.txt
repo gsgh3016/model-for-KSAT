@@ -21,6 +21,9 @@ wandb
 # RAG Packages
 pinecone-client
 langchain-community
+langchain_huggingface
+langchain_pinecone
+langchain_core
 
 # Development Packages
 tqdm
