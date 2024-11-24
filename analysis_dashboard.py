@@ -8,6 +8,7 @@ from streamlit_option_menu import option_menu
 from streamlit_utils import (
     display_data_summary,
     display_data_tab,
+    make_answer_distribution_fig,
     make_choices_distribution_fig,
     make_column_length_distribution_fig,
     make_total_length_distribution_fig,
@@ -32,7 +33,7 @@ if __name__ == "__main__":
         uploaded_file = st.sidebar.file_uploader("Upload a CSV file for analysis", type="csv")
         experiment_file = st.sidebar.file_uploader("Upload a experiment result CSV file for analysis", type="csv")
         tab1, tab2, tab3, tab4, tab5 = st.tabs(
-            ["📊 데이터 개요", "🔍 데이터 탐색", "📈 데이터 분포", "🔬 실험 데이터", "선다 확인"]
+            ["📊 데이터 개요", "🔍 데이터 탐색", "📈 데이터 분포", "🔬 실험 데이터", "💯선다 확인"]
         )
         if uploaded_file:
             df = pd.read_csv(uploaded_file)
@@ -69,6 +70,13 @@ if __name__ == "__main__":
         with tab5:
             st.subheader("선다 확인")
             st.pyplot(make_choices_distribution_fig(df))
+
+            st.subheader("정답 분포 확인")
+            # answer 열이 있는 경우 정답 분포를 표출, 없는 경우 warning을 표출합니다.
+            if "answer" in df.columns:
+                st.pyplot(make_answer_distribution_fig(df))
+            else:
+                st.warning("'answer' 행이 데이터 셋 내에 존재하지 않습니다!")
 
     elif selected == "Compare":
         st.title("🆚 Compare Datasets")
