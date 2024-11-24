@@ -18,6 +18,10 @@ streamlit
 streamlit-option-menu
 wandb
 
+# RAG Packages
+pinecone-client
+langchain-community
+
 # Development Packages
 tqdm
 ipykernel
