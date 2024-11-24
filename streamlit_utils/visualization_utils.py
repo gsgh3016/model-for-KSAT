@@ -1,3 +1,4 @@
+from ast import literal_eval
 from typing import List, Union
 
 import matplotlib.axes._axes as axes
@@ -65,6 +66,33 @@ def total_length_distribution(df: pd.DataFrame):
     fig, ax = plt.subplots(figsize=(10, 5))
 
     plot_length_distribution_percentage(ax=ax, df=df, column_name=columns, bin_size=bin_sizes[-1])
+
+    fig.tight_layout()
+    return fig
+
+
+def plot_choices_length_distribution(ax: axes.Axes, df: pd.DataFrame, bins=2, color="skyblue"):
+    df["choices"] = df["choices"].apply(literal_eval)
+    list_lengths = df["choices"].apply(len)
+    # 빈도수 계산 및 비율로 변환
+    value_counts = list_lengths.value_counts(normalize=True).sort_index() * 100
+
+    # 비율 text 명시
+    for idx, value in zip(value_counts.index, value_counts.values):
+        ax.text(idx, value - 5, f"{value:.1f}%", ha="center", fontsize=10, color="black")
+
+    ax.bar(value_counts.index, value_counts.values, color=color, edgecolor="black", alpha=0.7)
+    ax.set_title("Choices Length Distribution", fontsize=16)
+    ax.set_xlabel("Length of Choices", fontsize=12)
+    ax.set_ylabel("Percentage (%)", fontsize=12)
+    ax.grid(axis="y", linestyle="--", alpha=0.7)
+    ax.set_xticks(value_counts.index)
+
+
+def choices_distribution(df: pd.DataFrame):
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    plot_choices_length_distribution(ax, df)
 
     fig.tight_layout()
     return fig

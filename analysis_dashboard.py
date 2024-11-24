@@ -5,7 +5,13 @@ import streamlit as st
 from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
 
-from streamlit_utils import column_length_distribution, display_data_summary, display_data_tab
+from streamlit_utils import (
+    choices_distribution,
+    column_length_distribution,
+    display_data_summary,
+    display_data_tab,
+    total_length_distribution,
+)
 
 if __name__ == "__main__":
 
@@ -25,8 +31,9 @@ if __name__ == "__main__":
         st.title("📊 Data Analysis")
         uploaded_file = st.sidebar.file_uploader("Upload a CSV file for analysis", type="csv")
         experiment_file = st.sidebar.file_uploader("Upload a experiment result CSV file for analysis", type="csv")
-        tab1, tab2, tab3, tab4 = st.tabs(["📊 데이터 개요", "🔍 데이터 탐색", "📈 데이터 분포", "🔬 실험 데이터"])
-
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(
+            ["📊 데이터 개요", "🔍 데이터 탐색", "📈 데이터 분포", "🔬 실험 데이터", "선다 확인"]
+        )
         if uploaded_file:
             df = pd.read_csv(uploaded_file)
         else:
@@ -49,15 +56,19 @@ if __name__ == "__main__":
         # 분포 확인
         with tab3:
             st.subheader("컬럼 별 데이터 길이 분포")
+            st.pyplot(column_length_distribution(df))
 
-            fig = column_length_distribution(df)
-            st.pyplot(fig)
-
-            # TODO: Add distribution plotting logic
+            st.subheader("전체 유효 컬럼 데이터 길이 분포")
+            st.pyplot(total_length_distribution(df))
 
         # 실험 데이터 확인
         with tab4:
             display_data_tab(exp_df, "tab4")
+
+        # 선다 확인
+        with tab5:
+            st.subheader("선다 확인")
+            st.pyplot(choices_distribution(df))
 
     elif selected == "Compare":
         st.title("🆚 Compare Datasets")
