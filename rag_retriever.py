@@ -31,7 +31,7 @@ def rag_retrieval():
         print(f"   Metadata: {doc.metadata}")
 
     # VectorStore로 Retriever 객체 생성
-    retriever = vector_store.as_retriever()
+    retriever = vector_store.as_retriever(search_kwargs={"k": 5})
 
     # 생성 모델 불러오기
     model_id = "google/gemma-2-2b-it"
