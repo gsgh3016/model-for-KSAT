@@ -29,10 +29,23 @@ def rag_preprocessing():
     chunks = split_into_chunks(documents)
     embeddings = generate_embeddings(chunks, embedding_type="huggingface")
 
-    # 3. Prepare and upsert embeddings
-    upsert_data = [{"id": str(i), "values": embedding} for i, embedding in enumerate(embeddings)]
+    # 3. Prepare and upsert embeddings with metadata
+    upsert_data = []
+    for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
+        upsert_data.append(
+            {
+                "id": str(i),
+                "values": embedding,
+                "metadata": {
+                    "text": chunk.page_content,  # 메타데이터에 문단 텍스트 추가
+                    "document_id": chunk.metadata.get("document_id", "unknown"),  # 문서 ID가 있다면 추가
+                    "chunk_index": i,  # 각 chunk의 인덱스
+                },
+            }
+        )
+
     pinecone_index.upsert(vectors=upsert_data)
-    print(f"Upserted {len(embeddings)} embeddings to Pinecone index '{index_name}'.")
+    print(f"Upserted {len(embeddings)} embeddings with metadata to Pinecone index '{index_name}'.")
 
 
 if __name__ == "__main__":
