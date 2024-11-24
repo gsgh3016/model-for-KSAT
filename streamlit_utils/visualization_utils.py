@@ -6,6 +6,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+title_fontsize = 16
+label_fontsize = 12
+alpha = 0.7
+fig_size_s = (10, 4)
+fig_size_m = (10, 8)
+
 
 def set_before_length_plot(df: pd.DataFrame):
     # 길이 표출을 위한 결측값 처리
@@ -17,7 +23,7 @@ def set_before_length_plot(df: pd.DataFrame):
     return df, columns, bin_sizes
 
 
-def plot_length_distribution_percentage(
+def plot_length_distribution(
     ax: axes.Axes, df: pd.DataFrame, column_name: Union[str, List[str]], bin_size=10, color="skyblue"
 ):
     """
@@ -40,35 +46,11 @@ def plot_length_distribution_percentage(
     # 각 bin의 비율(%) 계산
     percentages = (counts / len(lengths)) * 100
 
-    ax.bar(edges[:-1], percentages, width=bin_size, color=color, edgecolor="black", alpha=0.7, align="edge")
-    ax.set_title(f"{column_name} length distribution", fontsize=16)
-    ax.set_xlabel("Length of " + column_name, fontsize=12)
-    ax.set_ylabel("Percentage (%)", fontsize=12)
-    ax.grid(axis="y", linestyle="--", alpha=0.7)
-
-
-def column_length_distribution(df: pd.DataFrame):
-    df, columns, bin_sizes = set_before_length_plot(df)
-
-    fig, axes = plt.subplots(2, 2, figsize=(10, 8))
-    axes = axes.flatten()
-
-    for ax, column, bin_size in zip(axes, columns, bin_sizes):
-        plot_length_distribution_percentage(ax=ax, df=df, column_name=column, bin_size=bin_size)
-
-    fig.tight_layout()
-    return fig
-
-
-def total_length_distribution(df: pd.DataFrame):
-    df, columns, bin_sizes = set_before_length_plot(df)
-
-    fig, ax = plt.subplots(figsize=(10, 5))
-
-    plot_length_distribution_percentage(ax=ax, df=df, column_name=columns, bin_size=bin_sizes[-1])
-
-    fig.tight_layout()
-    return fig
+    ax.bar(edges[:-1], percentages, width=bin_size, color=color, edgecolor="black", alpha=alpha, align="edge")
+    ax.set_title(f"{column_name} length distribution", fontsize=title_fontsize)
+    ax.set_xlabel("Length of " + column_name, fontsize=label_fontsize)
+    ax.set_ylabel("Percentage (%)", fontsize=label_fontsize)
+    ax.grid(axis="y", linestyle="--", alpha=alpha)
 
 
 def plot_choices_length_distribution(ax: axes.Axes, df: pd.DataFrame, bins=2, color="skyblue"):
@@ -79,18 +61,42 @@ def plot_choices_length_distribution(ax: axes.Axes, df: pd.DataFrame, bins=2, co
 
     # 비율 text 명시
     for idx, value in zip(value_counts.index, value_counts.values):
-        ax.text(idx, value - 5, f"{value:.1f}%", ha="center", fontsize=10, color="black")
+        ax.text(idx, value - 5, f"{value:.1f}%", ha="center", fontsize=label_fontsize, color="black")
 
-    ax.bar(value_counts.index, value_counts.values, color=color, edgecolor="black", alpha=0.7)
-    ax.set_title("Choices Length Distribution", fontsize=16)
-    ax.set_xlabel("Length of Choices", fontsize=12)
-    ax.set_ylabel("Percentage (%)", fontsize=12)
-    ax.grid(axis="y", linestyle="--", alpha=0.7)
+    ax.bar(value_counts.index, value_counts.values, color=color, edgecolor="black", alpha=alpha)
+    ax.set_title("Choices Length Distribution", fontsize=title_fontsize)
+    ax.set_xlabel("Length of Choices", fontsize=label_fontsize)
+    ax.set_ylabel("Percentage (%)", fontsize=label_fontsize)
+    ax.grid(axis="y", linestyle="--", alpha=alpha)
     ax.set_xticks(value_counts.index)
 
 
-def choices_distribution(df: pd.DataFrame):
-    fig, ax = plt.subplots(figsize=(10, 5))
+def make_column_length_distribution_fig(df: pd.DataFrame):
+    df, columns, bin_sizes = set_before_length_plot(df)
+
+    fig, axes = plt.subplots(2, 2, figsize=fig_size_m)
+    axes = axes.flatten()
+
+    for ax, column, bin_size in zip(axes, columns, bin_sizes):
+        plot_length_distribution(ax=ax, df=df, column_name=column, bin_size=bin_size)
+
+    fig.tight_layout()
+    return fig
+
+
+def make_total_length_distribution_fig(df: pd.DataFrame):
+    df, columns, bin_sizes = set_before_length_plot(df)
+
+    fig, ax = plt.subplots(figsize=fig_size_s)
+
+    plot_length_distribution(ax=ax, df=df, column_name=columns, bin_size=bin_sizes[-1])
+
+    fig.tight_layout()
+    return fig
+
+
+def make_choices_distribution_fig(df: pd.DataFrame):
+    fig, ax = plt.subplots(figsize=fig_size_s)
 
     plot_choices_length_distribution(ax, df)
 

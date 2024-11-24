@@ -6,11 +6,11 @@ from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
 
 from streamlit_utils import (
-    choices_distribution,
-    column_length_distribution,
     display_data_summary,
     display_data_tab,
-    total_length_distribution,
+    make_choices_distribution_fig,
+    make_column_length_distribution_fig,
+    make_total_length_distribution_fig,
 )
 
 if __name__ == "__main__":
@@ -56,10 +56,10 @@ if __name__ == "__main__":
         # 분포 확인
         with tab3:
             st.subheader("컬럼 별 데이터 길이 분포")
-            st.pyplot(column_length_distribution(df))
+            st.pyplot(make_column_length_distribution_fig(df))
 
             st.subheader("전체 유효 컬럼 데이터 길이 분포")
-            st.pyplot(total_length_distribution(df))
+            st.pyplot(make_total_length_distribution_fig(df))
 
         # 실험 데이터 확인
         with tab4:
@@ -68,7 +68,7 @@ if __name__ == "__main__":
         # 선다 확인
         with tab5:
             st.subheader("선다 확인")
-            st.pyplot(choices_distribution(df))
+            st.pyplot(make_choices_distribution_fig(df))
 
     elif selected == "Compare":
         st.title("🆚 Compare Datasets")
