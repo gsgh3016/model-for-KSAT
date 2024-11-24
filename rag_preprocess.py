@@ -2,14 +2,12 @@ import os
 import uuid
 
 from dotenv import load_dotenv
-from loaders.document_loader import load_document
 from pinecone import Pinecone
-from processing.chunk_splitter import split_into_chunks
-from processing.embedding_generator import generate_embeddings
+
+from rag_preprocess import generate_embeddings, load_document, split_into_chunks
 
 
 def rag_preprocessing():
-    load_dotenv()
     api_key = os.getenv("PINECONE_API_KEY")
     environment = os.getenv("PINECONE_ENVIRONMENT")
     index_name = os.getenv("PINECONE_INDEX")
@@ -23,7 +21,7 @@ def rag_preprocessing():
     print(f"Connected to Pinecone index: {index_name}")
 
     # Load and process document
-    file_path = "../data/test.md"
+    file_path = "data/test.md"
     documents = load_document(file_path)
     chunks = split_into_chunks(documents)
     embeddings = generate_embeddings(chunks, embedding_type="huggingface")
@@ -50,4 +48,5 @@ def rag_preprocessing():
 
 
 if __name__ == "__main__":
+    load_dotenv()
     rag_preprocessing()
