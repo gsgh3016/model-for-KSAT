@@ -20,7 +20,7 @@ def set_before_length_plot(df: pd.DataFrame):
     길이 관련 시각화를 위한 사전 설정을 진행합니다.
     """
     # 길이 표출을 위한 결측값 처리
-    df["question_plus"].fillna("", inplace=True)
+    df["question_plus"] = df["question_plus"].fillna("")
 
     # 표출할 columns와 적절한 bin_sizes
     columns = ["paragraph", "question", "choices", "question_plus"]
