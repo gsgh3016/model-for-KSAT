@@ -88,9 +88,17 @@ class DataVersionManager:
             Path: 최신 파일 경로
         """
         latest_file, version = self._find_latest_file(directory, prefix)
+        configured_version = self.latest_version[prefix]
+
+        # 발견된 버전이 설정된 최신 버전보다 이전인 경우 에러 발생
+        if Version(version) < Version(configured_version):
+            raise ValueError(
+                f"스캔된 {prefix} 데이터 버전 {version}이 설정된 최신 버전 {configured_version}보다 이전입니다. "
+                f"데이터 디렉토리를 확인하거나 설정을 업데이트하세요."
+            )
 
         # 발견된 버전이 설정된 최신 버전보다 새로운 경우 업데이트
-        if Version(version) > Version(self.latest_version[prefix]):
+        if Version(version) > Version(configured_version):
             self.latest_version[prefix] = version
             yaml_key = f"latest_{prefix}_version"
             self.raw_yaml[yaml_key] = version
