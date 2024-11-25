@@ -19,10 +19,11 @@ def train(config: Config):
         project=config.wandb.project,
         name=(
             f"{config.model.name_or_path.split('/')[1]}/"
-            f"{'4bit' if config.bnb.load_in_4bit else ('8bit' if config.bnb.load_in_8bit else 'no_qunatization')}/"
-            f"epoch-{config.sft.num_train_epochs}/"
-            f"LoRA_r-{config.peft.r}/"
-            f"max_seq_length-{config.sft.max_seq_length}/"
+            f"{'4bit' if config.bnb.load_in_4bit else ('8bit' if config.bnb.load_in_8bit else 'no_q')}/"
+            f"ep{config.sft.num_train_epochs}/"
+            f"r{config.peft.r}/al{config.peft.lora_alpha}/"
+            f"MSL{config.sft.max_seq_length}/"
+            f"lr{config.sft.learning_rate}/"
             f"data-{config.train.data_path.split('_')[1].split('.csv')[0]}"
         ),
         config=config.raw_config,
