@@ -141,7 +141,7 @@ class DataVersionManager:
 
     def search_latest_experiments_data(self) -> dict[int, pd.DataFrame]:
         """
-        실험 데이터에서 주요 버전별 최신 데이터를 로드.
+        실험 데이터에서 주요 버전별 최신 데이터를 로드하고 YAML 파일에 반영.
 
         Returns:
             dict[int, pd.DataFrame]: 주요 버전별 데이터프레임 딕셔너리
@@ -157,20 +157,24 @@ class DataVersionManager:
                     version_str = match.group(1)
                     version_obj = Version(version_str)
                     major = version_obj.major
+
                     # 같은 Major 버전 중 가장 최신 버전만 유지
                     if major not in versions or Version(versions[major][1]) < version_obj:
                         versions[major] = (file, version_str)
 
-        # 설정 파일 업데이트
+        # 새로운 Major 버전이 발견되면 self.latest_version["exp"]에 추가
         for major, (_, version_str) in versions.items():
-            if major in self.latest_version["exp"]:
-                if Version(version_str) > Version(self.latest_version["exp"][major]):
-                    self.latest_version["exp"][major] = version_str
+            if major not in self.latest_version["exp"] or Version(version_str) > Version(
+                self.latest_version["exp"].get(major, "0.0.0")
+            ):
+                self.latest_version["exp"][major] = version_str
 
+        # 설정 파일 업데이트
         self.raw_yaml["latest_experiments_version"] = self.latest_version["exp"]
         with self.data_version_path.open("w", encoding="utf-8") as f:
             yaml.safe_dump(self.raw_yaml, f, default_flow_style=False, allow_unicode=True)
 
+        # 최신 데이터를 로드하여 반환
         return {major: pd.read_csv(file) for major, (file, _) in versions.items()}
 
     def search_experiments_integration_data(self) -> pd.DataFrame:
