@@ -5,7 +5,14 @@ import streamlit as st
 from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
 
-from streamlit_utils import display_data_summary, display_data_tab
+from streamlit_utils import (
+    display_data_summary,
+    display_data_tab,
+    make_answer_distribution_fig,
+    make_choices_distribution_fig,
+    make_column_length_distribution_fig,
+    make_total_length_distribution_fig,
+)
 
 if __name__ == "__main__":
 
@@ -25,8 +32,9 @@ if __name__ == "__main__":
         st.title("📊 Data Analysis")
         uploaded_file = st.sidebar.file_uploader("Upload a CSV file for analysis", type="csv")
         experiment_file = st.sidebar.file_uploader("Upload a experiment result CSV file for analysis", type="csv")
-        tab1, tab2, tab3, tab4 = st.tabs(["📊 데이터 개요", "🔍 데이터 탐색", "📈 데이터 분포", "🔬 실험 데이터"])
-
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(
+            ["📊 데이터 개요", "🔍 데이터 탐색", "🔬 실험 데이터", "📈 데이터 분포", "💯 선다 확인"]
+        )
         if uploaded_file:
             df = pd.read_csv(uploaded_file)
         else:
@@ -46,14 +54,49 @@ if __name__ == "__main__":
         with tab2:
             display_data_tab(df, "tab2")
 
-        # 분포 확인
-        with tab3:
-            st.subheader("데이터 분포")
-            # TODO: Add distribution plotting logic
-
         # 실험 데이터 확인
+        with tab3:
+            display_data_tab(exp_df, "tab3")
+
+        # 분포 확인
         with tab4:
-            display_data_tab(exp_df, "tab4")
+            st.subheader("데이터프레임 선택")
+            option = st.selectbox(
+                "분석할 데이터프레임을 선택하세요:", ("Train data", "Experiment data"), key="tab4_selectbox"
+            )
+
+            if option == "Train data":
+                selected_df = df
+            else:
+                selected_df = exp_df
+
+            st.subheader("컬럼 별 데이터 길이 분포")
+            st.pyplot(make_column_length_distribution_fig(selected_df))
+
+            st.subheader("전체 유효 컬럼 데이터 길이 분포")
+            st.pyplot(make_total_length_distribution_fig(selected_df))
+
+        # 선다 확인
+        with tab5:
+            st.subheader("데이터프레임 선택")
+            option = st.selectbox(
+                "분석할 데이터프레임을 선택하세요:", ("Train data", "Experiment data"), key="tab5_selectbox"
+            )
+
+            if option == "Train data":
+                selected_df = df
+            else:
+                selected_df = exp_df
+
+            st.subheader("선다 확인")
+            st.pyplot(make_choices_distribution_fig(selected_df))
+
+            st.subheader("정답 분포 확인")
+            # answer 열이 있는 경우 정답 분포를 표출, 없는 경우 warning을 표출합니다.
+            if "answer" in selected_df.columns:
+                st.pyplot(make_answer_distribution_fig(selected_df))
+            else:
+                st.warning("'answer' 행이 데이터 셋 내에 존재하지 않습니다!")
 
     elif selected == "Compare":
         st.title("🆚 Compare Datasets")
