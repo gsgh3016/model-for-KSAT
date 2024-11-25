@@ -17,8 +17,8 @@ class DataVersionManager:
             self.raw_yaml = yaml.safe_load(f)
 
         # 데이터 경로와 관련 버전 정보 설정
-        self.data_path = project_directory / self.raw_yaml["data_path"]
-        self.experiment_data_path = project_directory / self.raw_yaml["experiment_data_path"]
+        self.data_path: Path = project_directory / self.raw_yaml["data_path"]
+        self.experiment_data_path: Path = project_directory / self.raw_yaml["experiment_data_path"]
         self.latest_train_version = self.raw_yaml["latest_train_version"]
         self.latest_valid_version = self.raw_yaml["latest_valid_version"]
         self.latest_test_version = self.raw_yaml["latest_test_version"]
@@ -89,7 +89,7 @@ class DataVersionManager:
         실험 데이터에서 주요 버전별 최신 데이터를 로드
 
         Returns:
-            dict[int, pd.DataFrame]: 주요 버전별 데이터프레임 딕셔너리
+            dict[int, pd.DataFrame]: 주요 버전별 데이터프레임 딕셔너리, key: 버전 Major, value: 해당 Major 버전의 최신 데이터
         """
         paths = self._scan_experiments_paths()
         return {major: pd.read_csv(path) for major, path in paths.items()}
@@ -101,8 +101,10 @@ class DataVersionManager:
         version_pattern = re.compile(r"v(\d+\.\d+\.\d+)")
         versions = {}
 
+        # 실험 데이터 저장 경로 내 파일 명 저장
         files = [f for f in self.experiment_data_path.iterdir() if f.is_file()]
 
+        # 시멘틱 버저닝으로 돼 있는 파일 명 추출
         for file in files:
             match = version_pattern.search(file.name)
             if match:
@@ -122,7 +124,6 @@ class DataVersionManager:
         matching_files = [
             f for f in self.experiment_data_path.iterdir() if self.experiments_integration in f.name and f.is_file()
         ]
-        print(f"Integration files: {matching_files}")  # 디버깅용
 
         if not matching_files:
             raise FileNotFoundError("No file with 'integration' in its name was found.")
