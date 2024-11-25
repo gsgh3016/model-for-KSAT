@@ -185,5 +185,6 @@ baseline*.ipynb
 .DS_Store
 configs/*.yaml
 !configs/config.yaml
+!configs/data_version.yaml
 
 wandb/
