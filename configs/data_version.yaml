@@ -6,4 +6,4 @@ latest_valid_version: "v2.0.1" # 최신 평가 데이터
 latest_test_version: "v1.0.2" # 최신 추론 데이터
 
 latest_experiments_version: ["v0.0.3", "v1.0.2"] # 실험 1, 2 ... 순으로 저장하기
-experiments_integration: "integration"
+experiments_integration: "integration" # 실험 데이터 통합 suffix
