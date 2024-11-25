@@ -1,9 +1,9 @@
-data_path: "data/" # 학습, 평가, 추론에 사용되는 데이터 디렉토리
-experiment_data_path: "data/experiments/" # 실험 데이터 디렉토리
-
-latest_train_version: "v2.0.1" # 최신 학습 데이터
-latest_valid_version: "v2.0.1" # 최신 평가 데이터
-latest_test_version: "v1.0.2" # 최신 추론 데이터
-
-latest_experiments_version: ["v0.0.3", "v1.0.2"] # 실험 1, 2 ... 순으로 저장하기
-experiments_integration: "integration" # 실험 데이터 통합 suffix
+data_path: data/
+experiment_data_path: data/experiments/
+experiments_integration: integration
+latest_experiments_version:
+  0: 0.0.3
+  1: 1.0.3
+latest_test_version: 1.0.2
+latest_train_version: 2.0.1
+latest_valid_version: 2.0.1
