@@ -10,6 +10,7 @@ from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from langchain_core.runnables import RunnableSerializable
 from langchain_huggingface import ChatHuggingFace, HuggingFacePipeline
+from sklearn.metrics import accuracy_score
 from tqdm import tqdm
 from transformers import pipeline
 
@@ -17,8 +18,6 @@ from configs import Config
 from models import load_model_and_tokenizer
 from prompts import load_template
 from utils import set_seed
-
-dotenv.load_dotenv()
 
 
 def inference(config: Config, validation: bool):
@@ -61,20 +60,26 @@ def inference(config: Config, validation: bool):
     for i, row in tqdm(df.iterrows(), total=len(df), dynamic_ncols=True):
         try:
             if config.common.cot_on:
-                result = process_row_with_cot(chain, row, config.inference.default_answer)
+                result = process_row_with_cot(chain, row)
                 reasoning, predict = result["reasoning"], result["predict"]
             else:
-                result = process_row(row, chain, config.inference.default_answer)
+                result = process_row(chain, row)
                 reasoning, predict = result["reasoning"], result["predict"]
         except Exception as e:
             print(f"Error: {row['id']} - {str(e)}")
             reasoning, predict = "", config.inference.default_answer
         df.loc[i, "reasoning"] = reasoning
-        df.loc[i, "answer"] = predict
+        df.loc[i, "predict"] = predict
 
     df.to_csv(config.inference.raw_output_path, index=False)
 
-    df[["id", "predict"]].rename(columns={"predict": "answer"}).to_csv(config.inference.output_path, index=False)
+    if validation:
+        df[["id", "predict"]].rename(columns={"predict": "answer"}).to_csv(config.train.valid_output_path, index=False)
+        accuracy = accuracy_score(df["answer"].astype(str), df["predict"].astype(str))
+        print("\nFinal Validation results:")
+        print(f"Accuracy: {accuracy:4f}")
+    else:
+        df[["id", "predict"]].rename(columns={"predict": "answer"}).to_csv(config.inference.output_path, index=False)
 
 
 def build_chat_prompt_template(train_df: pd.DataFrame, config: Config):
@@ -132,7 +137,7 @@ def create_ai_response(series: pd.Series, config: Config):
     return str(series["answer"])
 
 
-def process_row(row, chain: RunnableSerializable, default_answer):
+def process_row(chain: RunnableSerializable, row):
     # TODO: NOT IMPLEMENTED
     result = chain.invoke(
         build_input(
@@ -147,7 +152,7 @@ def process_row(row, chain: RunnableSerializable, default_answer):
     return {"reasoning": "", "predict": answer}
 
 
-def process_row_with_cot(chain: RunnableSerializable, row, default_answer):
+def process_row_with_cot(chain: RunnableSerializable, row):
     result = chain.invoke(
         build_input(
             row["paragraph"],
