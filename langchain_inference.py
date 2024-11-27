@@ -8,6 +8,7 @@ from langchain.output_parsers import OutputFixingParser
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
+from langchain_core.runnables import RunnableSerializable
 from langchain_huggingface import ChatHuggingFace, HuggingFacePipeline
 from tqdm import tqdm
 from transformers import pipeline
@@ -18,17 +19,6 @@ from prompts import load_template
 from utils import set_seed
 
 dotenv.load_dotenv()
-
-
-def build_input(paragraph, question, choices, question_plus=""):
-    question_plus_string = f"\n\n<보기>:\n{question_plus}" if question_plus else ""
-    question = f"{question}{question_plus_string}"
-    choices_string = "\n".join([f"{idx + 1} - {choice}" for idx, choice in enumerate(choices)])
-    return {
-        "paragraph": paragraph,
-        "question": question,
-        "choices": choices_string,
-    }
 
 
 def inference(config: Config, validation: bool):
@@ -42,9 +32,55 @@ def inference(config: Config, validation: bool):
     train_df = pd.read_csv(config.train.data_path)
     train_df["choices"] = train_df["choices"].apply(literal_eval)
     train_df["question_plus"] = train_df["question_plus"].fillna("")
+
+    chat_prompt_template: ChatPromptTemplate = build_chat_prompt_template(train_df, config)
+
+    model, tokenizer = load_model_and_tokenizer(config.inference.model_path, config)
+
+    llm = HuggingFacePipeline(
+        pipeline=pipeline(
+            task="text-generation",
+            model=model,
+            tokenizer=tokenizer,
+            max_new_tokens=1024,
+            temperature=0.5,
+            top_p=0.7,
+            repetition_penalty=1.15,
+            do_sample=True,
+            return_full_text=False,
+        )
+    )
+    chat_model = ChatHuggingFace(llm=llm, tokenizer=tokenizer)
+
+    chain = chat_prompt_template | chat_model
+    if config.common.cot_on:
+        parser = JsonOutputParser()
+        fixing_parser = OutputFixingParser.from_llm(parser=parser, llm=llm)
+        chain = chain | fixing_parser
+
+    for i, row in tqdm(df.iterrows(), total=len(df), dynamic_ncols=True):
+        try:
+            if config.common.cot_on:
+                result = process_row_with_cot(chain, row, config.inference.default_answer)
+                reasoning, predict = result["reasoning"], result["predict"]
+            else:
+                result = process_row(row, chain, config.inference.default_answer)
+                reasoning, predict = result["reasoning"], result["predict"]
+        except Exception as e:
+            print(f"Error: {row['id']} - {str(e)}")
+            reasoning, predict = "", config.inference.default_answer
+        df.loc[i, "reasoning"] = reasoning
+        df.loc[i, "answer"] = predict
+
+    df.to_csv(config.inference.raw_output_path, index=False)
+
+    df[["id", "predict"]].rename(columns={"predict": "answer"}).to_csv(config.inference.output_path, index=False)
+
+
+def build_chat_prompt_template(train_df: pd.DataFrame, config: Config):
     template: str = load_template("no_question_plus.txt", config.common.prompt_template)
 
-    chat_prompt_template = ChatPromptTemplate.from_messages(
+    return ChatPromptTemplate.from_messages(
         [
             HumanMessage(
                 content=template.format(
@@ -56,15 +92,7 @@ def inference(config: Config, validation: bool):
                     )
                 )
             ),
-            AIMessage(
-                content=json.dumps(
-                    {
-                        "reasoning": train_df.iloc[0]["reasoning"],
-                        "answer": str(train_df.iloc[0]["answer"]),
-                    },
-                    ensure_ascii=False,
-                )
-            ),
+            AIMessage(content=create_ai_response(train_df.iloc[0], config)),
             HumanMessage(
                 content=template.format(
                     **build_input(
@@ -75,66 +103,63 @@ def inference(config: Config, validation: bool):
                     )
                 )
             ),
-            AIMessage(
-                content=json.dumps(
-                    {
-                        "reasoning": train_df.iloc[1]["reasoning"],
-                        "answer": str(train_df.iloc[1]["answer"]),
-                    },
-                    ensure_ascii=False,
-                )
-            ),
+            AIMessage(content=create_ai_response(train_df.iloc[1], config)),
             HumanMessagePromptTemplate.from_template(template),
         ]
     )
 
-    model, tokenizer = load_model_and_tokenizer(config.inference.model_path, config)
 
-    pipe = pipeline(
-        task="text-generation",
-        model=model,
-        tokenizer=tokenizer,
-        max_new_tokens=1024,
-        temperature=0.5,
-        top_p=0.7,
-        repetition_penalty=1.15,
-        do_sample=True,
-        return_full_text=False,
+def build_input(paragraph, question, choices, question_plus=""):
+    question_plus_string = f"\n\n<보기>:\n{question_plus}" if question_plus else ""
+    question = f"{question}{question_plus_string}"
+    choices_string = "\n".join([f"{idx + 1} - {choice}" for idx, choice in enumerate(choices)])
+    return {
+        "paragraph": paragraph,
+        "question": question,
+        "choices": choices_string,
+    }
+
+
+def create_ai_response(series: pd.Series, config: Config):
+    if config.common.cot_on:
+        return json.dumps(
+            {
+                "reasoning": series["reasoning"],
+                "answer": str(series["answer"]),
+            },
+            ensure_ascii=False,
+        )
+    return str(series["answer"])
+
+
+def process_row(row, chain: RunnableSerializable, default_answer):
+    # TODO: NOT IMPLEMENTED
+    result = chain.invoke(
+        build_input(
+            row["paragraph"],
+            row["question"],
+            row["choices"],
+            row["question_plus"],
+        )
     )
-    llm = HuggingFacePipeline(pipeline=pipe)
+    logprobs = result.response_metadata["logprobs"]
+    answer = max(range(len(logprobs)), key=lambda idx: logprobs[idx]) + 1  # 가장 높은 logprob 선택
+    return {"reasoning": "", "predict": answer}
 
-    chat_model = ChatHuggingFace(llm=llm, tokenizer=tokenizer)
 
-    parser = JsonOutputParser()
-    fixing_parser = OutputFixingParser.from_llm(parser=parser, llm=llm)
-
-    chain = chat_prompt_template | chat_model | fixing_parser
-
-    for i, row in tqdm(df.iterrows(), total=len(df), dynamic_ncols=True):
-        result = ""
-        try:
-            result = chain.invoke(
-                build_input(
-                    row["paragraph"],
-                    row["question"],
-                    row["choices"],
-                    row["question_plus"],
-                )
-            )
-            answer = int(result["answer"])
-            if answer < 1 or len(row["choices"]) < answer:
-                raise Exception("not valid answer")
-            df.loc[i, "reasoning"] = result["reasoning"]
-            df.loc[i, "predict"] = answer
-        except Exception:
-            df.loc[i, "reasoning"] = ""
-            df.loc[i, "predict"] = config.inference.default_answer
-            print(f"Error: {row['id']}")
-            print(result)
-
-    df.to_csv(config.inference.raw_output_path, index=False)
-
-    df[["id", "predict"]].rename(columns={"predict": "answer"}).to_csv(config.inference.output_path, index=False)
+def process_row_with_cot(chain: RunnableSerializable, row, default_answer):
+    result = chain.invoke(
+        build_input(
+            row["paragraph"],
+            row["question"],
+            row["choices"],
+            row["question_plus"],
+        )
+    )
+    answer = int(result["answer"])
+    if answer < 1 or len(row["choices"]) < answer:
+        raise ValueError(result)
+    return {"reasoning": result["reasoning"], "predict": answer}
 
 
 if __name__ == "__main__":
