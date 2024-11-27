@@ -27,7 +27,6 @@ class TrainDataLoader(BaseDataLoader):
         return {
             "id": data["id"],
             "messages": [
-                {"role": "system", "content": "지문을 읽고 질문의 답을 구하세요."},
                 {"role": "user", "content": user_prompt},
                 {"role": "assistant", "content": f"{data['answer']}"},
             ],

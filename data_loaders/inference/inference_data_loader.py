@@ -15,7 +15,6 @@ class InferenceDataLoader(BaseDataLoader):
         result = {
             "id": data["id"],
             "messages": [
-                {"role": "system", "content": "지문을 읽고 질문의 답을 구하세요."},
                 {"role": "user", "content": user_prompt},
             ],
             "len_choices": len_choices,
