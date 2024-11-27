@@ -37,6 +37,8 @@ class ModelConfig:
 class CommonConfig:
     seed: int
     device: str
+    cot_on: bool = False
+    prompt_template: str = "base"
 
 
 @dataclass

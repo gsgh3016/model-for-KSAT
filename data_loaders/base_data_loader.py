@@ -5,12 +5,14 @@ import pandas as pd
 from datasets import Dataset
 from transformers import PreTrainedTokenizerFast
 
+from configs import Config
 from prompts import make_prompt
 
 
 class BaseDataLoader(ABC):
-    def __init__(self, data_path: str, tokenizer: PreTrainedTokenizerFast):
+    def __init__(self, data_path: str, config: Config, tokenizer: PreTrainedTokenizerFast):
         self.tokenizer = tokenizer
+        self.config = config
 
         df = self.read_csv(data_path)
 
@@ -25,7 +27,7 @@ class BaseDataLoader(ABC):
     def preprocess_dataset(self, df: pd.DataFrame) -> Dataset:
         processed_dataset = []
         for i, row in df.iterrows():
-            user_prompt = make_prompt(row, template_type="base")
+            user_prompt = make_prompt(row, self.config.common.prompt_template)
 
             processed_dataset.append(self.build_single_data(row, user_prompt))
         return Dataset.from_list(processed_dataset)

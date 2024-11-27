@@ -7,6 +7,8 @@ model:
 common:
   seed: 42
   device: "cuda"
+  cot_on: false
+  prompt_template: "base"
 
 bnb:
   load_in_8bit: false

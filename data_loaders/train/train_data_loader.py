@@ -8,7 +8,7 @@ from data_loaders.base_data_loader import BaseDataLoader
 
 class TrainDataLoader(BaseDataLoader):
     def __init__(self, config: Config, tokenizer: PreTrainedTokenizerFast):
-        super().__init__(config.train.data_path, tokenizer)
+        super().__init__(config.train.data_path, config, tokenizer)
         train_dataset = self.tokenize_dataset(self.dataset)
         train_dataset = train_dataset.filter(lambda x: len(x["input_ids"]) <= config.sft.max_seq_length)
 
