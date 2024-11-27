@@ -129,11 +129,11 @@ def inference(config: Config, validation: bool):
             df.loc[i, "predict"] = answer
         except Exception:
             df.loc[i, "reasoning"] = ""
-            df.loc[i, "predict"] = -1
+            df.loc[i, "predict"] = config.inference.default_answer
             print(f"Error: {row['id']}")
             print(result)
 
-    df.to_csv("data/output_raw.csv", index=False)
+    df.to_csv(config.inference.raw_output_path, index=False)
 
     df[["id", "predict"]].rename(columns={"predict": "answer"}).to_csv(config.inference.output_path, index=False)
 
