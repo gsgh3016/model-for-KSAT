@@ -42,8 +42,7 @@ def inference(config: Config, validation: bool):
     train_df = pd.read_csv(config.train.data_path)
     train_df["choices"] = train_df["choices"].apply(literal_eval)
     train_df["question_plus"] = train_df["question_plus"].fillna("")
-
-    template: str = load_template(config.common.prompt_template)
+    template: str = load_template("no_question_plus.txt", config.common.prompt_template)
 
     chat_prompt_template = ChatPromptTemplate.from_messages(
         [
@@ -104,7 +103,7 @@ def inference(config: Config, validation: bool):
     )
     llm = HuggingFacePipeline(pipeline=pipe)
 
-    chat_model = ChatHuggingFace(llm=llm)
+    chat_model = ChatHuggingFace(llm=llm, tokenizer=tokenizer)
 
     parser = JsonOutputParser()
     fixing_parser = OutputFixingParser.from_llm(parser=parser, llm=llm)
