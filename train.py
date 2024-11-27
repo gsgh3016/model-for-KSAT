@@ -51,13 +51,21 @@ def train(config: Config):
         greater_is_better=config.earlystop.greater_is_better,
     )
 
+    def compute_metrics_fn(eval_res):
+        return compute_metrics(eval_res, tokenizer)
+
+    if config.common.cot_on:
+        conditional_metrics_fn = None
+    else:
+        conditional_metrics_fn = compute_metrics_fn
+
     trainer = SFTTrainer(
         model=model,
         train_dataset=data_loader.train_dataset,
         eval_dataset=data_loader.eval_dataset,
         data_collator=get_data_collator(tokenizer, config.model.response_template),
         tokenizer=tokenizer,
-        compute_metrics=lambda eval_res: compute_metrics(eval_res, tokenizer),
+        compute_metrics=conditional_metrics_fn,
         preprocess_logits_for_metrics=lambda logits, labels: preprocess_logits_for_metrics(logits, labels, logit_idx),
         peft_config=peft_config,
         args=sft_config,

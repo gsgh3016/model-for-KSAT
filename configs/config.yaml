@@ -7,8 +7,8 @@ model:
 common:
   seed: 42
   device: "cuda"
-  cot_on: false
-  prompt_template: "base"
+  cot_on: false # cot 사용 시 prompt_template을 cot_json으로 변경 필요
+  prompt_template: "base" # base, cot_json
 
 bnb:
   load_in_8bit: false
