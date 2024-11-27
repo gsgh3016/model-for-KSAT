@@ -11,6 +11,7 @@ pandas
 bitsandbytes
 langchain
 langchain-openai
+langchain-huggingface
 wikipedia-api
 
 # Visualization Packages
