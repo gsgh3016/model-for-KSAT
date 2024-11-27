@@ -1,7 +1,7 @@
 model:
   name_or_path: "beomi/gemma-ko-2b"
   response_template: "<start_of_turn>model\n"
-  without_system_role: false
+  without_system_role: false # Deprecated (항상 system 없이 동작)
   torch_dtype: "float16" # float32, float16, bfloat16 / 모델의 기본 데이터 타입
 
 common:
