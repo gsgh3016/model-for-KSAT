@@ -27,6 +27,7 @@ def inference(config: Config, validation: bool):
         df = pd.read_csv(config.inference.data_path)
     df["choices"] = df["choices"].apply(literal_eval)
     df["question_plus"] = df["question_plus"].fillna("")
+    df = df.iloc
 
     train_df = pd.read_csv(config.train.data_path)
     train_df["choices"] = train_df["choices"].apply(literal_eval)
@@ -41,7 +42,7 @@ def inference(config: Config, validation: bool):
             task="text-generation",
             model=model,
             tokenizer=tokenizer,
-            max_new_tokens=1024,
+            max_new_tokens=1024 if config.common.cot_on else 32,
             temperature=0.5,
             top_p=0.7,
             repetition_penalty=1.15,
@@ -50,27 +51,21 @@ def inference(config: Config, validation: bool):
         )
     )
     chat_model = ChatHuggingFace(llm=llm, tokenizer=tokenizer)
-
-    chain = chat_prompt_template | chat_model
-    if config.common.cot_on:
-        parser = JsonOutputParser()
-        fixing_parser = OutputFixingParser.from_llm(parser=parser, llm=llm)
-        chain = chain | fixing_parser
+    parser = JsonOutputParser()
+    fixing_parser = OutputFixingParser.from_llm(parser=parser, llm=llm)
+    chain = chat_prompt_template | chat_model | fixing_parser
 
     for i, row in tqdm(df.iterrows(), total=len(df), dynamic_ncols=True):
         try:
-            if config.common.cot_on:
-                result = process_row_with_cot(chain, row)
-                reasoning, predict = result["reasoning"], result["predict"]
-            else:
-                result = process_row(chain, row)
-                reasoning, predict = result["reasoning"], result["predict"]
+            result = process_row(chain, row)
+            reasoning, predict = result["reasoning"], result["predict"]
         except Exception as e:
             print(f"Error: {row['id']} - {str(e)}")
             reasoning, predict = "", config.inference.default_answer
         df.loc[i, "reasoning"] = reasoning
         df.loc[i, "predict"] = predict
 
+    df["predict"] = df["predict"].astype(int)
     df.to_csv(config.inference.raw_output_path, index=False)
 
     if validation:
@@ -134,25 +129,16 @@ def create_ai_response(series: pd.Series, config: Config):
             },
             ensure_ascii=False,
         )
-    return str(series["answer"])
+    else:
+        return json.dumps(
+            {
+                "answer": str(series["answer"]),
+            },
+            ensure_ascii=False,
+        )
 
 
 def process_row(chain: RunnableSerializable, row):
-    # TODO: NOT IMPLEMENTED
-    result = chain.invoke(
-        build_input(
-            row["paragraph"],
-            row["question"],
-            row["choices"],
-            row["question_plus"],
-        )
-    )
-    logprobs = result.response_metadata["logprobs"]
-    answer = max(range(len(logprobs)), key=lambda idx: logprobs[idx]) + 1  # 가장 높은 logprob 선택
-    return {"reasoning": "", "predict": answer}
-
-
-def process_row_with_cot(chain: RunnableSerializable, row):
     result = chain.invoke(
         build_input(
             row["paragraph"],
@@ -164,7 +150,7 @@ def process_row_with_cot(chain: RunnableSerializable, row):
     answer = int(result["answer"])
     if answer < 1 or len(row["choices"]) < answer:
         raise ValueError(result)
-    return {"reasoning": result["reasoning"], "predict": answer}
+    return {"reasoning": result.get("reasoning", ""), "predict": answer}
 
 
 if __name__ == "__main__":
