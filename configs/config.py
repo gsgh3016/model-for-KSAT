@@ -37,6 +37,8 @@ class ModelConfig:
 class CommonConfig:
     seed: int
     device: str
+    cot_on: bool = False
+    prompt_template: str = "base"
 
 
 @dataclass
@@ -104,3 +106,5 @@ class InferenceConfig:
     model_path: str
     data_path: str
     output_path: str
+    raw_output_path: str = "data/raw_output.csv"
+    default_answer: int = 1

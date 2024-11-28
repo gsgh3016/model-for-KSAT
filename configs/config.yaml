@@ -1,12 +1,14 @@
 model:
   name_or_path: "beomi/gemma-ko-2b"
   response_template: "<start_of_turn>model\n"
-  without_system_role: false
+  without_system_role: false # Deprecated (항상 system 없이 동작)
   torch_dtype: "float16" # float32, float16, bfloat16 / 모델의 기본 데이터 타입
 
 common:
   seed: 42
   device: "cuda"
+  cot_on: false # cot 사용 시 prompt_template을 cot_json으로 변경 필요
+  prompt_template: "base" # base, cot_json
 
 bnb:
   load_in_8bit: false
@@ -60,3 +62,5 @@ inference:
   model_path: "outputs/gemma-ko-2b" # 학습된 모델로 변경 필요
   data_path: "data/test_v1.0.2.csv"
   output_path: "data/output.csv"
+  raw_output_path: "data/raw_output.csv"
+  default_answer: 1
