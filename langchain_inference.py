@@ -27,7 +27,6 @@ def inference(config: Config, validation: bool):
         df = pd.read_csv(config.inference.data_path)
     df["choices"] = df["choices"].apply(literal_eval)
     df["question_plus"] = df["question_plus"].fillna("")
-    df = df.iloc
 
     train_df = pd.read_csv(config.train.data_path)
     train_df["choices"] = train_df["choices"].apply(literal_eval)
