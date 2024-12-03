@@ -7,7 +7,7 @@ import wandb
 from trl import SFTTrainer
 from unsloth import FastLanguageModel
 
-from configs import Config, create_peft_config, create_sft_config
+from configs import Config, create_sft_config
 from data_loaders import build_data_loader
 from evaluation import compute_metrics, preprocess_logits_for_metrics
 from models import get_data_collator, load_model_and_tokenizer
