@@ -48,19 +48,3 @@ def set_chat_template(tokenizer: PreTrainedTokenizerFast):
         )
 
     return tokenizer
-
-
-def prepare_tokenizer(tokenizer: PreTrainedTokenizerFast):
-    """
-    토크나이저를 설정하는 함수입니다.
-
-    Args:
-        tokenizer: 설정할 토크나이저.
-
-    Returns:
-        tokenizer: 설정된 토크나이저.
-    """
-    tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.pad_token_id = tokenizer.eos_token_id
-    tokenizer.padding_side = "right"
-    return tokenizer

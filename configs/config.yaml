@@ -61,7 +61,7 @@ train:
   valid_output_path: "data/valid_output.csv"
 
 inference:
-  model_path: "outputs/gemma-ko-2b" # 학습된 모델로 변경 필요
+  model_path: "outputs/Qwen2.5-3B-Instruct-bnb-4bit" # 학습된 모델로 변경 필요
   data_path: "data/test_v1.0.2.csv"
   output_path: "data/output.csv"
   raw_output_path: "data/raw_output.csv"

@@ -1,5 +1,5 @@
 # Core Packages
-
+unsloth
 transformers
 scikit-learn
 evaluate
@@ -35,6 +35,3 @@ python-dotenv
 black
 flake8
 isort
-
-"unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git"
-xformers
