@@ -29,6 +29,26 @@
 
 베이스 모델인 `gemma-2b-ko`에서 데이터 정제 및 증강으로 소폭 성능 향상을 확인하였으며, 이는 최종 선정된 모델인 `Qwen-2.5-32b-Instruct`에서도 확인 할수 있었습니다. 최종적으로 데이터 증강 및 Prompt Tuning을 추가한 **Qwen-2.5-32b-Instruct** 모델이 **0.7747**로 가장 높은 정확도를 달성했습니다.
 
+## 다양한 모델 및 하이퍼파라미터 성능 비교
+
+![model compare](assets/model-compare.png)
+
+![qwen_parameter compare](assets/qwen-parameter-compare.png)
+
+![hyperparameter compare](assets/hyperparameter-compare.png)
+
+## 데이터 정제 및 증강
+
+![augmentation pipeline](/assets/augmentation-pipeline.png)
+
+## CoT 적용에 따른 추론 능력 평가
+
+## RAG를 활용한 검색 기반 답변 성능 실험
+
+## Streamlit
+
+![streamlit demo](assets/streamlit-demo.png)
+
 ## Project Quick Setup
 
 ### Requirements
