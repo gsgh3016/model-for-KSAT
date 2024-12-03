@@ -87,6 +87,8 @@ class SftConfig:
     save_total_limit: int
     save_only_model: bool
     report_to: str
+    gradient_checkpointing: bool
+    gradient_accumulation_steps: int
 
 
 @dataclass

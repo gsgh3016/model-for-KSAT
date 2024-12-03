@@ -47,4 +47,6 @@ def create_sft_config(sft_config: SftConfig) -> SFTConfig:
         save_total_limit=sft_config.save_total_limit,
         save_only_model=sft_config.save_only_model,
         report_to=sft_config.report_to,
+        gradient_checkpointing=sft_config.gradient_checkpointing,
+        gradient_accumulation_steps=sft_config.gradient_accumulation_steps,
     )

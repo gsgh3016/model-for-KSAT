@@ -5,8 +5,9 @@ import shutil
 import dotenv
 import wandb
 from trl import SFTTrainer
+from unsloth import FastLanguageModel
 
-from configs import Config, create_peft_config, create_sft_config
+from configs import Config, create_sft_config
 from data_loaders import build_data_loader
 from evaluation import compute_metrics, preprocess_logits_for_metrics
 from models import get_data_collator, load_model_and_tokenizer
@@ -30,10 +31,22 @@ def train(config: Config):
     )
 
     model, tokenizer = load_model_and_tokenizer(config.model.name_or_path, config)
+    model = FastLanguageModel.get_peft_model(
+        model,
+        r=config.peft.r,
+        target_modules=config.peft.target_modules,
+        lora_alpha=config.peft.lora_alpha,
+        lora_dropout=config.peft.lora_dropout,
+        bias=config.peft.bias,
+        use_gradient_checkpointing="unsloth",
+        random_state=config.common.seed,
+        use_rslora=False,
+        loftq_config=None,
+    )
 
     data_loader = build_data_loader("train", tokenizer, config)
 
-    peft_config = create_peft_config(config.peft)
+    # peft_config = create_peft_config(config.peft)
     sft_config = create_sft_config(config.sft)
 
     logit_idx = [
@@ -67,7 +80,7 @@ def train(config: Config):
         tokenizer=tokenizer,
         compute_metrics=conditional_metrics_fn,
         preprocess_logits_for_metrics=lambda logits, labels: preprocess_logits_for_metrics(logits, labels, logit_idx),
-        peft_config=peft_config,
+        # peft_config=peft_config,
         args=sft_config,
         callbacks=[early_stopping_callback],
     )
