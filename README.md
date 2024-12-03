@@ -31,11 +31,33 @@
 
 ## 다양한 모델 및 하이퍼파라미터 성능 비교
 
+다양한 모델과 하이퍼파라미터 설정을 기반으로 수능 문제 풀이 성능을 평가하였습니다. 주요 실험은 아래와 같습니다:
+
+### 모델별 성능 비교
+
+여러 언어 모델(gemma, Qwen, Llama, SOLAR, EXAONE 등)의 성능을 비교한 결과입니다:
+
 ![model compare](assets/model-compare.png)
+
+- `Qwen-2.5-32b-Instruct` 모델이 가장 높은 성능을 기록하였습니다.
+- 비슷한 파라미터 크기 내에에서 `Qwen` 계열의 모델이 전반적으로 우수한 성능을 보였습니다.
+
+### Qwen 모델의 파라미터 크기별 성능 비교
+
+`Qwen` 모델의 파라미터 크기(3B, 7B, 14B, 32B)에 따른 성능 변화입니다:
 
 ![qwen_parameter compare](assets/qwen-parameter-compare.png)
 
+- 14B과 32B의 경우 4bit 양자화가 적용되었습니다.
+- 양자화를 적용함했음에도 파라미터 크기가 커질수록 성능이 크게 향상되는 것을 확인 할 수 있었습니다.
+
+### 하이퍼파라미터 설정별 성능 비교
+
+학습에 사용되는 `LORA r`, `LORA alpha` 조합에 따른 성능 변화를 평가하였습니다:
+
 ![hyperparameter compare](assets/hyperparameter-compare.png)
+
+- Mid ACC와 Final ACC 모두에서 `r: 8, alpha: 16` 설정이 가장 높은 성능을 기록하였습니다.
 
 ## 데이터 정제 및 증강
 
