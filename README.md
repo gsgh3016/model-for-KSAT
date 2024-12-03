@@ -119,8 +119,8 @@ OPENAI_API_KEY={your_openai_api_key}
 
 ```yaml
 model:
-  name_or_path: "beomi/gemma-ko-2b"
-  response_template: "<start_of_turn>model\n"
+  name_or_path: "unsloth/Qwen2.5-3B-Instruct-bnb-4bit"
+  response_template: "<|im_start|>assistant\n"
   without_system_role: false # Deprecated (항상 system 없이 동작)
   torch_dtype: "float16" # float32, float16, bfloat16 / 모델의 기본 데이터 타입
 
@@ -169,6 +169,8 @@ sft:
   save_total_limit: 1
   save_only_model: true
   report_to: "wandb" # none or wandb, wandb로 변경하여 로그를 기록합니다.
+  gradient_checkpointing: false
+  gradient_accumulation_steps: 4
 
 wandb:
   project: "MMLU"
@@ -179,7 +181,7 @@ train:
   valid_output_path: "data/valid_output.csv"
 
 inference:
-  model_path: "outputs/gemma-ko-2b" # 학습된 모델로 변경 필요
+  model_path: "outputs/Qwen2.5-3B-Instruct-bnb-4bit" # 학습된 모델로 변경 필요
   data_path: "data/test_v1.0.2.csv"
   output_path: "data/output.csv"
   raw_output_path: "data/raw_output.csv"
