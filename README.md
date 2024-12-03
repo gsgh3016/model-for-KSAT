@@ -29,7 +29,7 @@
 
 베이스 모델인 `gemma-2b-ko`에서 데이터 정제 및 증강으로 소폭 성능 향상을 확인하였으며, 이는 최종 선정된 모델인 `Qwen-2.5-32b-Instruct`에서도 확인 할수 있었습니다. 최종적으로 데이터 증강 및 Prompt Tuning을 추가한 **Qwen-2.5-32b-Instruct** 모델이 **0.7747**로 가장 높은 정확도를 달성했습니다.
 
-## Getting Started
+## Project Quick Setup
 
 ### Requirements
 
@@ -95,7 +95,7 @@ OPENAI_API_KEY={your_openai_api_key}
 
 ## Config.yaml
 
-`config` 파일을 통해 원하는 환경으로 실행을 할 수 있습니다.
+`config.yaml` 파일을 사용하여 원하는 환경에서 실행을 설정할 수 있습니다. 아래는 기본 설정 예시입니다:
 
 ```yaml
 model:
@@ -166,13 +166,58 @@ inference:
   default_answer: 1
 ```
 
-## Train
+### Custom Config
 
-## Inference
+기본 설정 외에 사용자 정의 설정을 사용하려면 `configs/config.yaml` 파일을 복사한 뒤 수정하세요:
 
-### COT
+```shell
+(.venv) $ cp configs/config.yaml configs/config_custom.yaml
+(.venv) $ vi configs/config_custom.yaml
+```
 
-## RAG
+## Train 및 Inference 실행
+
+### Train
+
+학습을 실행하려면 기본 `train.py` 파일을 실행합니다:
+
+```shell
+(.venv) $ python train.py
+```
+
+커스텀 설정을 적용하려면 -c 또는 --config 옵션을 사용하세요:
+
+```shell
+(.venv) $ python train.py -c config_custom.yaml
+```
+
+- -c 옵션에는 configs 디렉토리 내부의 YAML 파일 이름만 입력합니다.
+
+### Inference
+
+학습된 모델을 사용하여 추론을 진행합니다:
+
+```shell
+(.venv) $ python inference.py
+```
+
+커스텀 설정을 사용하려면 다음 명령어를 실행하세요:
+
+```
+(.venv) $ python inference.py -c config_custom.yaml
+```
+
+`valid` 데이터에 대한 추론을 진행하려면 `-v` 옵션을 추가합니다:
+
+> `valid`에 대한 모델의 성능을 확인할 수 있습니다
+
+```shell
+(.venv) $ python inference.py -v
+
+# or
+
+(.venv) $ python inference.py -c config_custom.yaml -v
+```
 
 ## Contribution Guide
 
