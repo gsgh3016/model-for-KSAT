@@ -12,7 +12,9 @@ from data_loaders import build_data_loader
 from evaluation import compute_metrics, preprocess_logits_for_metrics
 from models import get_data_collator, load_model_and_tokenizer
 from utils import CustomEarlyStoppingCallback, set_seed
+import os
 
+os.environ["UNSLOTH_RETURN_LOGITS"] = "1"
 
 def train(config: Config):
     # wandb 초기화

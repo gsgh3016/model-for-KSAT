@@ -1,6 +1,6 @@
 model:
-  name_or_path: "beomi/gemma-ko-2b"
-  response_template: "<start_of_turn>model\n"
+  name_or_path: "unsloth/Qwen2.5-3B-Instruct-bnb-4bit"
+  response_template: "<|im_start|>assistant\n"
   without_system_role: false # Deprecated (항상 system 없이 동작)
   torch_dtype: "float16" # float32, float16, bfloat16 / 모델의 기본 데이터 타입
 
@@ -49,6 +49,8 @@ sft:
   save_total_limit: 1
   save_only_model: true
   report_to: "wandb" # none or wandb, wandb로 변경하여 로그를 기록합니다.
+  gradient_checkpointing: false
+  gradient_accumulation_steps: 4
 
 wandb:
   project: "MMLU"
