@@ -17,14 +17,16 @@ class WikipediaCrawler:
         USER_AGENT = os.getenv("WIKI_USER_AGENT")
         self.wiki = wk.Wikipedia(user_agent=USER_AGENT, language=languange)
 
-    def crawl_text(self, keyword: str) -> str:
+    def is_exists(self, keyword: str) -> tuple:
         """
-        위키피디아에서 키워드를 검색하여 페이지 텍스트를 크롤링하는 함수입니다.
+        위키피디아에 `keyword` 페이지가 존재하는 여부를 판별하는 함수입니다.
 
         Args:
             keyword (str): 검색할 키워드
 
         Returns:
-            str: 위키피디아 페이지 텍스트
+            tuple: 위키피디아 페이지 텍스트 존재 여부를 0번 인덱스에 답고 있는 튜플
         """
-        return self.wiki.page(keyword).text
+        page = self.wiki.page(keyword)
+        is_exists = page.exists()
+        return (is_exists, str(page.text)) if is_exists else (False,)
