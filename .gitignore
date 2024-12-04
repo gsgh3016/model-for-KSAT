@@ -181,10 +181,6 @@ data/*.csv
 !data/.gitkeep
 !data/experiments/.gitkeep
 
-rag_data/*
-!data/.gitkeep
-
-
 *.csv
 output*/
 

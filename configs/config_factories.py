@@ -50,7 +50,3 @@ def create_sft_config(sft_config: SftConfig) -> SFTConfig:
         gradient_checkpointing=sft_config.gradient_checkpointing,
         gradient_accumulation_steps=sft_config.gradient_accumulation_steps,
     )
-
-
-def create_rag_config(rag_config: RagConfig) -> RagConfig:
-    return RagConfig(query_builder_type=rag_config.query_builder_type)
