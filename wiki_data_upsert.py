@@ -3,9 +3,9 @@ import os
 import sys
 import uuid
 
-from rag_preprocess import generate_embeddings, load_document, split_into_chunks
 from tqdm import tqdm
 
+from rag_modules import generate_embeddings, load_document, split_into_chunks
 from utils import get_pinecone_index
 
 
