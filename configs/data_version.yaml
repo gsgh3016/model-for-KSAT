@@ -7,7 +7,7 @@ latest_experiments_version:
     3: 3.0.3
   before_integration: # train 기준으로 만
     0: 0.0.3
-    1: 1.0.2
+    1: 1.1.0
 latest_test_version: 1.0.2
 latest_train_version: 2.0.1
 latest_valid_version: 2.0.1
