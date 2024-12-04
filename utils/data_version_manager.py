@@ -35,6 +35,71 @@ class DataVersionManager:
         self.experiments_integration = self.raw_yaml["experiments_integration"]
         self.experiments_integration_version = self.raw_yaml["experiments_integration_version"]
 
+    def update_file_path(
+        self,
+        major: int,
+        minor: int,
+        update_target: str = "minor",
+        is_experiment: bool = False,
+        save_in_experiment: bool = False,
+    ) -> Path:
+        """
+        특정 Major, Minor 버전에 대해 새로운 파일 경로를 생성하여 반환.
+
+        Args:
+            major (int): Major 버전.
+            minor (int): Minor 버전.
+            update_target (str): 업데이트 대상 ("major", "minor", "micro").
+            is_experiment (bool): 실험 데이터 여부.
+            save_in_experiment (bool): 실험 데이터 경로에 저장 여부.
+
+        Returns:
+            Path: 새로 생성된 파일 경로.
+        """
+        # 인자 검사
+        if update_target not in ["minor", "major", "micro"]:
+            raise ValueError('update_target에 "major", "minor", "micro" 로만 입력하세요.')
+
+        # 저장 디렉토리 설정
+        dir = Path(self.experiment_data_path if save_in_experiment else self.data_path)
+
+        # 최신 파일 검색 (Major, Minor 버전 매칭)
+        latest_file = None
+        version_pattern = re.compile(r"v(\d+)\.(\d+)\.(\d+)")
+        for file in dir.iterdir():
+            if file.is_file():
+                match = version_pattern.search(file.name)
+                if match:
+                    version_obj = Version(match.group(0))
+                    if version_obj.major == major and version_obj.minor == minor:
+                        if (
+                            latest_file is None
+                            or Version(latest_file.name.split("_v")[-1].split(".csv")[0]) < version_obj
+                        ):
+                            latest_file = file
+
+        if not latest_file:
+            raise FileNotFoundError(f"{dir}에 Major {major}, Minor {minor} 버전에 해당하는 파일이 없습니다.")
+
+        # 최신 파일 버전 추출 및 업데이트
+        match = version_pattern.search(latest_file.name)
+        if not match:
+            raise ValueError(f"파일 이름에서 버전을 찾을 수 없습니다: {latest_file.name}")
+
+        version = Version(match.group(0))
+        new_major = version.major + 1 if update_target == "major" else version.major
+        new_minor = version.minor + 1 if update_target == "minor" else version.minor
+        new_micro = version.micro + 1 if update_target == "micro" else version.micro
+        new_version = f"v{new_major}.{new_minor}.{new_micro}"
+
+        # 새로운 파일 이름 생성
+        prefix = latest_file.name[: match.start()]
+        suffix = latest_file.name[match.end() :]
+        file_name = prefix + new_version + suffix
+
+        # 새로운 경로 반환
+        return dir / file_name
+
     def _find_matching_files(self, directory: Path, prefix: str) -> list[str]:
         """
         주어진 디렉토리에서 특정 접두사를 가진 파일 목록을 반환.
@@ -171,42 +236,13 @@ class DataVersionManager:
         # 최신 버전 정보를 가져오고 객체로 변환
         return Version(versioning[major])
 
-    def update_file_path(
-        self,
-        major: int,
-        minor: int,
-        update_target: str = "minor",
-        is_experiment: bool = False,
-        save_in_experiment: bool = False,
-    ) -> Path:
-        # 인자 검사
-        if update_target not in ["minor", "major", "micro"]:
-            raise ValueError('update_target에 "major", "minor", "micro" 로만 입력하세요.')
-        dir = Path(self.experiment_data_path if save_in_experiment else self.data_path)
-        exp_path = self.get_latest_experiment_data_path(major=major, is_experiment=is_experiment)
-
-        # 업데이트 버전 생성
-        version_pattern = re.compile(r"v(\d+\.\d+\.\d+)")
-        match = version_pattern.search(exp_path.name)
-        if not match:
-            raise FileNotFoundError(f"{dir}에 v{major}.{minor}.x가 없습니다.")
-        version = Version(match.group(1))
-        new_major = str(version.major + 1 if update_target == "major" else version.major)
-        new_minor = str(version.minor + 1 if update_target == "minor" else version.minor)
-        new_micro = str(version.micro + 1 if update_target == "micro" else 0)
-        new_version = "v" + ".".join([new_major, new_minor, new_micro])
-
-        prefix = exp_path.name[: match.start()]
-        suffix = exp_path.name[match.end() :]
-        file_name = prefix + new_version + suffix
-        return dir / file_name
-
-    def search_latest_experiments_data(self, major: int, is_experiment: bool = False) -> pd.DataFrame:
+    def search_latest_experiments_data(self, major: int, minor: int, is_experiment: bool = False) -> pd.DataFrame:
         """
         특정 Major 버전의 실험 데이터에서 최신 데이터를 로드하고, 필요 시 Patch를 +1하여 YAML 파일에 업데이트.
 
         Args:
             major (int): 검색할 Major 버전
+            minor (int): 검색할 Minor 버전
             is_experiment (bool): True인 경우, 최신 버전의 Patch를 +1하고 YAML 파일에 반영
 
         Returns:
@@ -222,7 +258,7 @@ class DataVersionManager:
                 match = version_pattern.search(file.name)
                 if match:
                     version_obj = Version(match.group(0))
-                    if version_obj.major == major and version_obj >= latest_version_obj:
+                    if version_obj.major == major and version_obj.minor == minor and version_obj >= latest_version_obj:
                         latest_version_obj = version_obj
                         latest_file = file
 
