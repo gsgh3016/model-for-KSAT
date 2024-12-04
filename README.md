@@ -29,6 +29,21 @@
 
 베이스 모델인 `gemma-2b-ko`에서 데이터 정제 및 증강으로 소폭 성능 향상을 확인하였으며, 이는 최종 선정된 모델인 `Qwen-2.5-32b-Instruct`에서도 확인 할수 있었습니다. 최종적으로 데이터 증강 및 Prompt Tuning을 추가한 **Qwen-2.5-32b-Instruct** 모델이 **0.7747**로 가장 높은 정확도를 달성했습니다.
 
+## Collaborators
+
+<div align="center">
+
+|                                                   팀원                                                    |                                  역할                                  |
+| :-------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------: |
+|     <a href="https://github.com/gsgh3016"><img src="https://github.com/gsgh3016.png" width="100"></a>     |  Streamlit app 개발 참여, 데이터 관찰 및 분석, 데이터 재구성 및 증강   |
+|       <a href="https://github.com/eyeol"> <img src="https://github.com/eyeol.png" width="100"></a>        |             Streamlit app 개발 참여, RAG 구현 및 성능 평가             |
+|    <a href="https://github.com/jagaldol"> <img src="https://github.com/jagaldol.png" width="100"> </a>    |  협업 초기 환경 세팅 및 코드 모듈화, CoT 방식 실험 설계 및 성능 평가   |
+|     <a href="https://github.com/Usunwoo"> <img src="https://github.com/Usunwoo.png" width="100"> </a>     |        베이스라인 모듈화, 메모리 사용 최적화, 모델 서치 및 실험        |
+| <a href="https://github.com/canolayoo78"> <img src="https://github.com/canolayoo78.png" width="100"> </a> |  Streamlit app 개발 참여, 데이터 분석 및 정제, RAG 구현 및 성능 평가   |
+|   <a href="https://github.com/chell9999"> <img src="https://github.com/chell9999.png" width="100"> </a>   | 문서 작업, RAG 전용 Vector DB 구성, 벤치마크 데이터셋 기반 데이터 증강 |
+
+</div>
+
 ## Tools and Technologies
 
 <div align="center">
@@ -102,14 +117,15 @@
 
 이 발견을 바탕으로, RAG (정보 검색 기반 생성) 접근법을 도입하는 방향으로 이어졌습니다.
 
-#### 벤치마크 데이터셋을 통한 데이터 증강
+#### 타 벤치마크 데이터셋을 통한 데이터 증강
 
-KMMLU 벤치마크 논문에서 언급된 다양한 데이터셋을 분석하여 학습 데이터에 적합한 데이터를 선정하였습니다.
+KMMLU 벤치마크 논문에서 언급된 다양한 타 벤치마크의 데이터셋을 분석하여 학습 데이터에 적합한 데이터를 선정하였습니다.
 
 ![kmmlu-dataset](/assets/kmmlu-dataset.png)
 
-- **KorNLI & KorSTS, KoBBQ 등**: 다지선다형 문제로 변환하기 어려움
-- **HAE-RAE Bench.**: 다지선다형으로 가공이 용이하고, 학습 목표와 높은 연관성을 가짐
+- **KLUE, KO-H5, KOR NAT:** Public으로 공개되지 않음
+- **KorNLI & KorSTS, KoBBQ**: 다지선다형 문제로 변환하기 어려움
+- **CLICK, HAE-RAE Bench.**: 다지선다형으로 가공이 용이함
 
 분석 결과, **HAE-RAE Bench. 데이터셋이 가장 적합한 선택**으로 확인되었습니다. 특히, **독해 카테고리의 데이터는 Test 데이터와 높은 연관성을 보여** 성능 개선에 기여했습니다.
 
@@ -244,6 +260,7 @@ $ source .venv/bin/activate
 
 ```shell
 (.venv) $ pip install -r requirements.txt
+(.venv) $ sudo apt-get install build-essential
 ```
 
 ### Setup Envronment Variables
@@ -419,9 +436,3 @@ $ git config commit.template .gitcommit_template
 
 - `.gitcommit_template` 파일은 프로젝트 루트에 있는 커밋 템플릿 파일입니다.
 - 위 명령어를 실행하면 커밋 시 템플릿이 자동으로 불러와집니다.
-
-## Collaborators
-
-|          [강감찬](https://github.com/gsgh3016)          |          [단이열](https://github.com/eyeol)          |          [안혜준](https://github.com/jagaldol)          |          [유선우](https://github.com/Usunwoo)          |          [유채은](https://github.com/canolayoo78)          |          [이채호](https://github.com/chell9999)          |
-| :-----------------------------------------------------: | :--------------------------------------------------: | :-----------------------------------------------------: | :----------------------------------------------------: | :--------------------------------------------------------: | :------------------------------------------------------: |
-| <img src="https://github.com/gsgh3016.png" width="100"> | <img src="https://github.com/eyeol.png" width="100"> | <img src="https://github.com/jagaldol.png" width="100"> | <img src="https://github.com/Usunwoo.png" width="100"> | <img src="https://github.com/canolayoo78.png" width="100"> | <img src="https://github.com/chell9999.png" width="100"> |
