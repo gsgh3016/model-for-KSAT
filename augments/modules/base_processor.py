@@ -22,6 +22,9 @@ class BaseProcessor(ABC):
     def process(self) -> pd.DataFrame:
         pass
 
+    def sample_data(self, n: int, seed: int = 1004):
+        self.source_data = self.source_data.sample(n=n, random_state=seed)
+
     def inject_source_data(self, data: pd.DataFrame):
         if not isinstance(data, pd.DataFrame):
             raise TypeError("data must be pandas.DataFrame format")
