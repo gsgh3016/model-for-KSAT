@@ -171,6 +171,36 @@ class DataVersionManager:
         # 최신 버전 정보를 가져오고 객체로 변환
         return Version(versioning[major])
 
+    def update_file_path(
+        self,
+        major: int,
+        minor: int,
+        update_target: str = "minor",
+        is_experiment: bool = False,
+        save_in_experiment: bool = False,
+    ) -> Path:
+        # 인자 검사
+        if update_target not in ["minor", "major"]:
+            raise ValueError("해당 기능은 Major, Minor에서만 가능합니다.")
+        dir = Path(self.experiment_data_path if save_in_experiment else self.data_path)
+        exp_path = self.get_latest_experiment_data_path(major=major, is_experiment=is_experiment)
+
+        # 업데이트 버전 생성
+        version_pattern = re.compile(r"v(\d+\.\d+\.\d+)")
+        match = version_pattern.search(exp_path.name)
+        if not match:
+            raise FileNotFoundError(f"{dir}에 v{major}.{minor}.x가 없습니다.")
+        version = Version(match.group(1))
+        new_major = str(version.major + 1 if update_target == "major" else version.major)
+        new_minor = str(version.minor + 1 if update_target == "minor" else version.minor)
+        new_micro = str(0)
+        new_version = "v" + ".".join([new_major, new_minor, new_micro])
+
+        prefix = exp_path.name[: match.start()]
+        suffix = exp_path.name[match.end() :]
+        file_name = prefix + new_version + suffix
+        return dir / file_name
+
     def search_latest_experiments_data(self, major: int, is_experiment: bool = False) -> pd.DataFrame:
         """
         특정 Major 버전의 실험 데이터에서 최신 데이터를 로드하고, 필요 시 Patch를 +1하여 YAML 파일에 업데이트.
@@ -183,7 +213,7 @@ class DataVersionManager:
             pd.DataFrame: 지정된 Major 버전의 최신 실험 데이터
         """
         latest_version_obj = self._validate_version(major=major, is_experiment=is_experiment)
-        version_pattern = re.compile(r"v(\d+)\.(\d+)\.(\d+)")
+        version_pattern = re.compile(r"v\d+\.\d+\.\d+")
 
         # 디렉토리에서 파일 검색 및 최신 버전 찾기
         latest_file = None
@@ -192,7 +222,7 @@ class DataVersionManager:
                 match = version_pattern.search(file.name)
                 if match:
                     version_obj = Version(match.group(0))
-                    if version_obj.major == major and version_obj > latest_version_obj:
+                    if version_obj.major == major and version_obj >= latest_version_obj:
                         latest_version_obj = version_obj
                         latest_file = file
 
