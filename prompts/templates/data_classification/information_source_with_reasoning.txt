@@ -1,0 +1,57 @@
+You are a model with excellent metacognition. If you need external knowledge to solve the problem by looking at the Paragraph, Question, Choices, Answer, Question Plus(if provided) and Reasoning process, classify the problem into **외적 추론**, and **내적 추론** if not needed.
+Answer only with 외적 추론, 내적 추론. You MUST strictly answer only in 내적 추론, 외적 추론. This is the most important thing in my career.
+
+### Classification Criteria
+1. **내적 추론**: 
+    - The answer can be fully derived using only the content in Paragraph or Question Plus (if provided).
+    - External knowledge (e.g., historical, cultural, or other academic information) is NOT required in Reasoning.
+2. **외적 추론**: 
+    - The answer requires additional background knowledge beyond the provided text in Paragraph and Question Plus.
+    - If the question references specific historical, cultural, or conceptual knowledge not provided in the Paragraph, classify it as '외적 추론'.
+
+### Example 1
+- Paragraph
+상소하여 아뢰기를 , “신이 좌참 찬 송준길이 올린 차자를 보았는데 , 상복(喪服) 절차에 대하여 논한 것이 신과는 큰 차이가 있었습니다 . 장자를 위하여 3년을 입는 까닭은 위로 ‘정체(正體)’가 되기 때문이고 또 전 중(傳重: 조상의 제사나 가문의 법통을 전함)하기 때문입니다 . …(중략) … 무엇보다 중요한 것은 할아버지와 아버지의 뒤를 이은 ‘정체’이지, 꼭 첫째이기 때문에 참 최 3년 복을 입는 것은 아닙니다 .”라고 하였다 .－현종실록 －
+
+- Question Plus
+ㄱ.기 사환국으로 정권을 장악하였다 .ㄴ.인 조반정을 주도 하여 집권세력이 되었다 .ㄷ.정조 시기에 탕평 정치의 한 축을 이루었다 .ㄹ.이 이와 성혼의 문인을 중심으로 형성되었다.
+
+- Question
+상소한 인물이 속한 붕당에 대한 설명으로 옳은 것만을 모두 고르면?
+
+- Choices
+['ㄱ, ㄴ', 'ㄱ, ㄷ', 'ㄴ, ㄹ', 'ㄷ, ㄹ']
+
+- Reasoning
+문제 해결 과정  배경 분석 지문은 송준길이 상복의 절차에 대해 논한 내용을 다루고 있으며, 이는 조선 후기 서인과 남인 간의 갈등을 반영하는 예송논쟁과 관련이 있습니다. 송준길은 서인의 대표적인 인물로, 그의 사상은 조선시대의 명분론에 뿌리를 두고 있습니다【6】【7】.  선택지 분석 각 선택지를 분석하여 송준길과 서인의 관련성을 도출합니다:  1. **ㄱ. 기사환국으로 정권을 장악하였다.**    - 기사환국(1689년)은 남인이 집권하게 된 사건으로, 서인은 이 시기에 정권에서 밀려났습니다. 따라서 이 설명은 서인과 관련이 없습니다.  2. **ㄴ. 인조반정을 주도하여 집권세력이 되었다.**    - 서인은 인조반정(1623년)을 통해 집권한 세력으로, 송준길은 서인의 주요 인물 중 하나입니다. 이 설명은 정확합니다.  3. **ㄷ. 정조 시기에 탕평 정치의 한 축을 이루었다.**    - 정조의 탕평 정치는 노론과 소론을 중심으로 이루어졌으며, 송준길이 활동했던 서인은 정조 시기 이전의 붕당입니다. 따라서 이 설명은 오답입니다.  4. **ㄹ. 이이와 성혼의 문인을 중심으로 형성되었다.**    - 서인은 이이와 성혼의 학문적 계보를 계승한 붕당으로, 송준길 역시 이이의 학통을 따른 인물입니다. 이 설명은 정확합니다【6】【7】.  정답 도출 올바른 설명은 **ㄴ**과 **ㄹ**입니다. 따라서 정답은 **'ㄴ, ㄹ'**입니다.  결론 송준길은 서인의 핵심 인물로, 그의 사상과 활동은 서인의 명분론적 정치와 예학에 뿌리를 두고 있습니다. 지문과 선택지의 역사적 맥락을 분석한 결과, 정답은 **'ㄴ, ㄹ'**으로 확정됩니다.
+
+- Category
+외적 추론
+
+### Example 2
+- Paragraph
+한국은행의 기준금리 인하로 은행 예금금리가 연 1% 수준으로 떨어지면서 대표적 수익형 부동산인 오피스텔이 또다시 관심 대상으로 떠올랐다. 최근 오피스텔 공급량 증가로 수익률이 떨어지긴 했지만 상가 등 다른 수익형 부동산에 비해 투자금이 적게 들어 중산층 실수요자들이 상대적으로 쉽게 다가갈 수 있는 상품이어서다.오피스텔 투자에서 가장 중요한 것은 무엇보다 분양가라는 게 전문가들의 조언이다. 사통팔달의 교통망과 다양한 커뮤니티시설을 갖춘 오피스텔이라고 하더라도 분양가가 비싸면 임대수익률이 낮아질 수밖에 없기 때문이다. 예를 들어 계약면적 33㎡ 규모의 오피스텔을 구입해 연 5% 임대수익률을 기대한다고 했을 때 분양가에 따라 월 임대료와 보증금은 큰 차이가 난다. 분양가가 3.3㎡당 1000만원일 경우 보증금 1000만원(예금금리 연 2% 가정)에 월 임대료 40만원만 받으면 되지만 분양가가 3.3㎡당 1500만원으로 높아질 경우 월 임대료가 60만원 이상이어야 수익률을 맞출 수 있다. 분양가는 세입자를 구하는 데도 영향을 미친다. 세입자 입장에서는 준공시기나 입지가 비슷하다면 굳이 비싼 임대료를 내려고 하지 않기 때문에 분양가가 저렴할수록 공실률도 낮아진다.임대 수요가 많은 서울 서초동에서 분양 중인 ‘아크로텔 강남역’오피스텔 분양가는 3.3㎡당 1630만원대로 총분양가 1억9000만~2억2000만원 선에서 매입할 수 있다. 앞선 강남역 오피스텔 분양가보다 3.3㎡당 100만원가량 저렴하다. 서울 마곡지구 ‘마곡나루역 일성트루엘 플래닛’도 3.3㎡당 분양가가 700만~800만원대로 인근에서 분양에 성공한 ‘엠코지니어스타’와 ‘마곡 힐스테이트 에코’보다 100만원가량 싸다.
+
+- Question Plus
+
+- Question
+오피스텔 투자에서 가장 중요한 요소로 전문가들이 강조하는 것은 무엇인가?
+
+- Choices
+['위치', '분양가', '임대료', '교통망', '세입자 수요']
+
+- Reasoning
+오피스텔 투자에서 가장 중요한 요소로 전문가들이 강조하는 것은 **분양가**입니다. 지문에서는 전문가들이 오피스텔 투자에서 분양가가 가장 중요하다고 언급하고 있으며, 분양가가 높을 경우 임대수익률이 낮아질 수밖에 없다고 설명하고 있습니다. 또한, 분양가가 저렴할수록 세입자를 구하는 데 유리하고 공실률이 낮아진다는 점도 강조되고 있습니다. 따라서, 주어진 선택지 중에서 전문가들이 강조하는 요소는 **'분양가'**로, 정답은 **2번**입니다.
+
+- Category
+내적 추론
+---
+YOUR TASK
+- Paragraph: {paragraph}
+- Question Plus: {question_plus}
+- Question: {question}
+- Choices: {choices}
+- Reasoning: {reasoning}
+- Category: YOUR ANSWER
+
+You MUST strictly answer only in 내적 추론, 외적 추론.
