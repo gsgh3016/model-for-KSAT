@@ -3,9 +3,10 @@ import os
 from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
-from text_crawler import WikipediaCrawler
 
 from prompts import load_template
+
+from .text_crawler import WikipediaCrawler
 
 
 class ParagraphGenerator:
