@@ -2,6 +2,7 @@ from .base_processor import *
 from .classification import *
 from .constants import *
 from .keywords_extractor import *
+from .kobest_augment import *
 from .langchain_manager import *
 from .paragraph_generator import *
 from .paragraph_trimmer import *
