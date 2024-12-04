@@ -54,5 +54,5 @@ class ParagraphGenerator:
 
         # TODO: 프롬프트 설계 및 인자 넘겨주기
         # GPT 모델을 사용해 생성된 지문을 반환
-        paragraph = self.chain.invoke()
+        paragraph = self.chain.invoke({"crawled_text": crawled_text}).content
         return paragraph
