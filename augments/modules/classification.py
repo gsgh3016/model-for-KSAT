@@ -18,9 +18,8 @@ class Classification(BaseProcessor):
             prompt_type="data_classification", prompt_source="information_source_with_reasoning.txt", output_type="json"
         )
 
-    def process(self) -> pd.DataFrame:
+    def process(self):
         tqdm.pandas()
-        self.source_data[[self._created_columns]] = self.source_data.progress_apply(
-            lambda row: self.lanchain_manager.invoke(row), axis=1
-        )
-        return self.source_data
+        result = self.source_data.progress_apply(lambda row: self.lanchain_manager.invoke(row), axis=1)
+        result_df = result.apply(pd.Series)
+        self.source_data[[ANALYSIS, CATEGORY]] = result_df
