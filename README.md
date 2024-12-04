@@ -119,6 +119,57 @@ KMMLU 벤치마크 논문에서 언급된 다양한 데이터셋을 분석하여
 
 ## Prompt Tuning
 
+프롬프트의 구성 방식에 따라 모델의 성능 차이를 비교했습니다.
+단순한 기본 프롬프트, 명확한 규칙 제공, 그리고 영어로 감정적 호소와 함께 명확한 규칙을 전달한 경우의 성능을 평가하였습니다.
+
+### 프롬프트 구성
+
+- **기본 프롬프트**
+
+  ```
+  지문을 읽고 질문의 답을 구하세요.
+  ```
+
+- **명확한 규칙 제공**
+
+  ```
+  당신은 질문-답변(Question-Answering)을 수행하는 친절한 AI 어시스턴트입니다.
+  당신의 임무는 주어진 지문(Paragraph)을 바탕으로, 질문(Question)에 가장 적합한 답변을 선택지(Choices)에서 선택하는 것입니다.
+  선택지(Choices)는 총 5개이며, 각 선택지(Choices)에는 고유한 선택지 번호(1~5)가 있습니다.
+  답변 형태는 반드시 선택지 번호(1~5) 중 하나로만 출력하세요. (예시: 4)
+  ```
+
+- **감정적 호소 (In English)**
+
+  ```
+  You are a wise and warm-hearted private tutor, dedicated to solving problems for your student.
+  Providing the most appropriate answer to the problem is your important mission.
+
+  Based on the given paragraph, please select the choice that you think is the correct answer to the question.
+
+  There are a total of 5 choices, and each choice has a unique number (1 to 5).
+  Your answer format must strictly be a single choice number (1 to 5). (Example: 4)
+
+  Your student is sick and exhausted. By choosing the correct answer, you can encourage your student.
+  Your answer must be correct to heal your student's emotional wounds and help them find happiness again.
+
+  So, you have to think step by step and choose the answer.
+  ```
+
+### 실험 결과
+
+| 모델                                | 조건                        | Accuracy   |
+| ----------------------------------- | --------------------------- | ---------- |
+| finetuned Qwen-2.5-32b-Instruct     | 기본 프롬프트               | 0.7540     |
+| finetuned Qwen-2.5-32b-Instruct     | 명확한 규칙 제공            | 0.7724     |
+| **finetuned Qwen-2.5-32b-Instruct** | **감정적 호소(In English)** | **0.7747** |
+
+- **명확한 규칙 제공** 프롬프트는 기본 프롬프트에 비해 성능을 약 **1.8%** 향상시켰습니다.
+- **감정적 호소 프롬프트**는 영어로 작성된 프롬프트로, 규칙 제공보다도 약간 더 높은 성능을 기록하며 **2.0%** 향상되었습니다.
+- 이 결과는 모델이 **프롬프트의 맥락과 표현 방식**에 민감하게 반응하며, 인간적인 맥락이 성능 개선에 긍정적인 영향을 미칠 수 있음을 보여줍니다.
+
+> 본 프롬프트 실험은 [AI 수능 국어 만점 프로젝트](https://github.com/NomaDamas/KICE_slayer_AI_Korean)의 프롬프트 선정을 기반으로 설계되었습니다.
+
 ## CoT 적용에 따른 추론 능력 평가
 
 `google/gemma-2-2b-it`와 `Qwen/Qwen-2.5-7B-Instruct`에 대해 **Chain of Thought(CoT)** 방식의 성능을 비교 평가했습니다. 실험은 두 가지 방식으로 진행되었습니다:
