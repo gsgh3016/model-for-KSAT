@@ -21,4 +21,5 @@ DOCUMENT = "document"
 CRAWLED_TEXT = "crawled_text"
 RAW_PARAGRAPH = "raw_paragraph"
 
+# 카테고리 명
 NEED_KNOWLEDGE = "외적 추론"
