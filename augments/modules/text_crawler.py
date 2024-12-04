@@ -1,7 +1,11 @@
 import os
 
+import pandas as pd
 import wikipediaapi as wk
 from dotenv import load_dotenv
+from tqdm import tqdm
+
+from .constants import EXISTS_SUFFIX, KEYWORD_PREFIX, PAGE_SUFFIX
 
 
 class WikipediaCrawler:
@@ -17,16 +21,27 @@ class WikipediaCrawler:
         USER_AGENT = os.getenv("WIKI_USER_AGENT")
         self.wiki = wk.Wikipedia(user_agent=USER_AGENT, language=languange)
 
-    def is_exists(self, keyword: str) -> tuple:
+    @property
+    def data(self) -> pd.DataFrame:
+        return self.data
+
+    def crawl(self, data: pd.DataFrame) -> pd.DataFrame:
         """
-        위키피디아에 `keyword` 페이지가 존재하는 여부를 판별하는 함수입니다.
+        위키피디아에 문서가 존재하는 여부를 판별하는 함수입니다.
 
         Args:
-            keyword (str): 검색할 키워드
+            data (pd.DataFrame): keyword_i 열이 있는 데이터 프레임
 
         Returns:
-            tuple: 위키피디아 페이지 텍스트 존재 여부를 0번 인덱스에 답고 있는 튜플
+            pd.DataFrame: 위키피디아 문서 존재 여부와 문서 텍스트 내용이 저장된 데이터
         """
-        page = self.wiki.page(keyword)
-        is_exists = page.exists()
-        return (is_exists, str(page.text)) if is_exists else (False,)
+        for i in range(1, 6):
+            data[KEYWORD_PREFIX + str(i) + EXISTS_SUFFIX] = False
+            data[KEYWORD_PREFIX + str(i) + PAGE_SUFFIX] = ""
+
+        for idx, row in tqdm(data.iterrows(), total=len(data), desc="Crawling Wikipedia"):
+            for j in range(1, 6):
+                page = self.wiki.page(row[KEYWORD_PREFIX + str(j)])
+                data.at[idx, KEYWORD_PREFIX + str(j) + EXISTS_SUFFIX] = page.exists()
+                data.at[idx, KEYWORD_PREFIX + str(j) + PAGE_SUFFIX] = page.text
+        self.data = data
