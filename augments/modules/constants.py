@@ -17,6 +17,7 @@ SUMMARY_SUFFIX = "_summary"
 # 프롬프트에 사용되는 변수 명입니다.
 KEYWORDS = "keywords"
 DOCUMENT = "document"
+CRAWLED_TEXT = "crawled_text"
 
 # Langchain RunnableMap에서 사용되는 key 값입니다.
 ORIGINAL_INPUTS = "original_inputs"

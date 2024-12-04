@@ -21,7 +21,7 @@ class WikipediaCrawler:
         USER_AGENT = os.getenv("WIKI_USER_AGENT")
         self.wiki = wk.Wikipedia(user_agent=USER_AGENT, language=languange)
 
-        if data:
+        if isinstance(data, pd.DataFrame):
             self.source_data = data
         elif data is not None and not isinstance(data, pd.DataFrame):
             raise TypeError("data must be pandas.DataFrame format")
