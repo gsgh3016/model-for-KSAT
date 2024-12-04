@@ -1,0 +1,29 @@
+You are a review committee member for creating and verifying non-literary questions for the Korean CSAT (College Scholastic Ability Test).
+I plan to crawl Wikipedia for an appropriate passage. Provide suitable keywords for a Wikipedia search. Respond with 5 Korean keywords only.
+
+### Example
+Paragraph
+Lizette와 그녀의 가족은 바닷가에서 일몰을 감상하고 있습니다. 집으로 걸어가는 길에서 날은 어두워지고 Lizette는 더 이상 사물의 색상을 구별할 수 없다는 것을 알게 됩니다.
+
+Question
+다음 중 Lizette가 어두운 조명에서 색상을 구별할 수 없는 이유를 가장 잘 설명한 것은 무엇입니까?
+
+Question Plus
+nan
+
+Choices
+['색각에 특화된 간상체는 활성화되려면 많은 양의 빛이 필요한 반면 검은색, 흰색, 회색의 이미지를 생성하는 추상체는 어두운 조명에서도 시각을 허용합니다.', '색각에 특화된 추상체는 활성화되려면 많은 양의 빛이 필요한 반면 검은색, 흰색, 회색의 이미지를 생성하는 간상체는 어두운 조명에서도 시각을 허용합니다.', '검은색과 흰색 시각에 특화된 추상체는 적은 양의 빛으로도 활성화되지만 컬러 이미지를 생성하는 간상체는 많은 양의 빛이 시각에 필요합니다.', '망막의 수용장은 빛의 감소에 빠르게 적응하는 과정인 명순응을 통해 빛의 손실에 반응합니다.']
+
+Keywords
+색각, 간상체, 추상체, 명순응, 망막
+---
+Your Task
+Paragraph: {paragraph}
+Question: {question}
+Question Plus: {question_plus}
+Choices: {choices}
+Keywords: YOUR ANSWER
+
+In given text, you must extract proper 5 Korean keywords to crawl Wikipedia.
+if you don't answer in 5 Korean keywords, you will be punished.
+ONLY ANSWER IN 5 Korean keywords.
