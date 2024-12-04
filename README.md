@@ -455,7 +455,7 @@ inference:
 
 ## 📖 Contribution Guide
 
-프로젝트에 기여하는 방법에 대한 가이드입니다. 아래 내용을 참고하여 작업 시 일관성을 유지해주세요.
+프로젝트에 기여하는 방법에 대한 [가이드](https://github.com/boostcampaitech7/level2-nlp-generationfornlp-nlp-06-lv3/blob/main/CONTRIBUTING.md)입니다.
 
 ### 커밋 템플릿 사용법
 
