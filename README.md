@@ -129,7 +129,7 @@ KMMLU 벤치마크 논문에서 (Son et al., 2024) 언급된 다양한 타 벤�
 - **KorNLI & KorSTS, KoBBQ**: 다지선다형 문제로 변환하기 어려움
 - **CLICK, HAE-RAE Bench.**: 다지선다형으로 가공이 용이함
 
-분석 결과, **HAE-RAE Bench. 데이터셋이 가장 적합한 선택**으로 확인되었습니다. 특히, **독해 카테고리의 데이터는 Test 데이터와 높은 연관성을 보여** 성능 개선에 기여했습니다.
+분석 결과, **HAE-RAE Bench. 데이터셋이 가장 적합한 선택**으로 확인되었습니다. 특히, **독해 카테고리의 데이터는 Task와 높은 연관성을 보여** 성능 개선에 기여했습니다.
 
 이를 통해 단순히 데이터를 증강하는 것보다, **데이터의 품질과 Task와의 연관성**이 성능에 핵심적인 영향을 미친다는 점을 확인할 수 있었습니다.
 
@@ -344,7 +344,7 @@ common:
   seed: 42
   device: "cuda"
   cot_on: false # cot 사용 시 prompt_template을 cot_json으로 변경 필요
-  prompt_template: "base" # base, cot_json
+  prompt_template: "base" # base, cot_json, raft
 
 bnb:
   load_in_8bit: false
@@ -402,6 +402,10 @@ inference:
   output_path: "data/output.csv"
   raw_output_path: "data/raw_output.csv"
   default_answer: 1
+
+rag:
+  query_builder_type: CombinedKeyQueryBuilder_pqc
+  raft_on: false # RAFT 시 prompt_template을 raft로 변경 필요
 ```
 
 ### Custom Config
