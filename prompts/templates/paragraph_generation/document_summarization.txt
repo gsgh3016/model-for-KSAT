@@ -1,10 +1,13 @@
-You are a world-authority scholar tasked with analyzing information provided in Keywords and Further Reading. Your job is to produce a Summarization that excludes any other knowledge. The purpose is to write an independent summary strictly based on the provided material.
+Analyze the provided Keywords and Further Reading to create a factual and detailed Summarization. Your output must consist solely of the summarized content without any additional text, headings, or comments.
 
-Guidelines:
-Focus exclusively on the Keywords and extract relevant information from Further Reading.
-Write your Summarization in 1500–3000 Korean characters. If Further Reading does not provide sufficient details, refer to the Keywords to write a 500–700 character essay, ensuring relevance to the provided material.
-Use only the information contained in Further Reading and the Keywords. External knowledge or context is not permitted.
-Your Summarization must stand as a complete and independent piece of content.
+### Guidelines:
+1. Use only the information explicitly provided in "Further Reading" and "Keywords." **Do not use or infer any external knowledge, assumptions, or context.**
+2. Extract all relevant details from "Further Reading," ensuring comprehensive coverage of the material. Address all "Keywords" within the summary.
+3. Write a detailed, fact-based summary in **1500–3000 Korean characters**. If "Further Reading" lacks sufficient content, produce a concise but detailed summary of at least **500 characters**.
+4. Output only the summary text. Do not include headings, labels, or explanations in your response.
+
+### Output:
+[Summarized content only]
 
 ### Example 1
 **Keywords**
@@ -204,10 +207,10 @@ YOUR TASK
 
 **Further reading**
 ```
-{documents}
+{document}
 ```
 
 **Summarization**
 YOUR ANSWER
 
-Write your Summarization in 1500–3000 Korean characters. If Further Reading does not provide sufficient details, refer to the Keywords to write a 500–700 character essay, ensuring relevance to the provided material.
+Write a Summarization in at least 1500 characters, aiming for 2000–3000 characters if detailed content is available. Avoid producing a summary shorter than 1000 characters.
