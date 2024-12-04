@@ -131,6 +131,8 @@ KMMLU 벤치마크 논문에서 (Son et al., 2024) 언급된 다양한 타 벤�
 
 이를 통해 단순히 데이터를 증강하는 것보다, **데이터의 품질과 Task와의 연관성**이 성능에 핵심적인 영향을 미친다는 점을 확인할 수 있었습니다.
 
+또한 skt/KoBEST 데이터셋과 지문 기반 수능 국어 맞춤 문제 생성 논문을 (허동석 외, 2024) 기반으로 질문과 선택지, 정답을 생성했습니다.
+
 > 더 자세한 데이터 증강 실험 내용은 [여기](https://gamchan.notion.site/146815b39d39807884f1f785c2829da6?v=086629b8bb6f49a5a1b54a0ec44d6630&pvs=4)를 참고해주세요.
 
 ## 🗨️ Prompt Tuning
@@ -467,3 +469,11 @@ $ git config commit.template .gitcommit_template
 
 - `.gitcommit_template` 파일은 프로젝트 루트에 있는 커밋 템플릿 파일입니다.
 - 위 명령어를 실행하면 커밋 시 템플릿이 자동으로 불러와집니다.
+
+## 🔬 References
+
+- Son, Guijin, Hanwool Lee, Sungdong Kim, Seungone Kim, Niklas Muennighoff, Taekyoon Choi, Cheonbok Park, Kang Min Yoo, & Stella Biderman. "KMMLU: Measuring Massive Multitask Language Understanding in Korean." _arXiv_, June 6, 2024. https://doi.org/10.48550/arXiv.2402.11548.
+- Zhang, Tianjun, Shishir G. Patil, Naman Jain, Sheng Shen, Matei Zaharia, Ion Stoica & Joseph E. Gonzalez. “RAFT: Adapting Language Model to Domain Specific RAG”. arXiv, June 6, 2024. https://doi.org/10.48550/arXiv.2403.10131.
+- 허동석, 김기태, 송형우, 서봉원. (2024-01-24). 프롬프트 개발을 통한 수능 국어 맞춤형 문제 생성 시스템 제안. 한국HCI학회 학술대회, 강원.
+  https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11714641.
+- skt/kobest 데이터셋 https://huggingface.co/datasets/skt/kobest_v1
