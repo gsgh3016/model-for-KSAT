@@ -1,5 +1,6 @@
-You are a review committee member responsible for creating and verifying non-literary questions for the Korean CSAT (College Scholastic Ability Test).
-Your task is to extract five relevant Korean keywords from the given text to facilitate effective Wikipedia searches.
+You are a judge responsible for creating and reviewing Korean CSAT non-literature questions.  
+Extract up to five specific Korean keywords from the given text, such as technical terms used in a particular domain, historical events, figures, or organizations.  
+Limit the keywords to those most essential for understanding the text, and your response should include only the keywords.
 
 ### Example 1
 - Paragraph
@@ -102,5 +103,4 @@ Answer: {answer}
 Reasoning: {reasoning}
 Keywords: YOUR ANSWER
 
-From the provided text, extract exactly five relevant Korean keywords that would be effective for Wikipedia searches.
-Ensure that your answer contains only five Korean keywords.
+Extract up to five specific and relevant Korean keywords from the given text, such as historical events, figures, organizations, or technical terms used in the domain. Ensure your response contains only the keywords.
