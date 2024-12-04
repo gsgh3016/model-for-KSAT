@@ -10,8 +10,8 @@
 - **주요 내용**:
   - 다양한 모델 및 하이퍼파라미터 성능 비교
   - 데이터 정제 및 증강을 통한 학습 효율 향상
-  - CoT(Chain of Thought) 방식 적용에 따른 추론 능력 평가
-  - RAG(Retrieval-Augmented Generation) 활용으로 검색 기반 답변 성능 실험
+  - CoT (Chain of Thought) 방식 적용에 따른 추론 능력 평가
+  - RAG (Retrieval-Augmented Generation) 활용으로 검색 기반 답변 성능 실험
 
 ## 최종 결과
 
@@ -100,7 +100,7 @@
 
 그러나 모델 학습 결과, 성능 향상에는 실패했으며 이는 일부 수능형 문제조차 외부 지식에 크게 의존함을 시사합니다.
 
-이 발견을 바탕으로, RAG(정보 검색 기반 생성) 접근법을 도입하는 방향으로 이어졌습니다.
+이 발견을 바탕으로, RAG (정보 검색 기반 생성) 접근법을 도입하는 방향으로 이어졌습니다.
 
 #### 벤치마크 데이터셋을 통한 데이터 증강
 
@@ -139,7 +139,7 @@ KMMLU 벤치마크 논문에서 언급된 다양한 데이터셋을 분석하여
   답변 형태는 반드시 선택지 번호(1~5) 중 하나로만 출력하세요. (예시: 4)
   ```
 
-- **감정적 호소 (In English)**
+- **감정적 호소(In English)**
 
   ```
   You are a wise and warm-hearted private tutor, dedicated to solving problems for your student.
@@ -172,10 +172,10 @@ KMMLU 벤치마크 논문에서 언급된 다양한 데이터셋을 분석하여
 
 ## CoT 적용에 따른 추론 능력 평가
 
-`google/gemma-2-2b-it`와 `Qwen/Qwen-2.5-7B-Instruct`에 대해 **Chain of Thought(CoT)** 방식의 성능을 비교 평가했습니다. 실험은 두 가지 방식으로 진행되었습니다:
+`google/gemma-2-2b-it`와 `Qwen/Qwen-2.5-7B-Instruct`에 대해 **Chain of Thought (CoT)** 방식의 성능을 비교 평가했습니다. 실험은 두 가지 방식으로 진행되었습니다:
 
 1. **정답 번호**(숫자)만 생성
-2. **JSON 형식으로 reasoning과 정답**을 포함하여 생성 (CoT 방식)
+2. **JSON 형식으로 reasoning과 정답**을 포함하여 생성(CoT 방식)
 
 | **모델**             | **실험 설정**            | **사전 학습 모델** | **파인튜닝 모델** |
 | -------------------- | ------------------------ | ------------------ | ----------------- |
