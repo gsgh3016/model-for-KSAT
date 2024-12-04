@@ -29,6 +29,27 @@
 
 베이스 모델인 `gemma-2b-ko`에서 데이터 정제 및 증강으로 소폭 성능 향상을 확인하였으며, 이는 최종 선정된 모델인 `Qwen-2.5-32b-Instruct`에서도 확인 할수 있었습니다. 최종적으로 데이터 증강 및 Prompt Tuning을 추가한 **Qwen-2.5-32b-Instruct** 모델이 **0.7747**로 가장 높은 정확도를 달성했습니다.
 
+## Tools and Technologies
+
+<div align="center">
+
+![Python](https://img.shields.io/badge/-Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![jupyter](https://img.shields.io/badge/-jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
+![PyTorch](https://img.shields.io/badge/-PyTorch-EE4C2C?style=for-the-badge&logo=PyTorch&logoColor=white)
+![huggingface](https://img.shields.io/badge/-huggingface-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
+
+![unsloth](https://img.shields.io/badge/-unsloth-14B789?style=for-the-badge&logo=unsloth&logoColor=white)
+![BitsandBytes](https://img.shields.io/badge/BitsandBytes-36474F?style=for-the-badge&logo=BitsandBytes&logoColor=white)
+![LoRA](https://img.shields.io/badge/LoRA-40B5A4?style=for-the-badge&logo=LoRA&logoColor=white)
+![langchain](https://img.shields.io/badge/-langchain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
+
+![RAG](https://img.shields.io/badge/RAG-1868F2?style=for-the-badge&logo=RAG&logoColor=white)
+![pinecone](https://img.shields.io/badge/pinecone-000000?style=for-the-badge&logo=pinecone&logoColor=white)
+![Cot](https://img.shields.io/badge/cot-535051?style=for-the-badge&logo=cot&logoColor=white)
+![github action](https://img.shields.io/badge/GITHUB%20ACTIONS-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
+
+</div>
+
 ## 다양한 모델 및 하이퍼파라미터 성능 비교
 
 다양한 모델과 하이퍼파라미터 설정을 기반으로 수능 문제 풀이 성능을 평가하였습니다. 주요 실험은 아래와 같습니다:
@@ -67,7 +88,7 @@
 
 ### 데이터 증강
 
-#### 외적 추론 문제에 대한 재구성 및 증강
+#### 외부 지식이 필요한 문제에 대한 재구성 및 증강
 
 ![augmentation pipeline](/assets/augmentation-pipeline.png)
 
@@ -75,7 +96,7 @@
 
 1. **핵심 키워드 추출**: 문제 해결에 필요한 주요 정보를 도출
 2. **관련 지문 확보**: 추출된 키워드를 기반으로 한국어 위키피디아에서 관련 문서를 크롤링
-3. **지문 보강**: 확보된 문서를 지문에 추가하고, 모델 입력 길이에 맞춰 요약된 문서를 활용
+3. **지문 보강**: 확보된 문서를 지문에 추가하고, 요약된 문서를 취합하여 수능 국어 비문학 지문 형식으로 보강
 
 그러나 모델 학습 결과, 성능 향상에는 실패했으며 이는 일부 수능형 문제조차 외부 지식에 크게 의존함을 시사합니다.
 
