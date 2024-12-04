@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 import pandas as pd
 
@@ -15,11 +15,16 @@ class BaseProcessor(ABC):
     def created_columns(self) -> list[str]:
         return self._created_columns
 
+    @property
+    def data(self) -> pd.DataFrame:
+        return self.source_data
+
     @created_columns.setter
     def created_columns(self, value: list[str]):
         self._created_columns = value
 
-    def process(self) -> pd.DataFrame:
+    @abstractmethod
+    def process(self, data: pd.DataFrame) -> pd.DataFrame:
         pass
 
     def sample_data(self, n: int, seed: int = 1004):

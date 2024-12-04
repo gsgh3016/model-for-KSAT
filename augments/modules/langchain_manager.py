@@ -59,9 +59,9 @@ class LangchainManager:
     def _get_output_parser(self):
         """출력 유형에 따른 파서 반환."""
         if self.output_type == JSON:
-            return OutputFixingParser.from_llm(JsonOutputParser(), llm=self.llm)
+            return OutputFixingParser.from_llm(parser=JsonOutputParser(), llm=self.llm)
         elif self.output_type == BOOL:
-            return OutputFixingParser.from_llm(BooleanOutputParser(), llm=self.llm)
+            return OutputFixingParser.from_llm(parser=BooleanOutputParser(), llm=self.llm)
         return None
 
     def invoke(self, data: pd.Series) -> bool | dict[str, str] | str:
