@@ -33,6 +33,7 @@ class DataVersionManager:
             "exp": self.raw_yaml["latest_experiments_version"],
         }
         self.experiments_integration = self.raw_yaml["experiments_integration"]
+        self.experiments_integration_version = self.raw_yaml["experiments_integration_version"]
 
     def _find_matching_files(self, directory: Path, prefix: str) -> list[str]:
         """
@@ -139,57 +140,120 @@ class DataVersionManager:
         latest_file = self._update_version(self.data_path, "test")
         return pd.read_csv(latest_file)
 
-    def search_latest_experiments_data(self) -> dict[int, pd.DataFrame]:
+    def search_latest_experiments_data(self, major: int, is_update: bool = False) -> pd.DataFrame:
         """
-        실험 데이터에서 주요 버전별 최신 데이터를 로드하고 YAML 파일에 반영.
+        특정 Major 버전의 실험 데이터에서 최신 데이터를 로드하고, 필요 시 Patch를 +1하여 YAML 파일에 업데이트.
+
+        Args:
+            major (int): 검색할 Major 버전
+            is_update (bool): True인 경우, 최신 버전의 Patch를 +1하고 YAML 파일에 반영
 
         Returns:
-            dict[int, pd.DataFrame]: 주요 버전별 데이터프레임 딕셔너리
+            pd.DataFrame: 지정된 Major 버전의 최신 실험 데이터
         """
-        version_pattern = re.compile(r"v(\d+\.\d+\.\d+)")
-        versions = {}
+        is_integrated = major < self.experiments_integration_version
+        version_type = "after_integration" if is_integrated else "before_integration"
+        version_pattern = re.compile(r"v(\d+)\.(\d+)\.(\d+)")
+        latest_version_str = self.latest_version["exp"][version_type].get(major, "0.0.0")
+        latest_version_obj = Version(latest_version_str)
 
-        # 실험 데이터 디렉토리에서 최신 버전 탐색
+        # 디렉토리에서 파일 검색 및 최신 버전 찾기
+        latest_file = None
         for file in self.experiment_data_path.iterdir():
             if file.is_file():
                 match = version_pattern.search(file.name)
                 if match:
-                    version_str = match.group(1)
-                    version_obj = Version(version_str)
-                    major = version_obj.major
+                    version_obj = Version(match.group(0))
+                    if version_obj.major == major and version_obj > latest_version_obj:
+                        latest_version_obj = version_obj
+                        latest_file = file
 
-                    # 같은 Major 버전 중 가장 최신 버전만 유지
-                    if major not in versions or Version(versions[major][1]) < version_obj:
-                        versions[major] = (file, version_str)
+        if not latest_file:
+            raise FileNotFoundError(
+                f"{'통합 후' if is_integrated else '통합 전'} Major 버전 {major}에 해당하는 실험 데이터가 존재하지 않습니다."
+            )
 
-        # 새로운 Major 버전이 발견되면 self.latest_version["exp"]에 추가
-        for major, (_, version_str) in versions.items():
-            if major not in self.latest_version["exp"] or Version(version_str) > Version(
-                self.latest_version["exp"].get(major, "0.0.0")
-            ):
-                self.latest_version["exp"][major] = version_str
-
-        # 설정 파일 업데이트
-        self.raw_yaml["latest_experiments_version"] = self.latest_version["exp"]
-        with self.data_version_path.open("w", encoding="utf-8") as f:
-            yaml.safe_dump(self.raw_yaml, f, default_flow_style=False, allow_unicode=True)
+        # is_update가 True인 경우 Patch를 +1하여 YAML 업데이트
+        if is_update:
+            updated_version = Version(
+                f"{latest_version_obj.major}.{latest_version_obj.minor}.{latest_version_obj.micro + 1}"
+            )
+            self.latest_version["exp"][version_type][major] = str(updated_version)
+            self.raw_yaml["latest_experiments_version"] = self.latest_version["exp"]
+            with self.data_version_path.open("w", encoding="utf-8") as f:
+                yaml.safe_dump(self.raw_yaml, f, default_flow_style=False, allow_unicode=True)
 
         # 최신 데이터를 로드하여 반환
-        return {major: pd.read_csv(file) for major, (file, _) in versions.items()}
+        return pd.read_csv(latest_file)
 
-    def search_experiments_integration_data(self) -> pd.DataFrame:
+    def get_latest_experiment_data_path(self, major: int, is_experiment: bool = False) -> Path:
         """
-        통합된 실험 데이터를 로드.
+        특정 Major 버전에 해당하는 최신 실험 데이터 경로를 반환.
+
+        Args:
+            major (int): 검색할 Major 버전
+            is_experiment (bool): 호출하는 시점이 실험 이후인지 설정. 기본값은 `False`
 
         Returns:
-            pd.DataFrame: 통합 실험 데이터
+            Path: 최신 실험 데이터 파일 경로
         """
+        is_integrated = major < self.experiments_integration_version
+        version_type = "after_integration" if is_integrated else "before_integration"
+        version_pattern = re.compile(r"v(\d+)\.(\d+)\.(\d+)")
+        latest_version_str = self.latest_version["exp"][version_type].get(major, "0.0.0")
+        latest_version_obj = Version(latest_version_str)
+
+        latest_file = None
+        for file in self.experiment_data_path.iterdir():
+            if file.is_file():
+                match = version_pattern.search(file.name)
+                if match:
+                    version_obj = Version(match.group(0))
+                    if version_obj.major == major and version_obj == latest_version_obj:
+                        latest_file = file
+                        break
+
+        if not latest_file:
+            raise FileNotFoundError(
+                f"{'통합 후' if is_integrated else '통합 전'} Major 버전 {major}에 해당하는 최신 실험 데이터가 존재하지 않습니다."
+            )
+
+        return latest_file
+
+    def search_experiments_integration_data(self, is_update: bool = False) -> pd.DataFrame:
+        """
+        통합된 실험 데이터를 로드하거나, 필요 시 Patch 버전을 +1하여 YAML 파일에 업데이트.
+
+        Args:
+            is_update (bool): True인 경우, 3.0.x 데이터의 Patch 버전을 +1하고 YAML 파일에 반영
+
+        Returns:
+            pd.DataFrame: 최신 통합 실험 데이터
+        """
+        # 통합 데이터 파일 검색
         matching_files = [
             f for f in self.experiment_data_path.iterdir() if self.experiments_integration in f.name and f.is_file()
         ]
+
         if not matching_files:
             raise FileNotFoundError("No file with 'integration' in its name was found.")
         if len(matching_files) > 1:
             raise ValueError(f"Multiple files with 'integration' in their names were found: {matching_files}")
 
-        return pd.read_csv(matching_files[0])
+        # 파일명 추출 및 최신 버전 확인
+        integration_file = matching_files[0]
+        latest_version_str = self.latest_version["exp"]["after_integration"].get(3, "3.0.0")
+        latest_version_obj = Version(latest_version_str)
+
+        # is_update가 True인 경우 Patch 버전 +1
+        if is_update:
+            updated_version = Version(
+                f"{latest_version_obj.major}.{latest_version_obj.minor}.{latest_version_obj.micro + 1}"
+            )
+            self.latest_version["exp"]["after_integration"][3] = str(updated_version)
+            self.raw_yaml["latest_experiments_version"] = self.latest_version["exp"]
+            with self.data_version_path.open("w", encoding="utf-8") as f:
+                yaml.safe_dump(self.raw_yaml, f, default_flow_style=False, allow_unicode=True)
+
+        # 통합 데이터 로드
+        return pd.read_csv(integration_file)
