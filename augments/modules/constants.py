@@ -18,6 +18,7 @@ SUMMARY_SUFFIX = "_summary"
 KEYWORDS = "keywords"
 DOCUMENT = "document"
 CRAWLED_TEXT = "crawled_text"
+RAW_PARAGRAPH = "raw_paragraph"
 
 # Langchain RunnableMap에서 사용되는 key 값입니다.
 ORIGINAL_INPUTS = "original_inputs"
