@@ -17,7 +17,7 @@ def check_prompt_path(prompt_type: str, file_name: str):
     Raises:
         FileNotFoundError: 프롬프트 종류/파일명에 맞는 디렉토리/파일이 존재하지 않을 때
     """
-    prompt_root_dir = os.path.join(__file__, "templates")
+    prompt_root_dir = os.path.join(os.path.dirname(__file__), "templates")
     prompt_type_dir = os.path.join(prompt_root_dir, prompt_type)
     prompt_file = os.path.join(prompt_type_dir, file_name)
 
@@ -28,7 +28,7 @@ def check_prompt_path(prompt_type: str, file_name: str):
         raise FileNotFoundError(f"No {prompt_file} in {prompt_type_dir}")
 
 
-def detect_input_variables(prompt_type: str, file_name: str) -> list[str]:
+def _detect_input_variables(prompt_type: str, file_name: str) -> list[str]:
     """
     프롬프트에서 입력 변수를 감지하는 함수.
     중괄호로 감싸져 있는 변수 명을 읽어옵니다.
@@ -50,4 +50,5 @@ def detect_input_variables(prompt_type: str, file_name: str) -> list[str]:
 
 
 def parse_input(data: pd.Series, prompt_type: str, file_name: str) -> dict[str, str]:
-    pass
+    variables = _detect_input_variables(prompt_type=prompt_type, file_name=file_name)
+    return {variable: data[variable] for variable in variables}
