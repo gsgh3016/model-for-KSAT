@@ -180,8 +180,8 @@ class DataVersionManager:
         save_in_experiment: bool = False,
     ) -> Path:
         # 인자 검사
-        if update_target not in ["minor", "major"]:
-            raise ValueError("해당 기능은 Major, Minor에서만 가능합니다.")
+        if update_target not in ["minor", "major", "micro"]:
+            raise ValueError('update_target에 "major", "minor", "micro" 로만 입력하세요.')
         dir = Path(self.experiment_data_path if save_in_experiment else self.data_path)
         exp_path = self.get_latest_experiment_data_path(major=major, is_experiment=is_experiment)
 
@@ -193,7 +193,7 @@ class DataVersionManager:
         version = Version(match.group(1))
         new_major = str(version.major + 1 if update_target == "major" else version.major)
         new_minor = str(version.minor + 1 if update_target == "minor" else version.minor)
-        new_micro = str(0)
+        new_micro = str(version.micro + 1 if update_target == "micro" else 0)
         new_version = "v" + ".".join([new_major, new_minor, new_micro])
 
         prefix = exp_path.name[: match.start()]
