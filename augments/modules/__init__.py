@@ -1,2 +1,2 @@
 from .langchain_manager import *
-from .wikipedia import *
+from .text_crawler import *
