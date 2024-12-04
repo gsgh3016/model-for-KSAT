@@ -116,3 +116,4 @@ class InferenceConfig:
 @dataclass
 class RagConfig:
     query_builder_type: str
+    raft_on: bool
