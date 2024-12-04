@@ -39,8 +39,7 @@ class DataVersionManager:
         self,
         major: int,
         minor: int,
-        update_target: str = "minor",
-        is_experiment: bool = False,
+        update_target: str = "micro",
         save_in_experiment: bool = False,
     ) -> Path:
         """
@@ -50,20 +49,34 @@ class DataVersionManager:
             major (int): Major 버전.
             minor (int): Minor 버전.
             update_target (str): 업데이트 대상 ("major", "minor", "micro").
-            is_experiment (bool): 실험 데이터 여부.
             save_in_experiment (bool): 실험 데이터 경로에 저장 여부.
 
         Returns:
             Path: 새로 생성된 파일 경로.
         """
         # 인자 검사
+        self._validate_update_target(update_target)
+
+        # 저장 디렉토리 설정
+        dir = self._get_save_directory(save_in_experiment)
+
+        # 최신 파일 검색
+        latest_file = self._find_latest_file_in_directory(dir, major, minor)
+
+        # 새로운 버전 생성
+        new_version = self._generate_new_version(latest_file, update_target)
+
+        # 새로운 파일 이름 생성 및 경로 반환
+        return self._create_new_file_path(latest_file, new_version, dir)
+
+    def _validate_update_target(self, update_target: str):
         if update_target not in ["minor", "major", "micro"]:
             raise ValueError('update_target에 "major", "minor", "micro" 로만 입력하세요.')
 
-        # 저장 디렉토리 설정
-        dir = Path(self.experiment_data_path if save_in_experiment else self.data_path)
+    def _get_save_directory(self, save_in_experiment: bool) -> Path:
+        return Path(self.experiment_data_path if save_in_experiment else self.data_path)
 
-        # 최신 파일 검색 (Major, Minor 버전 매칭)
+    def _find_latest_file_in_directory(self, dir: Path, major: int, minor: int) -> Path:
         latest_file = None
         version_pattern = re.compile(r"v(\d+)\.(\d+)\.(\d+)")
         for file in dir.iterdir():
@@ -74,30 +87,60 @@ class DataVersionManager:
                     if version_obj.major == major and version_obj.minor == minor:
                         if (
                             latest_file is None
-                            or Version(latest_file.name.split("_v")[-1].split(".csv")[0]) < version_obj
+                            or Version(latest_file.name.split("_v")[-1].split(".csv")[0]) <= version_obj
                         ):
                             latest_file = file
 
+        # Major.Minor 버전 파일이 없으면 새 파일 생성
         if not latest_file:
-            raise FileNotFoundError(f"{dir}에 Major {major}, Minor {minor} 버전에 해당하는 파일이 없습니다.")
+            print(f"{dir}에 Major {major}, Minor {minor} 버전에 해당하는 파일이 없습니다. 새로운 버전을 생성합니다.")
+            latest_file = self._create_placeholder_file(dir, major, minor)
 
-        # 최신 파일 버전 추출 및 업데이트
+        return latest_file
+
+    def _create_placeholder_file(self, dir: Path, major: int, minor: int) -> Path:
+        """
+        Major.Minor 버전에 해당하는 새로운 기본 파일 생성
+
+        Args:
+            dir (Path): 저장 디렉토리
+            major (int): Major 버전
+            minor (int): Minor 버전
+
+        Returns:
+            Path: 생성된 파일 경로
+        """
+        new_version = f"v{major}.{minor}.0"
+        file_name = f"data_{new_version}.csv"
+        file_path = dir / file_name
+        file_path.touch()  # 빈 파일 생성
+        return file_path
+
+    def _generate_new_version(self, latest_file: Path, update_target: str) -> str:
+        version_pattern = re.compile(r"v(\d+)\.(\d+)\.(\d+)")
         match = version_pattern.search(latest_file.name)
         if not match:
             raise ValueError(f"파일 이름에서 버전을 찾을 수 없습니다: {latest_file.name}")
 
         version = Version(match.group(0))
-        new_major = version.major + 1 if update_target == "major" else version.major
-        new_minor = version.minor + 1 if update_target == "minor" else version.minor
-        new_micro = version.micro + 1 if update_target == "micro" else version.micro
-        new_version = f"v{new_major}.{new_minor}.{new_micro}"
 
-        # 새로운 파일 이름 생성
+        if update_target == "major":
+            new_major, new_minor, new_micro = version.major + 1, 0, 0
+        elif update_target == "minor":
+            new_major, new_minor, new_micro = version.major, version.minor + 1, 0
+        elif update_target == "micro":
+            new_major, new_minor, new_micro = version.major, version.minor, version.micro + 1
+
+        return f"v{new_major}.{new_minor}.{new_micro}"
+
+    def _create_new_file_path(self, latest_file: Path, new_version: str, dir: Path) -> Path:
+        version_pattern = re.compile(r"v(\d+)\.(\d+)\.(\d+)")
+        match = version_pattern.search(latest_file.name)
+
         prefix = latest_file.name[: match.start()]
         suffix = latest_file.name[match.end() :]
         file_name = prefix + new_version + suffix
 
-        # 새로운 경로 반환
         return dir / file_name
 
     def _find_matching_files(self, directory: Path, prefix: str) -> list[str]:
