@@ -1,5 +1,6 @@
 import os
 
+import pandas as pd
 from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
@@ -7,6 +8,11 @@ from langchain_openai import ChatOpenAI
 from prompts import load_template
 
 from .text_crawler import WikipediaCrawler
+
+PARAGRAPH = "paragraph"
+QUESTION_PLUS = "question_plus"
+QUESTION = "question"
+CHOICES = "choices"
 
 
 class ParagraphGenerator:
@@ -37,7 +43,7 @@ class ParagraphGenerator:
         # 위키피디아 크롤러 초기화
         self.text_crawler = WikipediaCrawler()
 
-    def generate(self, problem: str, keywords: list[str]) -> str:
+    def generate(self, row: pd.Series, keywords: list[str]) -> str:
         """
         `keywords` 배열에 담긴 내용을 바탕으로 위키피디아 텍스트를 크롤링하여 지문을 생성합니다.
         지문 생성 시 문제가 필요한 정보를 포함하도록 합니다.
@@ -56,5 +62,13 @@ class ParagraphGenerator:
 
         # TODO: 프롬프트 설계 및 인자 넘겨주기
         # GPT 모델을 사용해 생성된 지문을 반환
-        paragraph = self.chain.invoke({"crawled_text": crawled_text, "problem": problem}).content
+        paragraph = self.chain.invoke(
+            {
+                "crawled_text": crawled_text,
+                PARAGRAPH: row[PARAGRAPH],
+                QUESTION_PLUS: row[QUESTION_PLUS],
+                QUESTION: row[QUESTION],
+                CHOICES: row[CHOICES],
+            }
+        ).content
         return paragraph
