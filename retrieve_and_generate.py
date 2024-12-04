@@ -1,5 +1,4 @@
 import argparse
-from ast import literal_eval
 
 import dotenv
 import pandas as pd

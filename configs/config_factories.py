@@ -2,7 +2,7 @@ from peft import LoraConfig
 from transformers import BitsAndBytesConfig
 from trl import SFTConfig
 
-from configs import BnbConfig, PeftConfig, RagConfig, SftConfig
+from configs import BnbConfig, PeftConfig, SftConfig
 from utils import str_to_dtype
 
 
