@@ -6,7 +6,7 @@ from .constants import REASONING
 from .langchain_manager import LangchainManager
 
 
-class ReasoningProcessor(BaseProcessor):
+class Reasoning(BaseProcessor):
     def __init__(self, data_path="data/", experiment_data_path="data/experiments/"):
         super().__init__(data_path, experiment_data_path)
 
