@@ -1,58 +1,12 @@
-You are a world-authority scholar tasked with analyzing information provided in Keywords and Further Reading. Your job is to produce a Summarization that excludes any direct or indirect mention of the Problem, Question, Choices, or Answer. The purpose is to write an independent summary strictly based on the provided material.
+You are a world-authority scholar tasked with analyzing information provided in Keywords and Further Reading. Your job is to produce a Summarization that excludes any other knowledge. The purpose is to write an independent summary strictly based on the provided material.
 
 Guidelines:
-DO NOT include any part of the Problem, Question, Choices, or Answer in your Summarization.
 Focus exclusively on the Keywords and extract relevant information from Further Reading.
 Write your Summarization in 1500–3000 Korean characters. If Further Reading does not provide sufficient details, refer to the Keywords to write a 500–700 character essay, ensuring relevance to the provided material.
 Use only the information contained in Further Reading and the Keywords. External knowledge or context is not permitted.
-Your Summarization must stand as a complete and independent piece of content, free of any implication or reference to the original Problem structure or components.
+Your Summarization must stand as a complete and independent piece of content.
 
 ### Example 1
-**Problem**
-```
-- Paragraph
-상소하여 아뢰기를 , “신이 좌참 찬 송준길이 올린 차자를 보았는데 , 상복(喪服) 절차에 대하여 논한 것이 신과는 큰 차이가 있었습니다 . 장자를 위하여 3년을 입는 까닭은 위로 ‘정체(正體)’가 되기 때문이고 또 전 중(傳重: 조상의 제사나 가문의 법통을 전함)하기 때문입니다 . …(중략) … 무엇보다 중요한 것은 할아버지와 아버지의 뒤를 이은 ‘정체’이지, 꼭 첫째이기 때문에 참 최 3년 복을 입는 것은 아닙니다 .”라고 하였다 .－현종실록 －
-
-- Question
-상소한 인물이 속한 붕당에 대한 설명으로 옳은 것만을 모두 고르면?
-
-- Question Plus
-ㄱ.기 사환국으로 정권을 장악하였다 .ㄴ.인 조반정을 주도 하여 집권세력이 되었다 .ㄷ.정조 시기에 탕평 정치의 한 축을 이루었다 .ㄹ.이 이와 성혼의 문인을 중심으로 형성되었다.
-
-- Choices
-['ㄱ, ㄴ', 'ㄱ, ㄷ', 'ㄴ, ㄹ', 'ㄷ, ㄹ']
-
-- Answer
-2
-
-- Reasoning
-문제 해결 과정
-
-배경 분석
-지문은 송준길이 상복의 절차에 대해 논한 내용을 다루고 있으며, 이는 조선 후기 서인과 남인 간의 갈등을 반영하는 예송논쟁과 관련이 있습니다. 송준길은 서인의 대표적인 인물로, 그의 사상은 조선시대의 명분론에 뿌리를 두고 있습니다【6】【7】.
-
-선택지 분석
-각 선택지를 분석하여 송준길과 서인의 관련성을 도출합니다:
-
-1. **ㄱ. 기사환국으로 정권을 장악하였다.**
-- 기사환국(1689년)은 남인이 집권하게 된 사건으로, 서인은 이 시기에 정권에서 밀려났습니다. 따라서 이 설명은 서인과 관련이 없습니다.
-
-2. **ㄴ. 인조반정을 주도하여 집권세력이 되었다.**
-- 서인은 인조반정(1623년)을 통해 집권한 세력으로, 송준길은 서인의 주요 인물 중 하나입니다. 이 설명은 정확합니다.
-
-3. **ㄷ. 정조 시기에 탕평 정치의 한 축을 이루었다.**
-- 정조의 탕평 정치는 노론과 소론을 중심으로 이루어졌으며, 송준길이 활동했던 서인은 정조 시기 이전의 붕당입니다. 따라서 이 설명은 오답입니다.
-
-4. **ㄹ. 이이와 성혼의 문인을 중심으로 형성되었다.**
-- 서인은 이이와 성혼의 학문적 계보를 계승한 붕당으로, 송준길 역시 이이의 학통을 따른 인물입니다. 이 설명은 정확합니다【6】【7】.
-
-정답 도출
-올바른 설명은 **ㄴ**과 **ㄹ**입니다. 따라서 정답은 **'ㄴ, ㄹ'**입니다.
-
-결론
-송준길은 서인의 핵심 인물로, 그의 사상과 활동은 서인의 명분론적 정치와 예학에 뿌리를 두고 있습니다. 지문과 선택지의 역사적 맥락을 분석한 결과, 정답은 **'ㄴ, ㄹ'**으로 확정됩니다.	
-```
-
 **Keywords**
 ```
 송준길, 서인, 예송논쟁, 인조반정, 탕평 정치
@@ -215,43 +169,6 @@ Your Summarization must stand as a complete and independent piece of content, fr
 ---
 
 ### Example 2
-**Problem**
-```
-- Paragraph
-인지 이론가 장 피아제(Jean Piaget)에 따르면,
-
-- Question Plus
-
-- Question
-다음 중 어디에 있는 아동은 자기 중심적이거나 다른 사람의 관점을 이해하지 못하는 아동은 다음 중 인지발달의 어느 단계에 있습니까?
-
-- Choices
-['감각운동기', '전조작기', '구체적 조작기', '형식적 조작기']
-
-- Answer
-2
-
-- Reasoning
-문제 해결 과정
-
-배경 분석
-인지 이론가 장 피아제(Jean Piaget)는 아동의 인지 발달을 네 가지 단계로 나누었습니다. 이 단계는 감각운동기, 전조작기, 구체적 조작기, 형식적 조작기로 구성되어 있습니다. 각 단계는 아동의 사고 방식과 인지 능력의 발전을 반영합니다.
-
-1. **감각운동기 (0-2세)**: 아동은 감각과 운동을 통해 세상을 탐색하며, 물체의 지속성 개념을 이해하지 못합니다. 이 단계에서는 자기 중심적 사고가 두드러지지 않습니다.
-
-2. **전조작기 (2-7세)**: 이 단계의 아동은 언어와 상징적 사고를 발달시키지만, 여전히 자기 중심적입니다. 즉, 다른 사람의 관점을 이해하지 못하고, 자신의 경험과 관점만을 중심으로 사고합니다. 이로 인해 아동은 다른 사람의 감정이나 생각을 고려하지 않고, 자신의 입장에서만 상황을 해석합니다【8】【9】.
-
-3. **구체적 조작기 (7-11세)**: 아동은 논리적 사고를 발달시키고, 구체적인 상황에서 문제를 해결할 수 있는 능력을 갖추게 됩니다. 이 단계에서는 다른 사람의 관점을 이해할 수 있는 능력이 향상됩니다.
-
-4. **형식적 조작기 (11세 이상)**: 아동은 추상적 사고와 가설적 사고를 할 수 있으며, 복잡한 문제를 해결하는 능력이 발달합니다. 이 단계에서는 자기 중심적 사고가 거의 사라지고, 다양한 관점을 이해할 수 있습니다.
-
-정답 도출
-문제에서 "자기 중심적이거나 다른 사람의 관점을 이해하지 못하는 아동"에 대한 질문이므로, 이는 전조작기(2-7세)에 해당합니다. 이 단계의 아동은 여전히 자기 중심적이며, 다른 사람의 관점을 이해하는 데 어려움을 겪습니다.
-
-결론
-따라서, 자기 중심적이거나 다른 사람의 관점을 이해하지 못하는 아동은 **전조작기**에 해당하므로, 정답은 **2번 전조작기**입니다.
-```
-
 **Keywords**
 ```
 인지 이론, 장 피아제, 자기 중심적 사고, 전조작기, 인지 발달
@@ -280,27 +197,6 @@ Your Summarization must stand as a complete and independent piece of content, fr
 ---
 
 YOUR TASK
-**Problem**
-```
-- Paragraph
-{paragraph}
-
-- Question Plus
-{question_plus}
-
-- Question
-{question}
-
-- Choices
-{choices}
-
-- Answer
-{answer}
-
-- Reasoning
-{reasoning}
-```
-
 **Keywords**
 ```
 {keywords}
@@ -313,3 +209,5 @@ YOUR TASK
 
 **Summarization**
 YOUR ANSWER
+
+You MUST strictly follow the Summarization format: Write your Summarization in 1500–3000 Korean characters. If Further Reading does not provide sufficient details, refer to the Keywords to write a 500–700 character essay, ensuring relevance to the provided material.
