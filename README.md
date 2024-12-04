@@ -29,6 +29,8 @@
 
 베이스 모델인 `gemma-2b-ko`에서 데이터 정제 및 증강으로 소폭 성능 향상을 확인하였으며, 이는 최종 선정된 모델인 `Qwen-2.5-32b-Instruct`에서도 확인 할수 있었습니다. 최종적으로 데이터 증강 및 Prompt Tuning을 추가한 **Qwen-2.5-32b-Instruct** 모델이 **0.7747**로 가장 높은 정확도를 달성했습니다.
 
+> 프로젝트 랩업 리포트는 [여기](<assets/Generation_for_NLP_NLP팀%20리포트(06조).pdf>)를 참고해주세요.
+
 ## 👥 Collaborators
 
 <div align="center">
@@ -472,8 +474,8 @@ $ git config commit.template .gitcommit_template
 
 ## 🔬 References
 
-- Son, Guijin, Hanwool Lee, Sungdong Kim, Seungone Kim, Niklas Muennighoff, Taekyoon Choi, Cheonbok Park, Kang Min Yoo, & Stella Biderman. "KMMLU: Measuring Massive Multitask Language Understanding in Korean." _arXiv_, June 6, 2024. https://doi.org/10.48550/arXiv.2402.11548.
-- Zhang, Tianjun, Shishir G. Patil, Naman Jain, Sheng Shen, Matei Zaharia, Ion Stoica & Joseph E. Gonzalez. “RAFT: Adapting Language Model to Domain Specific RAG”. arXiv, June 6, 2024. https://doi.org/10.48550/arXiv.2403.10131.
+- Son Guijin, Hanwool Lee, Sungdong Kim, Seungone Kim, Niklas Muennighoff, Taekyoon Choi, Cheonbok Park, Kang Min Yoo & Stella Biderman. "KMMLU: Measuring Massive Multitask Language Understanding in Korean." _arXiv_, June 6, 2024. https://doi.org/10.48550/arXiv.2402.11548.
+- Zhang Tianjun, Shishir G. Patil, Naman Jain, Sheng Shen, Matei Zaharia, Ion Stoica & Joseph E. Gonzalez. “RAFT: Adapting Language Model to Domain Specific RAG”. arXiv, June 6, 2024. https://doi.org/10.48550/arXiv.2403.10131.
 - 허동석, 김기태, 송형우, 서봉원. (2024-01-24). 프롬프트 개발을 통한 수능 국어 맞춤형 문제 생성 시스템 제안. 한국HCI학회 학술대회, 강원.
   https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11714641.
 - skt/kobest 데이터셋 https://huggingface.co/datasets/skt/kobest_v1
