@@ -37,11 +37,13 @@ class ParagraphGenerator:
         # 위키피디아 크롤러 초기화
         self.text_crawler = WikipediaCrawler()
 
-    def generate(self, keywords: list[str]) -> str:
+    def generate(self, problem: str, keywords: list[str]) -> str:
         """
         `keywords` 배열에 담긴 내용을 바탕으로 위키피디아 텍스트를 크롤링하여 지문을 생성합니다.
+        지문 생성 시 문제가 필요한 정보를 포함하도록 합니다.
 
         Args:
+            problem (str): 기존 문제
             keywords (list[str]): 검색할 위키피디아 텍스트 들
 
         Returns:
@@ -54,5 +56,5 @@ class ParagraphGenerator:
 
         # TODO: 프롬프트 설계 및 인자 넘겨주기
         # GPT 모델을 사용해 생성된 지문을 반환
-        paragraph = self.chain.invoke({"crawled_text": crawled_text}).content
+        paragraph = self.chain.invoke({"crawled_text": crawled_text, "problem": problem}).content
         return paragraph
