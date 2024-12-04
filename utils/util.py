@@ -38,4 +38,6 @@ def create_experiment_file_name(target_file: str, version: str, file_format="csv
         str: _description_
     """
     prefix = target_file.split("_")[0]
-    return prefix + "_" + version + "." + file_format
+    file_name = "_".join([prefix, "exp", version])
+    file_name_with_extension = file_name + "." + file_format
+    return file_name_with_extension
