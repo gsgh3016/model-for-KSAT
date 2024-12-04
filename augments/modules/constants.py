@@ -4,6 +4,9 @@ QUESTION = "question"
 CHOICES = "choices"
 ANSWER = "answer"
 QUESTION_PLUS = "question_plus"
+DEFAULT_COLUMNS = ["paragraph", "question", "choices", "answer", "question_plus"]
+
+
 REASONING = "reasoning"
 ANALYSIS = "analysis"
 CATEGORY = "category"

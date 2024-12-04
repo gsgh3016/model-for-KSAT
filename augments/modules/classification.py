@@ -62,3 +62,6 @@ class Classification(BaseProcessor):
         result_df = result.apply(pd.Series)
         # 결과를 source_data의 ANALYSIS, CATEGORY 열에 저장
         self.source_data[[ANALYSIS, CATEGORY]] = result_df
+
+        # 결과 저장
+        self.source_data.to_csv("data/experiments/classification.csv", index=False)

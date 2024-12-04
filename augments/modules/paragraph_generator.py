@@ -5,12 +5,14 @@ from .base_processor import BaseProcessor
 from .constants import (
     CHOICES,
     CRAWLED_TEXT,
+    DEFAULT_COLUMNS,
     KEYWORD_PREFIX,
-    PAGE_SUFFIX,
     PARAGRAPH,
     QUESTION,
     QUESTION_PLUS,
     RAW_PARAGRAPH,
+    REASONING,
+    SUMMARY_SUFFIX,
 )
 from .langchain_manager import LangchainManager
 
@@ -74,13 +76,22 @@ class ParagraphGenerator(BaseProcessor):
         tqdm.pandas()
 
         # 크롤링된 텍스트 결합
-        columns_to_join = [KEYWORD_PREFIX + str(i) + PAGE_SUFFIX for i in range(1, 6)]
-        self.source_data[CRAWLED_TEXT] = self.source_data[columns_to_join].apply(lambda row: "\n".join(row), axis=1)
+        columns_to_join = [KEYWORD_PREFIX + str(i) + SUMMARY_SUFFIX for i in range(1, 6)]
+        self.source_data.loc[:, CRAWLED_TEXT] = self.source_data[columns_to_join].apply(
+            lambda row: "\n".join(row), axis=1
+        )
 
         # 필요한 열만 추출
+        self.source_data = self.source_data[DEFAULT_COLUMNS + [REASONING, CRAWLED_TEXT]].copy()
+
         df = self.source_data[[PARAGRAPH, QUESTION_PLUS, QUESTION, CHOICES, CRAWLED_TEXT]]
 
         # LangChain을 활용한 문단 생성
-        self.source_data[RAW_PARAGRAPH] = df.progress_apply(
+        self.source_data.loc[:, RAW_PARAGRAPH] = df.progress_apply(
             lambda row: self.langchain_manager.invoke(row.to_dict()), axis=1
         )
+
+        self.source_data = self.source_data[DEFAULT_COLUMNS + [REASONING, RAW_PARAGRAPH]].copy()
+
+        # 결과 저장
+        self.source_data.to_csv("data/experiments/paragraph_generation.csv", index=False)

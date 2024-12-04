@@ -2,7 +2,7 @@ import pandas as pd
 from tqdm import tqdm
 
 from .base_processor import BaseProcessor
-from .constants import DOCUMENT, KEYWORD_PREFIX, KEYWORDS, PAGE_SUFFIX, SUMMARY_SUFFIX
+from .constants import DEFAULT_COLUMNS, DOCUMENT, KEYWORD_PREFIX, KEYWORDS, PAGE_SUFFIX, REASONING, SUMMARY_SUFFIX
 from .langchain_manager import LangchainManager
 
 
@@ -103,3 +103,10 @@ class Summarizer(BaseProcessor):
             self.source_data[KEYWORD_PREFIX + str(i) + SUMMARY_SUFFIX] = self.source_data.progress_apply(
                 lambda row: self.summarize(row, i), axis=1
             )
+
+        self.source_data = self.source_data[
+            DEFAULT_COLUMNS + [KEYWORD_PREFIX + str(i) + SUMMARY_SUFFIX for i in range(1, 6)] + [REASONING]
+        ]
+
+        # 결과 저장
+        self.source_data.to_csv("data/experiments/summarization.csv", index=False)

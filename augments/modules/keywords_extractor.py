@@ -2,18 +2,7 @@ import pandas as pd
 from tqdm import tqdm
 
 from .base_processor import BaseProcessor
-from .constants import (
-    ANSWER,
-    CATEGORY,
-    CHOICES,
-    KEYWORD_PREFIX,
-    KEYWORDS,
-    NEED_KNOWLEDGE,
-    PARAGRAPH,
-    QUESTION,
-    QUESTION_PLUS,
-    REASONING,
-)
+from .constants import CATEGORY, DEFAULT_COLUMNS, KEYWORD_PREFIX, KEYWORDS, NEED_KNOWLEDGE, REASONING
 from .langchain_manager import LangchainManager
 
 
@@ -92,7 +81,7 @@ class KeywordsExtractor(BaseProcessor):
         self.source_data = self.source_data[self.source_data[CATEGORY] == NEED_KNOWLEDGE]
 
         # 주요 열만 유지
-        self.source_data = self.source_data[[PARAGRAPH, QUESTION, QUESTION_PLUS, CHOICES, ANSWER, REASONING]]
+        self.source_data = self.source_data[DEFAULT_COLUMNS + [REASONING]]
 
         # extract_keyword 함수로 키워드 추출
         self.source_data[KEYWORDS] = self.source_data.progress_apply(self.extract_keyword, axis=1)
@@ -103,3 +92,6 @@ class KeywordsExtractor(BaseProcessor):
 
         # 기존 데이터를 키워드 칼럼들과 병합
         self.source_data = pd.concat([self.source_data.drop(columns=[KEYWORDS]), keywords_expanded], axis=1)
+
+        # 결과 저장
+        self.source_data.to_csv("data/experiments/keywords.csv", index=False)

@@ -50,7 +50,7 @@ class WikipediaCrawler:
         """
         return self.source_data
 
-    def crawl(self) -> pd.DataFrame:
+    def crawl(self):
         """
         위키피디아 문서 존재 여부를 판별하고 내용을 데이터프레임에 추가하는 함수.
 
@@ -80,4 +80,5 @@ class WikipediaCrawler:
                 self.source_data.at[idx, KEYWORD_PREFIX + str(j) + EXISTS_SUFFIX] = page.exists()
                 self.source_data.at[idx, KEYWORD_PREFIX + str(j) + PAGE_SUFFIX] = page.text
 
-        return self.source_data
+        # 결과 저장
+        self.source_data.to_csv("data/experiments/wikipedia_documents.csv", index=False)

@@ -2,7 +2,7 @@ import pandas as pd
 from tqdm import tqdm
 
 from .base_processor import BaseProcessor
-from .constants import ANSWER, CHOICES, DOCUMENT, PARAGRAPH, QUESTION, QUESTION_PLUS, RAW_PARAGRAPH
+from .constants import CHOICES, DEFAULT_COLUMNS, DOCUMENT, PARAGRAPH, QUESTION, QUESTION_PLUS, RAW_PARAGRAPH
 from .langchain_manager import LangchainManager
 
 
@@ -81,4 +81,6 @@ class ParagraphTrimmer(BaseProcessor):
         self.source_data[PARAGRAPH] = self.source_data[DOCUMENT]
 
         # 데이터프레임 열 정리
-        self.source_data = self.source_data[[PARAGRAPH, QUESTION_PLUS, QUESTION, CHOICES, ANSWER]]
+        self.source_data = self.source_data[DEFAULT_COLUMNS]
+
+        self.source_data.to_csv("data/experiments/paragraph_trimmer.csv", index=False)

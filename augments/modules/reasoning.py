@@ -67,3 +67,6 @@ class Reasoning(BaseProcessor):
         self.source_data[REASONING] = self.source_data.progress_apply(
             lambda row: self.langchain_manager.invoke(row), axis=1
         )
+
+        # 결과 저장
+        self.source_data.to_csv("data/experiments/reasoning.csv", index=False)
