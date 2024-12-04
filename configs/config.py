@@ -115,4 +115,4 @@ class InferenceConfig:
 
 @dataclass
 class RagConfig:
-    query_builder_type: int
+    query_builder_type: str
