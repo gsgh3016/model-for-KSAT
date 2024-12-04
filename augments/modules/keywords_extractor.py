@@ -27,7 +27,7 @@ class KeywordsExtractor(BaseProcessor):
             raise TypeError("data must be pandas.DataFrame format")
 
         # 출력이 문자열인 prompts/templates/keyword_extraction/wikipedia_search_keyword_with_reasoning.txt 기반 체인 설정
-        self.lanchain_manager = LangchainManager(
+        self.langchain_manager = LangchainManager(
             prompt_type="keyword_extraction",
             prompt_source="wikipedia_search_keyword_with_reasoning.txt",
             output_type="str",
@@ -43,7 +43,7 @@ class KeywordsExtractor(BaseProcessor):
         Returns:
             list[str]: 추출된 5개 키워드
         """
-        response = self.lanchain_manager.invoke(data.to_dict())
+        response = self.langchain_manager.invoke(data.to_dict())
         response_split = response.split(",")
         keywords = [keyword.strip() for keyword in response_split]
         return keywords

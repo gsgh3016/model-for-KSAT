@@ -16,7 +16,7 @@ class Summarizer(BaseProcessor):
             raise TypeError("data must be pandas.DataFrame format")
 
         # 출력이 문자열인 prompts/templates/paragraph_generation/document_summarization.txt 기반 체인 설정
-        self.lanchain_manager = LangchainManager(
+        self.langchain_manager = LangchainManager(
             prompt_type="paragraph_generation",
             prompt_source="document_summarization.txt",
             output_type="str",
@@ -41,7 +41,7 @@ class Summarizer(BaseProcessor):
             return ""
         document = row[KEYWORD_PREFIX + str(i) + PAGE_SUFFIX]
 
-        response = self.lanchain_manager.invoke(
+        response = self.langchain_manager.invoke(
             {
                 KEYWORDS: keywords,
                 DOCUMENT: document,

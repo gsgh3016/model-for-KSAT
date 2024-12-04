@@ -19,11 +19,11 @@ class Reasoning(BaseProcessor):
             self.source_data = data
 
         # 출력이 문자열인 prompts/templates/base/reasoning.txt 기반 체인 설정
-        self.lanchain_manager = LangchainManager(prompt_type="base", prompt_source="reasoning.txt", output_type="str")
+        self.langchain_manager = LangchainManager(prompt_type="base", prompt_source="reasoning.txt", output_type="str")
 
     def process(self):
         tqdm.pandas()
         self.source_data.drop(columns=["id"], inplace=True)
         self.source_data[REASONING] = self.source_data.progress_apply(
-            lambda row: self.lanchain_manager.invoke(row), axis=1
+            lambda row: self.langchain_manager.invoke(row), axis=1
         )

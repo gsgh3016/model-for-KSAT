@@ -25,7 +25,7 @@ class ParagraphGenerator(BaseProcessor):
             raise TypeError("data must be pandas.DataFrame format")
 
         # 출력이 문자열인 prompts/templates/paragraph_generation/document_summarization.txt 기반 체인 설정
-        self.lanchain_manager = LangchainManager(
+        self.langchain_manager = LangchainManager(
             prompt_type="paragraph_generation",
             prompt_source="generation_from_wiki.txt",
             output_type="str",
@@ -38,5 +38,5 @@ class ParagraphGenerator(BaseProcessor):
         df = self.source_data[[PARAGRAPH, QUESTION_PLUS, QUESTION, CHOICES, CRAWLED_TEXT]]
 
         self.source_data[RAW_PARAGRAPH] = df.progress_apply(
-            lambda row: self.lanchain_manager.invoke(row.to_dict()), axis=1
+            lambda row: self.langchain_manager.invoke(row.to_dict()), axis=1
         )
