@@ -179,6 +179,7 @@ pyrightconfig.json
 
 data/*.csv
 !data/.gitkeep
+!data/experiments/.gitkeep
 
 *.csv
 output*/
