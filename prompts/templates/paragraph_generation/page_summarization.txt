@@ -210,4 +210,4 @@ YOUR TASK
 **Summarization**
 YOUR ANSWER
 
-You MUST strictly follow the Summarization format: Write your Summarization in 1500–3000 Korean characters. If Further Reading does not provide sufficient details, refer to the Keywords to write a 500–700 character essay, ensuring relevance to the provided material.
+Write your Summarization in 1500–3000 Korean characters. If Further Reading does not provide sufficient details, refer to the Keywords to write a 500–700 character essay, ensuring relevance to the provided material.
