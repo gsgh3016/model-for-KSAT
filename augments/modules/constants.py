@@ -21,3 +21,5 @@ DOCUMENT = "document"
 # Langchain RunnableMap에서 사용되는 key 값입니다.
 ORIGINAL_INPUTS = "original_inputs"
 REASONING_OUTPUT = "reasoning_output"
+
+NEED_KNOWLEDGE = "외적 추론"

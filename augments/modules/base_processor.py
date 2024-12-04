@@ -24,7 +24,7 @@ class BaseProcessor(ABC):
         self._created_columns = value
 
     @abstractmethod
-    def process(self, data: pd.DataFrame) -> None:
+    def process(self) -> None:
         pass
 
     def sample_data(self, n: int, seed: int = 1004):
