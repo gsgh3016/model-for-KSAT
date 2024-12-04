@@ -18,8 +18,13 @@ from .langchain_manager import LangchainManager
 
 
 class KeywordsExtractor(BaseProcessor):
-    def __init__(self, data_path="data/", experiment_data_path="data/experiments/"):
+    def __init__(self, data_path="data/", experiment_data_path="data/experiments/", data: pd.DataFrame = None):
         super().__init__(data_path, experiment_data_path)
+
+        if data:
+            self.source_data = data
+        elif data is not None and not isinstance(data, pd.DataFrame):
+            raise TypeError("data must be pandas.DataFrame format")
 
         # 출력이 문자열인 prompts/templates/keyword_extraction/wikipedia_search_keyword_with_reasoning.txt 기반 체인 설정
         self.lanchain_manager = LangchainManager(

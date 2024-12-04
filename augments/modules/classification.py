@@ -7,11 +7,13 @@ from .langchain_manager import LangchainManager
 
 
 class Classification(BaseProcessor):
-    def __init__(self, data_path="data/", experiment_data_path="data/experiments/"):
+    def __init__(self, data_path="data/", experiment_data_path="data/experiments/", data: pd.DataFrame = None):
         super().__init__(data_path, experiment_data_path)
 
-        # 추가할 데이터 칼럼 세팅
-        self._created_columns += [ANALYSIS, CATEGORY]
+        if data:
+            self.source_data = data
+        elif data is not None and not isinstance(data, pd.DataFrame):
+            raise TypeError("data must be pandas.DataFrame format")
 
         # 출력이 문자열인 prompts/templates/data_classification/information_source_with_reasoning.txt 기반 체인 설정
         self.lanchain_manager = LangchainManager(
