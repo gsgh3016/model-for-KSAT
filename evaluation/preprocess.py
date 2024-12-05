@@ -28,6 +28,9 @@ def logits_to_predictions(logits):
 
     Args:
         logits: 모델의 출력 logits(1, 2, 3, 4, 5에 대해서만 존재).
+
+    Returns:
+        최종 예측된 예측값(1 ~ 5).
     """
     # logits를 소프트맥스 함수로 확률 값으로 변환
     probs = torch.nn.functional.softmax(torch.tensor(logits), dim=-1)
@@ -44,6 +47,13 @@ def logits_to_predictions(logits):
 def preprocess_labels(labels, tokenizer: PreTrainedTokenizerFast):
     """
     레이블 데이터를 전처리하는 함수.
+
+    Args:
+        labels: 레이블 데이터.
+        tokenizer: 토크나이저 객체.
+
+    Returns:
+        디코딩된 레이블 데이터.
     """
     # -100 값을 tokenizer의 pad_token_id로 변경
     labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
