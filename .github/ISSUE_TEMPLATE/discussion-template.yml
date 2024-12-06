@@ -26,7 +26,7 @@ body:
   - type: textarea
     id: background-context
     validations:
-      required: false
+      required: true
     attributes:
       label: "📖 배경 설명"
       description: "팀원들이 이해할 수 있도록, 이 주제가 왜 중요한지 간단히 설명해주세요."
@@ -35,7 +35,7 @@ body:
   - type: textarea
     id: discussion-points
     validations:
-      required: false
+      required: true
     attributes:
       label: "💬 논의 포인트"
       description: "논의 중 다뤄보고 싶은 주요 포인트나 질문이 있으면 간단히 작성해주세요."
